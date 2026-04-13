@@ -103,7 +103,7 @@ const recentPosts: CollectionEntry<"posts">[] = (await getCollection("posts"))
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
 			{
 				recentPosts.map((post) => (
-					<a href={`/blog/${post.slug}`} class="block group">
+					<a href={`/${post.slug}`} class="block group">
 						<div class="aspect-[3/2] overflow-hidden bg-[#1a1a1a] mb-6">
 							{post.data.featuredImage && (
 								<img
