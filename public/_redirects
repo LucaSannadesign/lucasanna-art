@@ -1,0 +1,34 @@
+# Legacy URL da Search Console — 301 permanenti
+/arte /opere/ 301
+/biografia /biografia-luca-sanna/ 301
+/biografia/ /biografia-luca-sanna/ 301
+/contatti /contatti/ 301
+/biografia-luca-sanna /biografia-luca-sanna/ 301
+/blog /blog-arte/ 301
+/blog/ /blog-arte/ 301
+/arte-intelligenza-artificiale /lintelligenza-artificiale-nellarte/ 301
+/opere/grafica/inquietudine- /opere/grafica/inquietudine-della-natura/ 301
+/opere/grafica/inquietudine-della-natura /opere/grafica/inquietudine-della-natura/ 301
+/page/2/ / 301
+/page/2 / 301
+/opere/page/2/ /opere/ 301
+/opere/page/2 /opere/ 301
+/opere/page/3/ /opere/ 301
+/opere/page/3 /opere/ 301
+/opere/page/4/ /opere/ 301
+/opere/page/4 /opere/ 301
+/opere/page/5/ /opere/ 301
+/opere/page/5 /opere/ 301
+/opere/page/6/ /opere/ 301
+/opere/page/6 /opere/ 301
+/opere/animali/page/2/ /opere/animali/ 301
+/opere/animali/page/2 /opere/animali/ 301
+
+# Contenuti rimossi — 410 Gone
+/shop 410
+/shop/ 410
+/shop/page/1/ 410
+/shop/page/1 410
+/prodotto/bird-stampa-su-tela/ 410
+/prodotto/tucano-custodia-per-iphone/ 410
+/prodotto/dostoevskij-custodia-per-iphone/ 410
