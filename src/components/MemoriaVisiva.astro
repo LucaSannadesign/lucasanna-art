@@ -1,0 +1,78 @@
+---
+interface Props {
+    selector?: string;
+    enabled?: boolean;
+}
+
+const { selector = "[data-memoria-slug]", enabled = true } = Astro.props;
+---
+
+<script is:inline define:vars={{ selector, enabled }}>
+    const MEMORIA_KEY = "memoria-visiva-opere";
+    const RESET_DAYS = 45;
+
+    const readMemoria = () => {
+        try {
+            const parsed = JSON.parse(localStorage.getItem(MEMORIA_KEY) || "{}");
+            const updatedAt = Number(parsed.updatedAt || 0);
+            const age = Date.now() - updatedAt;
+            if (!updatedAt || age > RESET_DAYS * 24 * 60 * 60 * 1000) {
+                return { updatedAt: Date.now(), slugs: {} };
+            }
+            return {
+                updatedAt,
+                slugs: parsed.slugs && typeof parsed.slugs === "object" ? parsed.slugs : {},
+            };
+        } catch {
+            return { updatedAt: Date.now(), slugs: {} };
+        }
+    };
+
+    const writeMemoria = (payload) => {
+        try {
+            localStorage.setItem(MEMORIA_KEY, JSON.stringify(payload));
+        } catch {
+            // noop
+        }
+    };
+
+    const initMemoriaVisiva = () => {
+        if (!enabled) return;
+        const items = Array.from(document.querySelectorAll(selector));
+        if (!items.length || !("IntersectionObserver" in window)) return;
+
+        const memoria = readMemoria();
+        items.forEach((item) => {
+            if (!(item instanceof HTMLElement)) return;
+            const slug = item.dataset.memoriaSlug || "";
+            if (slug && memoria.slugs[slug]) item.classList.add("was-seen");
+        });
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting || entry.intersectionRatio < 0.55) return;
+                    const node = entry.target;
+                    if (!(node instanceof HTMLElement)) return;
+                    const slug = node.dataset.memoriaSlug || "";
+                    if (!slug || memoria.slugs[slug]) return;
+                    memoria.slugs[slug] = true;
+                    memoria.updatedAt = Date.now();
+                    node.classList.add("was-seen");
+                    writeMemoria(memoria);
+                });
+            },
+            { threshold: [0.55] },
+        );
+
+        items.forEach((item) => {
+            if (item instanceof HTMLElement && item.dataset.memoriaBound !== "true") {
+                item.dataset.memoriaBound = "true";
+                observer.observe(item);
+            }
+        });
+    };
+
+    initMemoriaVisiva();
+    document.addEventListener("astro:page-load", initMemoriaVisiva);
+</script>

@@ -1,0 +1,360 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import ReazioneOpera from "../../components/ReazioneOpera.astro";
+import OperaReattiva from "../../components/OperaReattiva.astro";
+import TempoDiSguardo from "../../components/TempoDiSguardo.astro";
+import RevealNarrativo from "../../components/RevealNarrativo.astro";
+import TestoMutabile from "../../components/TestoMutabile.astro";
+import MemoriaVisiva from "../../components/MemoriaVisiva.astro";
+import PercorsoTrigger from "../../components/PercorsoTrigger.astro";
+import PercorsoOverlay from "../../components/PercorsoOverlay.astro";
+import HoverNarrativo from "../../components/HoverNarrativo.astro";
+import FocusProgressivo from "../../components/FocusProgressivo.astro";
+
+const INTERACTIONS = {
+    reactiveMotion: true,
+    gazeTime: true,
+    reveal: true,
+    mutableText: true,
+    memoriaVisiva: true,
+    hoverNarrativo: true,
+    focusProgressivo: true,
+};
+
+export async function getStaticPaths() {
+    const opere = await getCollection("opere");
+    return opere
+        .filter((entry) => entry.slug !== "opere")
+        .map((entry) => ({
+        params: { slug: entry.slug },
+        props: { entry },
+    }));
+}
+
+type Props = {
+    entry: CollectionEntry<"opere">;
+};
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+// Detect if this is a category page (no "/" in slug) or individual artwork
+const isCategoryPage = !entry.slug.includes("/");
+const currentCategory = isCategoryPage ? entry.slug : null;
+
+// If category page, get all artworks in that category
+let categoryWorks: CollectionEntry<"opere">[] = [];
+let percorsoWorks: any[] = [];
+
+if (isCategoryPage) {
+    const allWorks = (await getCollection("opere")).filter(
+        (work) => work.slug.includes("/")
+    );
+    
+    categoryWorks = allWorks
+        .filter((work) => work.slug.startsWith(currentCategory + "/"))
+        .sort(
+            (a, b) =>
+                new Date(b.data.date || 0).getTime() -
+                new Date(a.data.date || 0).getTime()
+        );
+
+    const getWorkCategory = (work: CollectionEntry<"opere">) => {
+        const explicitCategory = work.data.categories?.[0]?.toLowerCase();
+        if (explicitCategory) return explicitCategory;
+        return work.slug.split("/")[0]?.toLowerCase() || "altro";
+    };
+
+    const inferTema = (work: CollectionEntry<"opere">) => {
+        if (work.data.tema) return work.data.tema.toLowerCase();
+        const category = getWorkCategory(work);
+        const tags = (work.data.tags || []).map((tag) => tag.toLowerCase());
+        if (tags.some((tag) => tag.includes("natura") || tag.includes("paesaggio"))) return "natura";
+        if (tags.some((tag) => tag.includes("ritratto") || tag.includes("volto"))) return "figura";
+        if (category === "animali") return "fauna";
+        if (category === "grafica") return "segno";
+        if (category === "ritratti") return "identità";
+        return "luce";
+    };
+
+    const inferPeriodo = (work: CollectionEntry<"opere">) => {
+        if (work.data.periodo) return work.data.periodo.toLowerCase();
+        const sourceYear = Number(work.data.year || new Date(work.data.date || 0).getFullYear() || 0);
+        if (sourceYear && sourceYear <= 2021) return "radici";
+        if (sourceYear && sourceYear <= 2023) return "passaggio";
+        if (sourceYear && sourceYear <= 2024) return "orizzonti";
+        return "contemporaneo";
+    };
+
+    const inferEmozione = (work: CollectionEntry<"opere">) => {
+        if (work.data.emozione) return work.data.emozione.toLowerCase();
+        const category = getWorkCategory(work);
+        if (category === "paesaggio") return "contemplazione";
+        if (category === "ritratti") return "intimità";
+        if (category === "animali") return "vitalità";
+        if (category === "grafica") return "tensione";
+        return "meraviglia";
+    };
+
+    percorsoWorks = categoryWorks.map((work) => ({
+        title: work.data.title,
+        image: work.data.featuredImage || "",
+        description: work.data.description || "",
+        year: work.data.year ? String(work.data.year) : "",
+        date: work.data.date ? String(work.data.date) : "",
+        technique: work.data.technique || "",
+        href: `/opere/${work.slug}`,
+        tema: inferTema(work),
+        periodo: inferPeriodo(work),
+        emozione: inferEmozione(work),
+    }));
+}
+
+const CATEGORY_LABELS: Record<string, string> = {
+    animali: "Animali",
+    pittura: "Pittura",
+    grafica: "Grafica",
+    paesaggio: "Paesaggio",
+    ritratti: "Ritratti",
+};
+---
+
+<BaseLayout
+    title={entry.data.title + " | Opere Luca Sanna"}
+    description={entry.data.description}
+    context="blog"
+>
+    {isCategoryPage ? (
+        <!-- Category Gallery View -->
+        <div class="py-12 md:py-20 px-4">
+            <h1
+                class="text-4xl md:text-7xl font-heading font-normal text-center mb-24 uppercase tracking-[0.2em] text-white"
+            >
+                {CATEGORY_LABELS[currentCategory!] || entry.data.title}
+            </h1>
+
+            <div class="text-center mb-10">
+                <TestoMutabile
+                    enabled={INTERACTIONS.mutableText}
+                    intervalMs={24000}
+                    variants={[
+                        "Una soglia tra visione e memoria.",
+                        "Ogni opera cambia al variare dello sguardo.",
+                        "Il ritmo dell'archivio è un invito alla lentezza.",
+                    ]}
+                    className="text-xs uppercase tracking-[0.16em] text-gray-500"
+                />
+            </div>
+
+            <PercorsoTrigger />
+
+            <div
+                id="opere-grid"
+                class="opere-gallery grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-24 max-w-7xl mx-auto"
+            >
+                {
+                    categoryWorks.map((work, index) => {
+                        const category = work.slug.split("/")[0]?.toLowerCase() || "altro";
+                        const tags = (work.data.tags || [])
+                            .map((tag) => tag.toLowerCase())
+                            .join(" ");
+
+                        return (
+                        <a
+                            href={`/opere/${work.slug}`}
+                            class="group block opere-card"
+                            data-gallery-card
+                            data-fx-card
+                            data-reveal-item
+                            data-reveal-order={String(index)}
+                            data-hover-narrativo
+                            data-memoria-slug={work.slug}
+                            data-categoria={category}
+                            data-tipo={category}
+                            data-tema={tags}
+                        >
+                            <div class="opere-media aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative" data-tempo-sguardo>
+                                {work.data.featuredImage ? (
+                                    <img
+                                        src={work.data.featuredImage}
+                                        alt={work.data.title}
+                                        data-opera-reattiva
+                                        data-focus-progressivo
+                                        data-gaze-media
+                                        data-parallax-strength="3"
+                                        style={`view-transition-name: opera-${work.slug.replaceAll("/", "-")};`}
+                                        class="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div class="w-full h-full bg-[#1a1a1a] flex items-center justify-center text-gray-600 font-light tracking-widest uppercase text-sm">
+                                        No Image
+                                    </div>
+                                )}
+
+                                <p
+                                    class="opere-gaze-copy text-[10px] uppercase tracking-[0.16em] text-gray-300"
+                                    data-sguardo-copy
+                                    aria-hidden="true"
+                                >
+                                    Lo sguardo resta: l'opera cambia tono.
+                                </p>
+
+                                <p
+                                    class="opere-hover-copy text-[10px] uppercase tracking-[0.16em] text-gray-300"
+                                    data-hover-copy
+                                    aria-hidden="true"
+                                >
+                                    Un dettaglio emerge solo con uno sguardo più lungo.
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <h2 class="opere-card-title text-xl font-heading text-white mb-2 transition-colors">
+                                    {work.data.title}
+                                </h2>
+                                {work.data.technique && (
+                                    <p class="text-xs text-gray-500 uppercase tracking-widest mb-2">
+                                        {work.data.technique}
+                                    </p>
+                                )}
+                                {work.data.description && (
+                                    <p class="opere-card-description text-xs text-gray-400 leading-relaxed">
+                                        {work.data.description}
+                                    </p>
+                                )}
+                            </div>
+                        </a>
+                    )})
+                }
+            </div>
+
+            <div class="mt-20 pt-8 border-t border-white/5 text-center">
+                <a
+                    href="/opere"
+                    class="inline-block text-xs uppercase tracking-[0.2em] text-gray-500 hover:text-white transition-colors duration-300 border-b border-transparent hover:border-white py-1"
+                    >Torna alla Galleria</a
+                >
+            </div>
+
+            <PercorsoOverlay works={percorsoWorks} />
+        </div>
+
+        <RevealNarrativo enabled={INTERACTIONS.reveal} selector="[data-reveal-item]" />
+        <OperaReattiva enabled={INTERACTIONS.reactiveMotion} selector="[data-opera-reattiva]" />
+        <TempoDiSguardo enabled={INTERACTIONS.gazeTime} selector="[data-tempo-sguardo]" delayMs={3400} />
+        <HoverNarrativo enabled={INTERACTIONS.hoverNarrativo} selector="[data-hover-narrativo]" delayMs={900} />
+        <MemoriaVisiva enabled={INTERACTIONS.memoriaVisiva} selector="[data-memoria-slug]" />
+        <FocusProgressivo enabled={INTERACTIONS.focusProgressivo} selector="[data-focus-progressivo]" />
+    ) : (
+        <!-- Individual Artwork Detail View -->
+        <div class="max-w-6xl mx-auto px-4 py-12 md:py-20">
+        <div class="mb-12 text-center">
+            <h1
+                class="text-4xl md:text-7xl font-heading font-normal text-white mb-8 uppercase tracking-widest leading-tight"
+                data-reveal-item
+                data-reveal-order="1"
+            >
+                {entry.data.title}
+            </h1>
+
+            <TestoMutabile
+                enabled={INTERACTIONS.mutableText}
+                intervalMs={26000}
+                variants={[
+                    "Un'opera non si chiude nel primo sguardo.",
+                    "Qui il tempo è parte della composizione.",
+                    "Restare davanti all'immagine cambia il ritmo interiore.",
+                ]}
+                className="text-xs uppercase tracking-[0.16em] text-gray-500 mb-6"
+            />
+
+            <div
+                class="flex flex-wrap justify-center items-center gap-4 text-xs md:text-sm text-gray-500 uppercase tracking-[0.2em] font-light"
+                data-reveal-item
+                data-reveal-order="2"
+            >
+                {entry.data.year && <span>{entry.data.year}</span>}
+                {entry.data.technique && <span>• {entry.data.technique}</span>}
+            </div>
+        </div>
+
+        <div
+            class="mb-16 relative"
+            data-tempo-sguardo
+            data-reveal-item
+            data-reveal-order="3"
+            data-memoria-slug={entry.slug}
+        >
+            {
+                entry.data.featuredImage && (
+                    <img
+                        src={entry.data.featuredImage}
+                        alt={entry.data.title}
+                        data-opera-reattiva
+                        style={`view-transition-name: opera-${entry.slug.replaceAll("/", "-")};`}
+                        class="w-full h-auto max-h-[85vh] object-contain mx-auto shadow-2xl"
+                    />
+                )
+            }
+
+            <p
+                class="opere-gaze-copy text-[10px] uppercase tracking-[0.16em] text-gray-300 mt-3 text-center"
+                data-sguardo-copy
+                aria-hidden="true"
+            >
+                L'opera si apre nel tempo del tuo sguardo.
+            </p>
+        </div>
+
+        <div
+            class="single-opera-content prose prose-invert prose-lg mx-auto text-gray-300 leading-relaxed font-light tracking-wide max-w-2xl text-center"
+            data-reveal-item
+            data-reveal-order="4"
+        >
+            <Content />
+        </div>
+
+        <div data-reveal-item data-reveal-order="5">
+            <ReazioneOpera operaSlug={entry.slug} />
+        </div>
+
+        <div class="mt-20 pt-8 border-t border-white/5 text-center">
+            <a
+                href="/opere"
+                class="inline-block text-xs uppercase tracking-[0.2em] text-gray-500 hover:text-white transition-colors duration-300 border-b border-transparent hover:border-white py-1"
+                >Torna alla Galleria</a
+            >
+        </div>
+    </div>
+
+    <RevealNarrativo enabled={INTERACTIONS.reveal} selector="[data-reveal-item]" />
+    <OperaReattiva enabled={INTERACTIONS.reactiveMotion} selector="[data-opera-reattiva]" />
+    <TempoDiSguardo enabled={INTERACTIONS.gazeTime} selector="[data-tempo-sguardo]" delayMs={3600} />
+    <MemoriaVisiva enabled={INTERACTIONS.memoriaVisiva} selector="[data-memoria-slug]" />
+    )}
+</BaseLayout>
+
+<style is:global>
+    /*
+      Opere: manteniamo UNA sola immagine (featured hero).
+      Nascondiamo qualsiasi immagine nel body markdown,
+      evitando in modo definitivo la duplicazione visiva.
+    */
+    .single-opera-content img {
+        display: none !important;
+    }
+
+    .single-opera-content > p:has(> img:only-child),
+    .single-opera-content > p:has(> a > img:only-child) {
+        display: none !important;
+    }
+
+    .single-opera-content a[href*="facebook.com/sharer"],
+    .single-opera-content a[href*="twitter.com/intent"],
+    .single-opera-content a[href*="linkedin.com/share"],
+    .single-opera-content a[href*="pinterest.com/pin"],
+    .single-opera-content a[href*="api.whatsapp.com"],
+    .single-opera-content a[href*="t.me/share"] {
+        display: none !important;
+    }
+</style>

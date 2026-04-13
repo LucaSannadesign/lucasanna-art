@@ -1,0 +1,75 @@
+---
+interface Props {
+    enabled?: boolean;
+}
+
+const { enabled = true } = Astro.props;
+---
+
+<button
+    type="button"
+    class="modalita-toggle"
+    data-modalita-toggle
+    data-enabled={enabled ? "true" : "false"}
+    aria-label="Cambia modalità percettiva"
+>
+    <span class="modalita-toggle__label">Modalità</span>
+    <span class="modalita-toggle__value" data-modalita-value>Silenzio</span>
+</button>
+
+<script is:inline>
+    const MODALITA_KEY = "modalita-percettiva";
+
+    const initModalitaPercettiva = () => {
+        const toggle = document.querySelector("[data-modalita-toggle]");
+        if (!(toggle instanceof HTMLButtonElement) || toggle.dataset.enabled !== "true") return;
+        if (toggle.dataset.bound === "true") return;
+        toggle.dataset.bound = "true";
+
+        const valueNode = toggle.querySelector("[data-modalita-value]");
+        const validModes = new Set(["silenzio", "rumore"]);
+
+        const applyMode = (mode) => {
+            const normalized = validModes.has(mode) ? mode : "silenzio";
+            document.documentElement.setAttribute("data-modalita-percettiva", normalized);
+            if (valueNode) valueNode.textContent = normalized === "silenzio" ? "Silenzio" : "Rumore";
+            localStorage.setItem(MODALITA_KEY, normalized);
+        };
+
+        const initial = localStorage.getItem(MODALITA_KEY) || document.documentElement.getAttribute("data-modalita-percettiva") || "silenzio";
+        applyMode(initial);
+
+        toggle.addEventListener("click", () => {
+            const current = document.documentElement.getAttribute("data-modalita-percettiva") || "silenzio";
+            applyMode(current === "silenzio" ? "rumore" : "silenzio");
+        });
+    };
+
+    initModalitaPercettiva();
+    document.addEventListener("astro:page-load", initModalitaPercettiva);
+</script>
+
+<style>
+    .modalita-toggle {
+        position: fixed;
+        right: 1rem;
+        bottom: 1rem;
+        z-index: 70;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        background: rgba(11, 11, 11, 0.86);
+        color: #ececec;
+        padding: 0.5rem 0.7rem;
+        display: inline-flex;
+        gap: 0.55rem;
+        align-items: baseline;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.58rem;
+        backdrop-filter: blur(6px);
+    }
+
+    .modalita-toggle__value {
+        color: #fff;
+        font-size: 0.62rem;
+    }
+</style>

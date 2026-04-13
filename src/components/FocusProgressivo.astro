@@ -1,0 +1,78 @@
+---
+interface Props {
+    selector: string;
+    enabled?: boolean;
+    blurAmount?: number;
+    duration?: number;
+    delay?: number;
+}
+
+const { 
+    selector = "[data-focus-progressivo]", 
+    enabled = true,
+    blurAmount = 3,
+    duration = 1400,
+    delay = 400
+} = Astro.props;
+---
+
+<script is:inline define:vars={{ selector, enabled, blurAmount, duration, delay }}>
+    const initFocusProgressivo = () => {
+        if (!enabled) return;
+
+        const images = document.querySelectorAll(selector);
+        if (!images.length) return;
+
+        // Store timeout IDs for cleanup
+        const timeouts = new WeakMap();
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const img = entry.target;
+                    
+                    // Clear any pending timeout
+                    const existingTimeout = timeouts.get(img);
+                    if (existingTimeout) {
+                        clearTimeout(existingTimeout);
+                        timeouts.delete(img);
+                    }
+                    
+                    if (entry.isIntersecting) {
+                        // Image enters viewport - start blurred
+                        img.classList.remove('focus-progressivo-sharp');
+                        img.classList.add('focus-progressivo-blurred');
+                        
+                        // After delay, start sharpening
+                        const timeoutId = setTimeout(() => {
+                            img.classList.remove('focus-progressivo-blurred');
+                            img.classList.add('focus-progressivo-sharp');
+                            timeouts.delete(img);
+                        }, delay);
+                        
+                        timeouts.set(img, timeoutId);
+                    } else {
+                        // Image leaves viewport - reset
+                        img.classList.remove('focus-progressivo-blurred', 'focus-progressivo-sharp');
+                    }
+                });
+            },
+            {
+                threshold: 0.1,
+                rootMargin: '50px'
+            }
+        );
+
+        images.forEach((img) => {
+            observer.observe(img);
+        });
+    };
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initFocusProgressivo);
+    } else {
+        initFocusProgressivo();
+    }
+
+    document.addEventListener("astro:page-load", initFocusProgressivo);
+</script>

@@ -1,0 +1,316 @@
+---
+import OperaFocus from "./OperaFocus.astro";
+
+const { works = [] } = Astro.props;
+---
+
+<div
+    id="percorso-overlay"
+    class="percorso-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    hidden
+>
+    <div class="percorso-overlay__inner">
+        <div class="percorso-overlay__top">
+            <div>
+                <p class="text-xs uppercase tracking-[0.2em] text-gray-400 mb-3">
+                    Percorso Curatoriale Dinamico
+                </p>
+                <div class="percorso-keybar" id="percorso-keybar" role="tablist" aria-label="Scegli chiave curatoriale">
+                    <button type="button" class="percorso-key-btn" data-key="tema">Tema</button>
+                    <button type="button" class="percorso-key-btn" data-key="periodo">Periodo</button>
+                    <button type="button" class="percorso-key-btn" data-key="emozione">Emozione</button>
+                </div>
+                <div id="percorso-valuebar" class="percorso-valuebar" aria-live="polite"></div>
+            </div>
+
+            <button type="button" id="percorso-close" class="percorso-close" aria-label="Chiudi percorso curatoriale">Chiudi ✕</button>
+        </div>
+
+        <OperaFocus />
+
+        <div class="percorso-overlay__bottom">
+            <button type="button" id="percorso-prev" class="percorso-nav-btn" aria-label="Opera precedente">←</button>
+            <p id="percorso-progress" class="text-xs md:text-sm uppercase tracking-[0.16em] text-gray-400">0 / 0</p>
+            <button type="button" id="percorso-next" class="percorso-nav-btn" aria-label="Opera successiva">→</button>
+        </div>
+    </div>
+</div>
+
+<script is:inline define:vars={{ works }}>
+    const initPercorsoOverlay = () => {
+        const overlay = document.getElementById("percorso-overlay");
+        const trigger = document.getElementById("percorso-trigger");
+        const closeButton = document.getElementById("percorso-close");
+        const prevButton = document.getElementById("percorso-prev");
+        const nextButton = document.getElementById("percorso-next");
+        const progressNode = document.getElementById("percorso-progress");
+        const valueBar = document.getElementById("percorso-valuebar");
+        const keyButtons = Array.from(document.querySelectorAll(".percorso-key-btn"));
+
+        const imageNode = document.getElementById("percorso-opera-image");
+        const titleNode = document.getElementById("percorso-opera-title");
+        const metaNode = document.getElementById("percorso-opera-meta");
+        const descriptionNode = document.getElementById("percorso-opera-description");
+        const linkNode = document.getElementById("percorso-opera-link");
+        const noteNode = document.getElementById("percorso-curator-note");
+
+        if (!overlay || overlay.dataset.bound === "true") return;
+        if (!trigger || !imageNode || !titleNode || !metaNode || !descriptionNode || !linkNode || !noteNode || !valueBar) return;
+        overlay.dataset.bound = "true";
+
+        const state = {
+            key: "tema",
+            value: "",
+            list: [],
+            index: 0,
+            touchStartX: 0,
+        };
+
+        const periodoOrder = {
+            radici: 1,
+            passaggio: 2,
+            orizzonti: 3,
+            contemporaneo: 4,
+        };
+
+        const getValuesForKey = (key) => {
+            const values = Array.from(new Set(works.map((work) => (work[key] || "").toString().trim()).filter(Boolean)));
+            if (key === "periodo") return values.sort((a, b) => (periodoOrder[a] || 99) - (periodoOrder[b] || 99));
+            return values.sort((a, b) => a.localeCompare(b, "it"));
+        };
+
+        const narrativeSort = (list, key) => {
+            return [...list].sort((a, b) => {
+                const periodDelta = (periodoOrder[a.periodo] || 99) - (periodoOrder[b.periodo] || 99);
+                if (periodDelta !== 0) return periodDelta;
+
+                const dateA = new Date(a.date || a.year || 0).getTime();
+                const dateB = new Date(b.date || b.year || 0).getTime();
+                if (dateA !== dateB) return dateA - dateB;
+
+                if (key === "emozione") return (a.tema || "").localeCompare(b.tema || "", "it");
+                return a.title.localeCompare(b.title, "it");
+            });
+        };
+
+        const curatorNote = (work, index, total) => {
+            const family = state.key === "tema" ? work.tema : state.key === "periodo" ? work.periodo : work.emozione;
+            return `Tappa ${index + 1} di ${total}: ${family}. Una progressione visiva tra linguaggio, memoria e presenza.`;
+        };
+
+        const updateUI = () => {
+            const current = state.list[state.index];
+            if (!current) return;
+
+            imageNode.src = current.image || "";
+            imageNode.alt = current.title || "Opera";
+            titleNode.textContent = current.title || "Opera";
+            metaNode.textContent = [current.year, current.technique].filter(Boolean).join(" • ");
+            descriptionNode.textContent = (current.description || "").trim();
+            linkNode.href = current.href || "/opere";
+            progressNode.textContent = `${state.index + 1} / ${state.list.length}`;
+            noteNode.textContent = curatorNote(current, state.index, state.list.length);
+
+            prevButton.disabled = state.index <= 0;
+            nextButton.disabled = state.index >= state.list.length - 1;
+        };
+
+        const applySelection = (key, value) => {
+            state.key = key;
+            state.value = value;
+
+            keyButtons.forEach((btn) => {
+                const active = btn.dataset.key === key;
+                btn.classList.toggle("is-active", active);
+                btn.setAttribute("aria-selected", active ? "true" : "false");
+            });
+
+            state.list = narrativeSort(works.filter((work) => work[key] === value), key);
+            state.index = 0;
+            updateUI();
+        };
+
+        const renderValues = (key) => {
+            const values = getValuesForKey(key);
+            if (!values.length) {
+                valueBar.innerHTML = "<p class='text-xs text-gray-500'>Nessun percorso disponibile.</p>";
+                return;
+            }
+
+            valueBar.innerHTML = values
+                .map(
+                    (value, index) =>
+                        `<button type=\"button\" class=\"percorso-value-btn ${index === 0 ? "is-active" : ""}\" data-value=\"${value}\">${value}</button>`,
+                )
+                .join("");
+
+            Array.from(valueBar.querySelectorAll(".percorso-value-btn")).forEach((button) => {
+                button.addEventListener("click", () => {
+                    const selected = button.getAttribute("data-value") || "";
+                    Array.from(valueBar.querySelectorAll(".percorso-value-btn")).forEach((node) =>
+                        node.classList.toggle("is-active", node === button),
+                    );
+                    applySelection(key, selected);
+                });
+            });
+
+            applySelection(key, values[0]);
+        };
+
+        const openOverlay = () => {
+            overlay.hidden = false;
+            overlay.setAttribute("aria-hidden", "false");
+            document.body.classList.add("percorso-lock-scroll");
+            renderValues(state.key);
+        };
+
+        const closeOverlay = () => {
+            overlay.hidden = true;
+            overlay.setAttribute("aria-hidden", "true");
+            document.body.classList.remove("percorso-lock-scroll");
+        };
+
+        trigger.addEventListener("click", openOverlay);
+        closeButton.addEventListener("click", closeOverlay);
+
+        prevButton.addEventListener("click", () => {
+            if (state.index > 0) {
+                state.index -= 1;
+                updateUI();
+            }
+        });
+
+        nextButton.addEventListener("click", () => {
+            if (state.index < state.list.length - 1) {
+                state.index += 1;
+                updateUI();
+            }
+        });
+
+        keyButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const key = button.dataset.key || "tema";
+                renderValues(key);
+            });
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (overlay.hidden) return;
+            if (event.key === "Escape") closeOverlay();
+            if (event.key === "ArrowLeft") prevButton.click();
+            if (event.key === "ArrowRight") nextButton.click();
+        });
+
+        overlay.addEventListener("touchstart", (event) => {
+            state.touchStartX = event.changedTouches[0]?.clientX || 0;
+        });
+
+        overlay.addEventListener("touchend", (event) => {
+            const touchEndX = event.changedTouches[0]?.clientX || 0;
+            const delta = touchEndX - state.touchStartX;
+            if (Math.abs(delta) < 40) return;
+            if (delta > 0) prevButton.click();
+            if (delta < 0) nextButton.click();
+        });
+    };
+
+    initPercorsoOverlay();
+    document.addEventListener("DOMContentLoaded", initPercorsoOverlay, { once: true });
+    document.addEventListener("astro:page-load", initPercorsoOverlay);
+</script>
+
+<style>
+    :global(body.percorso-lock-scroll) {
+        overflow: hidden;
+    }
+
+    .percorso-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        background: rgba(6, 6, 6, 0.96);
+        padding: 1.25rem;
+        overflow-y: auto;
+    }
+
+    .percorso-overlay__inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        min-height: calc(100vh - 2.5rem);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1.25rem;
+    }
+
+    .percorso-overlay__top,
+    .percorso-overlay__bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .percorso-keybar,
+    .percorso-valuebar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .percorso-key-btn,
+    .percorso-value-btn,
+    .percorso-nav-btn,
+    .percorso-close {
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        color: #fff;
+        background: transparent;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        padding: 0.55rem 0.9rem;
+        transition: 180ms ease;
+    }
+
+    .percorso-key-btn.is-active,
+    .percorso-value-btn.is-active,
+    .percorso-nav-btn:hover,
+    .percorso-close:hover {
+        border-color: rgba(255, 255, 255, 0.64);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .percorso-nav-btn[disabled] {
+        opacity: 0.4;
+        pointer-events: none;
+    }
+
+    :global(.percorso-opera-focus) {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    :global(.percorso-opera-media) {
+        background: #111;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        min-height: 42vh;
+        padding: 1rem;
+    }
+
+    @media (max-width: 900px) {
+        :global(.percorso-opera-focus) {
+            grid-template-columns: 1fr;
+        }
+
+        :global(.percorso-opera-media) {
+            min-height: 36vh;
+        }
+    }
+</style>

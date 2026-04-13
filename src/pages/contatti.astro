@@ -1,0 +1,119 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getEntry } from "astro:content";
+
+const entry = await getEntry("pages", "contatti");
+if (!entry) throw new Error("Contact page not found");
+const { Content } = await entry.render();
+---
+
+<BaseLayout
+    title="Contatti | Luca Sanna"
+    description={entry.data.description}
+    context="page"
+>
+    <div class="max-w-3xl mx-auto px-4 py-12 md:py-24">
+        <h1
+            class="text-4xl md:text-6xl font-heading font-normal text-center mb-20 text-white uppercase tracking-[0.2em]"
+        >
+            Contatti
+        </h1>
+
+        <div class="contact-page-content prose prose-invert mx-auto text-gray-300 font-light leading-relaxed tracking-wide">
+            <Content />
+        </div>
+    </div>
+
+    <script>
+        const contactRoot = document.querySelector(".contact-page-content");
+
+        if (contactRoot) {
+            const junkPatterns = [
+                "LS CONTACT",
+                "Ninja Forms",
+                "PATCH: mobile double-border",
+                "formDisplay=1",
+                "Avviso: JavaScript è obbligatorio",
+            ];
+
+            contactRoot.querySelectorAll("p, a, script").forEach((node) => {
+                const text = (node.textContent || "").trim();
+                const isJunk = junkPatterns.some((pattern) =>
+                    text.includes(pattern),
+                );
+
+                if (
+                    node.tagName === "SCRIPT" ||
+                    isJunk ||
+                    (node.tagName === "A" && !node.getAttribute("href"))
+                ) {
+                    node.remove();
+                }
+            });
+        }
+    </script>
+</BaseLayout>
+
+<style is:global>
+    /* 
+    Raffina lo stile della pagina contatti rimuovendo i residui di WordPress
+    e uniformando il design al tema minimale del sito.
+  */
+
+    .contact-page-content .ls-contact {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .contact-page-content .ls-contact:before,
+    .contact-page-content .ls-contact__title,
+    .contact-page-content .ls-contact__badge,
+    .contact-page-content .ls-contact__dot {
+        display: none !important;
+    }
+
+    .contact-page-content .ls-contact__lead {
+        color: #a8a8a8 !important;
+        font-size: 1.1rem !important;
+        line-height: 1.8 !important;
+        margin-bottom: 3rem !important;
+        text-align: center;
+    }
+
+    .contact-page-content .ls-panel {
+        background: transparent !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        padding: 2rem !important;
+        margin-bottom: 2rem !important;
+    }
+
+    .contact-page-content .ls-panel__title {
+        color: #fff !important;
+        font-size: 0.75rem !important;
+        letter-spacing: 0.2em !important;
+        text-transform: uppercase !important;
+        margin-bottom: 1.5rem !important;
+        opacity: 0.6;
+    }
+
+    .contact-page-content a {
+        color: #fff !important;
+        text-decoration: none !important;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 2px;
+        transition: all 0.3s ease;
+    }
+
+    .contact-page-content a:hover {
+        border-bottom-color: #fff;
+        opacity: 0.8;
+    }
+
+    /* Hide the form if it's still present in the markdown but non-functional */
+    .contact-page-content .ls-contact__form, 
+    .contact-page-content .nf-form-wrap {
+        display: none !important;
+    }
+</style>

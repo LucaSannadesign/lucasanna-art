@@ -1,0 +1,69 @@
+---
+interface Props {
+    variants: string[];
+    intervalMs?: number;
+    enabled?: boolean;
+    className?: string;
+}
+
+const { variants = [], intervalMs = 24000, enabled = true, className = "" } = Astro.props;
+const safeVariants = variants.filter(Boolean);
+const initial = safeVariants[0] || "";
+---
+
+<p
+    class={`testo-mutabile ${className}`}
+    data-testo-mutabile
+    data-enabled={enabled ? "true" : "false"}
+    data-variants={JSON.stringify(safeVariants)}
+    data-interval={String(intervalMs)}
+>
+    <span data-testo-mutabile-value>{initial}</span>
+</p>
+
+<script is:inline>
+    const initTestoMutabile = () => {
+        document.querySelectorAll("[data-testo-mutabile]").forEach((node) => {
+            if (!(node instanceof HTMLElement) || node.dataset.enabled !== "true") return;
+            if (node.dataset.bound === "true") return;
+            node.dataset.bound = "true";
+
+            const valueNode = node.querySelector("[data-testo-mutabile-value]");
+            if (!(valueNode instanceof HTMLElement)) return;
+
+            let variants = [];
+            try {
+                variants = JSON.parse(node.dataset.variants || "[]");
+            } catch {
+                variants = [];
+            }
+            if (!Array.isArray(variants) || variants.length < 2) return;
+
+            const every = Number(node.dataset.interval || 24000);
+            let index = 0;
+
+            window.setInterval(() => {
+                index = (index + 1) % variants.length;
+                node.classList.add("is-fading");
+                window.setTimeout(() => {
+                    valueNode.textContent = variants[index] || "";
+                    node.classList.remove("is-fading");
+                }, 320);
+            }, Math.max(every, 12000));
+        });
+    };
+
+    initTestoMutabile();
+    document.addEventListener("astro:page-load", initTestoMutabile);
+</script>
+
+<style>
+    .testo-mutabile {
+        margin: 0;
+        transition: opacity 600ms ease;
+    }
+
+    .testo-mutabile.is-fading {
+        opacity: 0.36;
+    }
+</style>

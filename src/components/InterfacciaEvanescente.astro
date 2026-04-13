@@ -1,0 +1,37 @@
+---
+interface Props {
+    enabled?: boolean;
+    idleMs?: number;
+}
+
+const { enabled = true, idleMs = 5200 } = Astro.props;
+---
+
+<script is:inline define:vars={{ enabled, idleMs }}>
+    const initInterfacciaEvanescente = () => {
+        if (!enabled) return;
+        if (document.body.dataset.evanescenteBound === "true") return;
+        document.body.dataset.evanescenteBound = "true";
+
+        let timer = 0;
+
+        const fadeChrome = () => {
+            document.body.classList.add("ui-evanescente");
+        };
+
+        const resetTimer = () => {
+            document.body.classList.remove("ui-evanescente");
+            window.clearTimeout(timer);
+            timer = window.setTimeout(fadeChrome, Number(idleMs) || 5000);
+        };
+
+        ["mousemove", "pointerdown", "keydown", "touchstart", "scroll", "focusin"].forEach((eventName) => {
+            window.addEventListener(eventName, resetTimer, { passive: true });
+        });
+
+        resetTimer();
+    };
+
+    initInterfacciaEvanescente();
+    document.addEventListener("astro:page-load", initInterfacciaEvanescente);
+</script>

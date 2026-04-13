@@ -1,0 +1,18 @@
+---
+interface Props {
+    enabled?: boolean;
+}
+
+const { enabled = true } = Astro.props;
+---
+
+<script is:inline define:vars={{ enabled }}>
+    const initTransizionePercettiva = () => {
+        if (!enabled) return;
+        const supported = "startViewTransition" in document;
+        document.documentElement.classList.toggle("has-view-transition", supported);
+    };
+
+    initTransizionePercettiva();
+    document.addEventListener("astro:page-load", initTransizionePercettiva);
+</script>

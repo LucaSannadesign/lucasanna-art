@@ -1,0 +1,34 @@
+---
+interface Props {
+    selector?: string;
+    delayMs?: number;
+    enabled?: boolean;
+}
+
+const { selector = "[data-hover-narrativo]", delayMs = 900, enabled = true } = Astro.props;
+---
+
+<script is:inline define:vars={{ selector, delayMs, enabled }}>
+    const initHoverNarrativo = () => {
+        if (!enabled || window.matchMedia("(pointer: coarse)").matches) return;
+
+        const items = Array.from(document.querySelectorAll(selector));
+        items.forEach((item) => {
+            if (!(item instanceof HTMLElement) || item.dataset.hoverBound === "true") return;
+            item.dataset.hoverBound = "true";
+
+            let timer = 0;
+            item.addEventListener("mouseenter", () => {
+                timer = window.setTimeout(() => item.classList.add("is-hover-narrative"), Number(delayMs) || 900);
+            });
+
+            item.addEventListener("mouseleave", () => {
+                window.clearTimeout(timer);
+                item.classList.remove("is-hover-narrative");
+            });
+        });
+    };
+
+    initHoverNarrativo();
+    document.addEventListener("astro:page-load", initHoverNarrativo);
+</script>

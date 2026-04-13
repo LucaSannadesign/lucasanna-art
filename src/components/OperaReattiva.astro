@@ -1,0 +1,57 @@
+---
+interface Props {
+    selector: string;
+    enabled?: boolean;
+}
+
+const { selector = "[data-opera-reattiva]", enabled = true } = Astro.props;
+---
+
+<script is:inline define:vars={{ selector, enabled }}>
+    const initOperaReattiva = () => {
+        if (!enabled) return;
+        if (window.matchMedia("(pointer: coarse)").matches) return;
+
+        const nodes = Array.from(document.querySelectorAll(selector));
+        nodes.forEach((node) => {
+            if (!(node instanceof HTMLElement) || node.dataset.reactiveBound === "true") return;
+            node.dataset.reactiveBound = "true";
+            const strength = Number(node.dataset.parallaxStrength || 2.5);
+
+            let tx = 0;
+            let ty = 0;
+            let cx = 0;
+            let cy = 0;
+            let raf = 0;
+
+            const animate = () => {
+                cx += (tx - cx) * 0.09;
+                cy += (ty - cy) * 0.09;
+                node.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
+                if (Math.abs(tx - cx) > 0.02 || Math.abs(ty - cy) > 0.02) {
+                    raf = requestAnimationFrame(animate);
+                } else {
+                    raf = 0;
+                }
+            };
+
+            node.addEventListener("mousemove", (event) => {
+                const rect = node.getBoundingClientRect();
+                const px = (event.clientX - rect.left) / rect.width - 0.5;
+                const py = (event.clientY - rect.top) / rect.height - 0.5;
+                tx = px * strength;
+                ty = py * strength;
+                if (!raf) raf = requestAnimationFrame(animate);
+            });
+
+            node.addEventListener("mouseleave", () => {
+                tx = 0;
+                ty = 0;
+                if (!raf) raf = requestAnimationFrame(animate);
+            });
+        });
+    };
+
+    initOperaReattiva();
+    document.addEventListener("astro:page-load", initOperaReattiva);
+</script>

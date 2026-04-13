@@ -1,0 +1,60 @@
+---
+interface Props {
+    selector?: string;
+    delayMs?: number;
+    enabled?: boolean;
+}
+
+const { selector = "[data-tempo-sguardo]", delayMs = 3200, enabled = true } = Astro.props;
+---
+
+<script is:inline define:vars={{ selector, delayMs, enabled }}>
+    const initTempoDiSguardo = () => {
+        if (!enabled || !("IntersectionObserver" in window)) return;
+
+        const targets = Array.from(document.querySelectorAll(selector));
+        const timers = new WeakMap();
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const el = entry.target;
+                    if (!(el instanceof HTMLElement)) return;
+
+                    if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+                        const existingTimer = timers.get(el);
+                        if (existingTimer) return;
+
+                        const timer = window.setTimeout(() => {
+                            el.classList.add("is-gazed");
+                            const copy = el.querySelector("[data-sguardo-copy]");
+                            if (copy instanceof HTMLElement) copy.setAttribute("aria-hidden", "false");
+                            timers.delete(el);
+                        }, Number(delayMs) || 3000);
+                        timers.set(el, timer);
+                    } else {
+                        const timer = timers.get(el);
+                        if (timer) {
+                            window.clearTimeout(timer);
+                            timers.delete(el);
+                        }
+
+                        el.classList.remove("is-gazed");
+                        const copy = el.querySelector("[data-sguardo-copy]");
+                        if (copy instanceof HTMLElement) copy.setAttribute("aria-hidden", "true");
+                    }
+                });
+            },
+            { threshold: [0.35, 0.6, 0.85] },
+        );
+
+        targets.forEach((target) => {
+            if (target instanceof HTMLElement && target.dataset.gazeObserved === "true") return;
+            if (target instanceof HTMLElement) target.dataset.gazeObserved = "true";
+            observer.observe(target);
+        });
+    };
+
+    initTempoDiSguardo();
+    document.addEventListener("astro:page-load", initTempoDiSguardo);
+</script>

@@ -1,0 +1,405 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import PercorsoTrigger from "../../components/PercorsoTrigger.astro";
+import PercorsoOverlay from "../../components/PercorsoOverlay.astro";
+import OperaReattiva from "../../components/OperaReattiva.astro";
+import TempoDiSguardo from "../../components/TempoDiSguardo.astro";
+import RevealNarrativo from "../../components/RevealNarrativo.astro";
+import TestoMutabile from "../../components/TestoMutabile.astro";
+import HoverNarrativo from "../../components/HoverNarrativo.astro";
+import MemoriaVisiva from "../../components/MemoriaVisiva.astro";
+import FocusProgressivo from "../../components/FocusProgressivo.astro";
+
+const INTERACTIONS = {
+    reactiveMotion: true,
+    gazeTime: true,
+    reveal: true,
+    mutableText: true,
+    hoverNarrativo: true,
+    memoriaVisiva: true,
+    focusProgressivo: true,
+};
+
+const allWorks: CollectionEntry<"opere">[] = (await getCollection("opere")).filter(
+    (work) => work.slug.includes("/"),
+);
+const sortedWorks = allWorks.sort(
+    (a, b) =>
+        new Date(b.data.date || 0).getTime() -
+        new Date(a.data.date || 0).getTime(),
+);
+
+const CATEGORY_LABELS: Record<string, string> = {
+    animali: "Animali",
+    pittura: "Pittura",
+    grafica: "Grafica",
+    paesaggio: "Paesaggio",
+    ritratti: "Ritratti",
+    opere: "Opere",
+};
+
+const getWorkCategory = (work: CollectionEntry<"opere">) => {
+    const explicitCategory = work.data.categories?.[0]?.toLowerCase();
+    if (explicitCategory) return explicitCategory;
+    return work.slug.split("/")[0]?.toLowerCase() || "altro";
+};
+
+const availableCategories = Array.from(
+    new Set(sortedWorks.map((work) => getWorkCategory(work))),
+).filter(Boolean);
+
+const inferTema = (work: CollectionEntry<"opere">) => {
+    if (work.data.tema) return work.data.tema.toLowerCase();
+    const category = getWorkCategory(work);
+    const tags = (work.data.tags || []).map((tag) => tag.toLowerCase());
+    if (tags.some((tag) => tag.includes("natura") || tag.includes("paesaggio"))) return "natura";
+    if (tags.some((tag) => tag.includes("ritratto") || tag.includes("volto"))) return "figura";
+    if (category === "animali") return "fauna";
+    if (category === "grafica") return "segno";
+    if (category === "ritratti") return "identità";
+    return "luce";
+};
+
+const inferPeriodo = (work: CollectionEntry<"opere">) => {
+    if (work.data.periodo) return work.data.periodo.toLowerCase();
+    const sourceYear = Number(work.data.year || new Date(work.data.date || 0).getFullYear() || 0);
+    if (sourceYear && sourceYear <= 2021) return "radici";
+    if (sourceYear && sourceYear <= 2023) return "passaggio";
+    if (sourceYear && sourceYear <= 2024) return "orizzonti";
+    return "contemporaneo";
+};
+
+const inferEmozione = (work: CollectionEntry<"opere">) => {
+    if (work.data.emozione) return work.data.emozione.toLowerCase();
+    const category = getWorkCategory(work);
+    if (category === "paesaggio") return "contemplazione";
+    if (category === "ritratti") return "intimità";
+    if (category === "animali") return "vitalità";
+    if (category === "grafica") return "tensione";
+    return "meraviglia";
+};
+
+const percorsoWorks = sortedWorks.map((work) => ({
+    title: work.data.title,
+    image: work.data.featuredImage || "",
+    description: work.data.description || "",
+    year: work.data.year ? String(work.data.year) : "",
+    date: work.data.date ? String(work.data.date) : "",
+    technique: work.data.technique || "",
+    href: `/opere/${work.slug}`,
+    tema: inferTema(work),
+    periodo: inferPeriodo(work),
+    emozione: inferEmozione(work),
+}));
+---
+
+<BaseLayout
+    title="Opere | Luca Sanna"
+    description="Galleria delle opere di Luca Sanna"
+>
+    <div class="py-12 md:py-20 px-4">
+        <h1
+            class="text-4xl md:text-7xl font-heading font-normal text-center mb-24 uppercase tracking-[0.2em] text-white"
+        >
+            Opere
+        </h1>
+
+        <div class="text-center mb-10">
+            <TestoMutabile
+                enabled={INTERACTIONS.mutableText}
+                intervalMs={24000}
+                variants={[
+                    "Una soglia tra visione e memoria.",
+                    "Ogni opera cambia al variare dello sguardo.",
+                    "Il ritmo dell'archivio è un invito alla lentezza.",
+                ]}
+                className="text-xs uppercase tracking-[0.16em] text-gray-500"
+            />
+        </div>
+
+        <div class="max-w-7xl mx-auto mb-12 md:mb-14">
+            <div
+                class="hidden md:flex flex-wrap justify-center gap-3"
+                role="toolbar"
+                aria-label="Filtra opere per categoria"
+            >
+                <button
+                    type="button"
+                    class="opere-filter-btn border border-white/15 px-4 py-2 text-xs uppercase tracking-[0.16em] text-gray-300 hover:text-white hover:border-white/40 transition-colors"
+                    data-filter="all"
+                    aria-pressed="true"
+                >
+                    Tutte
+                </button>
+
+                {
+                    availableCategories.map((category) => (
+                        <button
+                            type="button"
+                            class="opere-filter-btn border border-white/15 px-4 py-2 text-xs uppercase tracking-[0.16em] text-gray-300 hover:text-white hover:border-white/40 transition-colors"
+                            data-filter={category}
+                            aria-pressed="false"
+                        >
+                            {CATEGORY_LABELS[category] || category}
+                        </button>
+                    ))
+                }
+            </div>
+
+            <div class="md:hidden max-w-xs mx-auto">
+                <label for="opere-filter-select" class="sr-only"
+                    >Filtra opere per categoria</label
+                >
+                <select
+                    id="opere-filter-select"
+                    class="w-full bg-[#141414] border border-white/15 text-gray-300 text-sm px-4 py-3 uppercase tracking-[0.14em]"
+                >
+                    <option value="all">Tutte</option>
+                    {
+                        availableCategories.map((category) => (
+                            <option value={category}>
+                                {CATEGORY_LABELS[category] || category}
+                            </option>
+                        ))
+                    }
+                </select>
+            </div>
+        </div>
+
+        <PercorsoTrigger />
+
+        <div
+            id="opere-grid"
+            class="opere-gallery grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-24 max-w-7xl mx-auto"
+        >
+            {
+                sortedWorks.map((work, index) => {
+                    const category = getWorkCategory(work);
+                    const tags = (work.data.tags || [])
+                        .map((tag) => tag.toLowerCase())
+                        .join(" ");
+
+                    return (
+                    <a
+                        href={`/opere/${work.slug}`}
+                        class="group block opere-card"
+                        data-gallery-card
+                        data-fx-card
+                        data-reveal-item
+                        data-reveal-order={String(index)}
+                        data-hover-narrativo
+                        data-memoria-slug={work.slug}
+                        data-categoria={category}
+                        data-tipo={category}
+                        data-tema={tags}
+                    >
+                        <div class="opere-media aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative" data-tempo-sguardo>
+                            {work.data.featuredImage ? (
+                                <img
+                                    src={work.data.featuredImage}
+                                    alt={work.data.title}
+                                    data-opera-reattiva
+                                    data-focus-progressivo
+                                    data-gaze-media
+                                    data-parallax-strength="3"
+                                    style={`view-transition-name: opera-${work.slug.replaceAll("/", "-")};`}
+                                    class="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div class="w-full h-full bg-[#1a1a1a] flex items-center justify-center text-gray-600 font-light tracking-widest uppercase text-sm">
+                                    No Image
+                                </div>
+                            )}
+
+                            <p
+                                class="opere-gaze-copy text-[10px] uppercase tracking-[0.16em] text-gray-300"
+                                data-sguardo-copy
+                                aria-hidden="true"
+                            >
+                                Lo sguardo resta: l'opera cambia tono.
+                            </p>
+
+                            <p
+                                class="opere-hover-copy text-[10px] uppercase tracking-[0.16em] text-gray-300"
+                                data-hover-copy
+                                aria-hidden="true"
+                            >
+                                Un dettaglio emerge solo con uno sguardo più lungo.
+                            </p>
+                        </div>
+                        <div class="text-center">
+                            <h2 class="opere-card-title text-xl font-heading text-white mb-2 transition-colors">
+                                {work.data.title}
+                            </h2>
+                            {work.data.technique && (
+                                <p class="text-xs text-gray-500 uppercase tracking-widest mb-2">
+                                    {work.data.technique}
+                                </p>
+                            )}
+                            {work.data.description && (
+                                <p class="opere-card-description text-xs text-gray-400 leading-relaxed">
+                                    {work.data.description}
+                                </p>
+                            )}
+                        </div>
+                    </a>
+                )})
+            }
+        </div>
+
+        <PercorsoOverlay works={percorsoWorks} />
+    </div>
+
+    <RevealNarrativo enabled={INTERACTIONS.reveal} selector="[data-reveal-item]" />
+    <OperaReattiva enabled={INTERACTIONS.reactiveMotion} selector="[data-opera-reattiva]" />
+    <TempoDiSguardo enabled={INTERACTIONS.gazeTime} selector="[data-tempo-sguardo]" delayMs={3400} />
+    <HoverNarrativo enabled={INTERACTIONS.hoverNarrativo} selector="[data-hover-narrativo]" delayMs={900} />
+    <MemoriaVisiva enabled={INTERACTIONS.memoriaVisiva} selector="[data-memoria-slug]" />
+    <FocusProgressivo enabled={INTERACTIONS.focusProgressivo} selector="[data-focus-progressivo]" />
+
+    <script is:inline>
+        const initOpereFilters = () => {
+            const grid = document.getElementById("opere-grid");
+            if (!grid) return;
+
+            const cards = Array.from(document.querySelectorAll(".opere-card"));
+            const buttons = Array.from(document.querySelectorAll(".opere-filter-btn"));
+            const select = document.getElementById("opere-filter-select");
+
+            const applyFilter = (filter) => {
+                const active = (filter || "all").toLowerCase();
+
+                cards.forEach((card) => {
+                    const categoria = (card.getAttribute("data-categoria") || "").toLowerCase();
+                    const visible = active === "all" || categoria === active;
+                    card.style.display = visible ? "block" : "none";
+                });
+
+                buttons.forEach((button) => {
+                    const isActive = (button.dataset.filter || "all") === active;
+                    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+                    button.classList.toggle("text-white", isActive);
+                    button.classList.toggle("border-white/50", isActive);
+                });
+
+                if (select && select.value !== active) select.value = active;
+            };
+
+            buttons.forEach((button) => {
+                if (button.dataset.bound === "true") return;
+                button.dataset.bound = "true";
+                button.addEventListener("click", () => {
+                    applyFilter(button.dataset.filter || "all");
+                });
+            });
+
+            if (select && select.dataset.bound !== "true") {
+                select.dataset.bound = "true";
+                select.addEventListener("change", () => applyFilter(select.value));
+            }
+
+            applyFilter("all");
+        };
+
+        initOpereFilters();
+        document.addEventListener("DOMContentLoaded", initOpereFilters, { once: true });
+        document.addEventListener("astro:page-load", initOpereFilters);
+
+        const initFocusProgressivoFallback = () => {
+            if (!window.matchMedia("(pointer: fine)").matches) return;
+
+            const gallery = document.querySelector(".opere-gallery");
+            if (!(gallery instanceof HTMLElement) || gallery.dataset.focusFallbackBound === "true") return;
+            gallery.dataset.focusFallbackBound = "true";
+
+            const cards = Array.from(gallery.querySelectorAll("[data-fx-card]"));
+            let enterTimer = 0;
+            let activeCard = null;
+
+            const applyReductionProfile = () => {
+                const KEY = "opere-fx-profile-v1";
+                const now = Date.now();
+                let visits = 1;
+
+                try {
+                    const payload = JSON.parse(localStorage.getItem(KEY) || "{}");
+                    const last = Number(payload.last || 0);
+                    const previous = Number(payload.visits || 0);
+                    const twelveHours = 12 * 60 * 60 * 1000;
+                    visits = last && now - last < twelveHours ? Math.max(previous, 1) : Math.max(previous + 1, 1);
+                    localStorage.setItem(KEY, JSON.stringify({ visits, last: now }));
+                } catch {
+                    // noop
+                }
+
+                const factor = Math.max(0.52, 1 - Math.max(0, visits - 1) * 0.06);
+                document.documentElement.style.setProperty("--opere-fx-factor", factor.toFixed(3));
+            };
+
+            applyReductionProfile();
+
+            const activate = (card) => {
+                if (!(card instanceof HTMLElement)) return;
+                if (activeCard && activeCard !== card && activeCard instanceof HTMLElement) {
+                    activeCard.classList.remove("is-focused", "is-focused-delayed", "is-grid-break");
+                }
+
+                activeCard = card;
+                card.classList.add("is-focused", "is-focused-delayed");
+                const order = Number(card.dataset.revealOrder || 0);
+                card.classList.toggle("is-grid-break", order % 4 === 0);
+                card.style.setProperty("--crop-shift-x", order % 2 === 0 ? "-1.1%" : "1.1%");
+                card.style.setProperty("--crop-shift-y", order % 3 === 0 ? "0.9%" : "-0.8%");
+                gallery.classList.add("is-gallery-focused");
+                cards.forEach((node) => {
+                    if (node !== card && node instanceof HTMLElement) node.classList.remove("is-focused", "is-focused-delayed", "is-grid-break");
+                });
+            };
+
+            const clearCard = (card) => {
+                if (!(card instanceof HTMLElement)) return;
+                card.classList.remove("is-focused", "is-focused-delayed", "is-grid-break");
+                card.style.removeProperty("--crop-shift-x");
+                card.style.removeProperty("--crop-shift-y");
+                if (activeCard === card) activeCard = null;
+            };
+
+            const clear = () => {
+                window.clearTimeout(enterTimer);
+                gallery.classList.remove("is-gallery-focused");
+                cards.forEach((card) => clearCard(card));
+            };
+
+            cards.forEach((card) => {
+                if (!(card instanceof HTMLElement)) return;
+                card.addEventListener("mouseenter", () => {
+                    window.clearTimeout(enterTimer);
+                    enterTimer = window.setTimeout(() => activate(card), 120);
+                });
+
+                card.addEventListener("mouseleave", () => {
+                    window.clearTimeout(enterTimer);
+                    clearCard(card);
+                    if (!gallery.matches(":hover")) gallery.classList.remove("is-gallery-focused");
+                });
+                card.addEventListener("focusin", () => {
+                    window.clearTimeout(enterTimer);
+                    enterTimer = window.setTimeout(() => activate(card), 70);
+                });
+                card.addEventListener("focusout", () => {
+                    window.clearTimeout(enterTimer);
+                    clearCard(card);
+                    gallery.classList.remove("is-gallery-focused");
+                });
+            });
+
+            gallery.addEventListener("mouseleave", clear);
+        };
+
+        initFocusProgressivoFallback();
+        document.addEventListener("astro:page-load", initFocusProgressivoFallback);
+    </script>
+
+    <script src="../../scripts/masonry-entrance.js"></script>
+</BaseLayout>

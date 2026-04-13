@@ -1,0 +1,235 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getEntry, getCollection, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+
+// Get Home Page Content
+const entry = await getEntry("pages", "index");
+if (!entry) throw new Error("Missing index page");
+const { Content } = await entry.render();
+
+// Get Recent Works (top 6?)
+const recentWorks: CollectionEntry<"opere">[] = (await getCollection("opere"))
+	.filter((work) => !work.slug.includes("/"))
+	.sort(
+		(a, b) =>
+			new Date(b.data.date || 0).getTime() -
+			new Date(a.data.date || 0).getTime(),
+	)
+	.slice(0, 6);
+
+// Get Recent Posts (top 3)
+const recentPosts: CollectionEntry<"posts">[] = (await getCollection("posts"))
+	.sort(
+		(a, b) =>
+			new Date(b.data.date || 0).getTime() -
+			new Date(a.data.date || 0).getTime(),
+	)
+	.slice(0, 3);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description}>
+	<!-- Hero / Intro -->
+	<section class="max-w-5xl mx-auto mb-14 md:mb-20 pt-8 md:pt-12 text-center">
+		{
+			entry.data.featuredImage && (
+				<img
+					src={entry.data.featuredImage}
+					alt="Luca Sanna"
+					class="w-full max-h-[62vh] object-cover mb-10 md:mb-12 grayscale hover:grayscale-0 transition-all duration-1000 ease-in-out shadow-2xl"
+				/>
+			)
+		}
+		<div
+			class="home-editorial-content prose prose-invert lg:prose-xl mx-auto font-light text-gray-300 leading-relaxed"
+		>
+			<Content />
+		</div>
+	</section>
+
+	<!-- Recent Works Section -->
+	<section class="mb-16 md:mb-24">
+		<h2
+			class="text-3xl md:text-4xl font-heading font-normal text-center mb-10 md:mb-12 uppercase tracking-[0.2em] text-white"
+		>
+			Opere Recenti
+		</h2>
+		<div
+			class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10"
+		>
+			{
+				recentWorks.map((work) => (
+					<a href={`/opere/${work.slug}`} class="group block">
+						<div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6">
+							{work.data.featuredImage && (
+								<img
+									src={work.data.featuredImage}
+									alt={work.data.title}
+									class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000 ease-out"
+								/>
+							)}
+						</div>
+						<div class="text-center">
+							<h3 class="text-xl font-heading text-white mb-2 group-hover:text-gray-300 transition-colors">
+								{work.data.title}
+							</h3>
+							{work.data.technique && (
+								<p class="text-xs text-gray-500 uppercase tracking-widest mb-1">
+									{work.data.technique}
+								</p>
+							)}
+						</div>
+					</a>
+				))
+			}
+		</div>
+		<div class="text-center mt-12">
+			<a
+				href="/opere"
+				class="inline-block border-b border-white pb-1 text-sm uppercase tracking-[0.2em] hover:text-gray-400 hover:border-gray-400 transition-all"
+			>
+				Vedi tutte le opere
+			</a>
+		</div>
+	</section>
+
+	<!-- Recent Blog Section -->
+	<section class="mb-14 md:mb-20">
+		<h2
+			class="text-3xl md:text-4xl font-heading font-normal text-center mb-10 md:mb-12 uppercase tracking-[0.2em] text-white"
+		>
+			Dal Blog
+		</h2>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+			{
+				recentPosts.map((post) => (
+					<a href={`/blog/${post.slug}`} class="block group">
+						<div class="aspect-[3/2] overflow-hidden bg-[#1a1a1a] mb-6">
+							{post.data.featuredImage && (
+								<img
+									src={post.data.featuredImage}
+									alt={post.data.title}
+									class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+								/>
+							)}
+						</div>
+						<div>
+							<div class="text-xs text-gray-500 mb-3 uppercase tracking-widest">
+								{new Date(post.data.date).toLocaleDateString(
+									"it-IT",
+									{
+										year: "numeric",
+										month: "long",
+										day: "numeric",
+									},
+								)}
+							</div>
+							<h3 class="text-2xl font-heading text-white mb-4 leading-tight group-hover:underline decoration-1 underline-offset-4">
+								{post.data.title}
+							</h3>
+							{post.data.description && (
+								<p class="text-sm text-gray-400 leading-relaxed line-clamp-3">
+									{post.data.description}
+								</p>
+							)}
+						</div>
+					</a>
+				))
+			}
+		</div>
+		<div class="text-center mt-12">
+			<a
+				href="/blog-arte"
+				class="inline-block border-b border-white pb-1 text-sm uppercase tracking-[0.2em] hover:text-gray-400 hover:border-gray-400 transition-all"
+			>
+				Vai al blog
+			</a>
+		</div>
+	</section>
+
+	<script>
+		const editorialRoot = document.querySelector(".home-editorial-content");
+
+		if (editorialRoot) {
+			const stopHeadings = [
+				"Scopri le opere di Luca Sanna",
+				"Blog d’Arte Contemporanea e tecniche",
+				"Articoli Recenti",
+			];
+
+			let node = editorialRoot.firstElementChild;
+			while (node) {
+				const next = node.nextElementSibling;
+				const text = (node.textContent || "").trim();
+
+				if (node.tagName === "H2" && stopHeadings.includes(text)) {
+					let removeNode = node;
+					while (removeNode) {
+						const nextNode = removeNode.nextElementSibling;
+						removeNode.remove();
+						removeNode = nextNode;
+					}
+					break;
+				}
+
+				node = next;
+			}
+
+			editorialRoot.querySelectorAll("p, a").forEach((el) => {
+				if (el.querySelector("img")) el.remove();
+			});
+		}
+	</script>
+
+<script>
+	// Replace low-resolution image URLs with full resolution versions
+	function upgradeImageResolution() {
+		// Pattern to match dimension suffixes: -WIDTHxHEIGHT before file extension
+		// Handles both single dash and double dash (e.g., .jpg--705x1024.jpg)
+		const dimensionPattern = /-+\d+x\d+(\.(jpg|jpeg|png|webp|gif|avif))/gi;
+		
+		// Query all images on the homepage
+		const images = document.querySelectorAll('img');
+		
+		let upgradedCount = 0;
+		
+		images.forEach((img) => {
+			const currentSrc = img.getAttribute('src');
+			
+			if (!currentSrc) return;
+			
+			// Check if the src contains dimension suffix
+			if (/-+\d+x\d+\.(jpg|jpeg|png|webp|gif|avif)/i.test(currentSrc)) {
+				// Remove the dimension suffix to get full resolution
+				const fullResSrc = currentSrc.replace(dimensionPattern, '$1');
+				
+				// Only update if the result is different
+				if (fullResSrc !== currentSrc) {
+					img.setAttribute('src', fullResSrc);
+					upgradedCount++;
+					
+					// Also update srcset if present
+					const srcset = img.getAttribute('srcset');
+					if (srcset) {
+						const upgradedSrcset = srcset.replace(dimensionPattern, '$1');
+						img.setAttribute('srcset', upgradedSrcset);
+					}
+					
+					console.log(`🖼️ Upgraded: ${currentSrc.split('/').pop()} → ${fullResSrc.split('/').pop()}`);
+				}
+			}
+		});
+		
+		if (upgradedCount > 0) {
+			console.log(`✅ Upgraded ${upgradedCount} image${upgradedCount !== 1 ? 's' : ''} to full resolution`);
+		}
+	}
+	
+	// Run on DOM ready
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', upgradeImageResolution);
+	} else {
+		upgradeImageResolution();
+	}
+</script>
+

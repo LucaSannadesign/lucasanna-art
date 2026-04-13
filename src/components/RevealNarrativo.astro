@@ -1,0 +1,36 @@
+---
+interface Props {
+    selector?: string;
+    enabled?: boolean;
+}
+
+const { selector = "[data-reveal-item]", enabled = true } = Astro.props;
+---
+
+<script is:inline define:vars={{ selector, enabled }}>
+    const initRevealNarrativo = () => {
+        if (!enabled || !("IntersectionObserver" in window)) return;
+
+        const items = Array.from(document.querySelectorAll(selector));
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+                    const el = entry.target;
+                    if (!(el instanceof HTMLElement)) return;
+                    const order = Number(el.dataset.revealOrder || 0);
+                    window.setTimeout(() => {
+                        el.classList.add("is-revealed");
+                    }, Math.min(order * 70, 700));
+                    observer.unobserve(el);
+                });
+            },
+            { threshold: 0.2 },
+        );
+
+        items.forEach((item) => observer.observe(item));
+    };
+
+    initRevealNarrativo();
+    document.addEventListener("astro:page-load", initRevealNarrativo);
+</script>

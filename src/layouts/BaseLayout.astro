@@ -1,0 +1,64 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ModalitaPercettivaToggle from "../components/ModalitaPercettivaToggle.astro";
+import InterfacciaEvanescente from "../components/InterfacciaEvanescente.astro";
+import TransizionePercettiva from "../components/TransizionePercettiva.astro";
+import "../styles/global.css";
+
+interface Props {
+    title: string;
+    description?: string;
+    image?: string;
+    context?: "home" | "blog" | "page";
+}
+
+const { title, description, image } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ENABLE_PERCEPTIVE_TOGGLE = true;
+const ENABLE_EVANESCENTE_UI = true;
+const ENABLE_PERCETTIVE_TRANSITIONS = true;
+---
+
+<!doctype html>
+<html lang="it" data-modalita-percettiva="silenzio">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="description"
+            content={description ||
+                "Luca Sanna - Arte Visiva e Paesaggi Onirici in Sardegna"}
+        />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="canonical" href={canonicalURL} />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+        <script is:inline>
+            document.documentElement.classList.add("js");
+        </script>
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+
+        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+        ></script>
+    </head>
+    <body class="bg-[#121212] text-[#e0e0e0] flex flex-col min-h-screen">
+        <Header />
+        <main class="flex-grow container mx-auto px-4 py-8 mt-24 md:mt-32">
+            <slot />
+        </main>
+
+        <ModalitaPercettivaToggle enabled={ENABLE_PERCEPTIVE_TOGGLE} />
+        <InterfacciaEvanescente enabled={ENABLE_EVANESCENTE_UI} idleMs={5200} />
+        <TransizionePercettiva enabled={ENABLE_PERCETTIVE_TRANSITIONS} />
+
+        <Footer />
+    </body>
+</html>

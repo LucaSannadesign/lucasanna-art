@@ -1,0 +1,93 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    const pages = await getCollection("pages");
+    const posts = await getCollection("posts");
+
+    const pagePaths = pages
+        .filter((entry) => entry.slug !== "index")
+        .map((entry) => ({
+            params: { slug: entry.slug },
+            props: { entry, type: "page" as const },
+        }));
+
+    const postPaths = posts.map((entry) => ({
+        params: { slug: entry.slug },
+        props: { entry, type: "post" as const },
+    }));
+
+    return [...pagePaths, ...postPaths];
+}
+
+type Props =
+    | { entry: CollectionEntry<"pages">; type: "page" }
+    | { entry: CollectionEntry<"posts">; type: "post" };
+
+const { entry, type } = Astro.props;
+const { Content } = await entry.render();
+
+const layoutContext = type === "post" ? "blog" : "page";
+
+// Helper to access data safely across types
+const title = entry.data.title;
+const description = entry.data.description;
+const featuredImage = entry.data.featuredImage;
+const date = "date" in entry.data ? entry.data.date : undefined;
+const categories =
+    "categories" in entry.data ? entry.data.categories : undefined;
+
+// Format date helper
+const formatDate = (d: Date | string) => {
+    return new Date(d).toLocaleDateString("it-IT", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+};
+---
+
+<BaseLayout title={title} description={description} context={layoutContext}>
+    <article class="max-w-3xl mx-auto px-4 py-12">
+        <header class="mb-12 text-center">
+            {
+                type === "post" && date && (
+                    <div class="text-gray-500 text-xs uppercase tracking-[0.2em] mb-4">
+                        <time datetime={date.toString()}>
+                            {formatDate(date)}
+                        </time>
+                        {categories && (
+                            <span class="ml-2 text-gray-600">
+                                — {categories.join(", ")}
+                            </span>
+                        )}
+                    </div>
+                )
+            }
+            <h1
+                class="text-4xl md:text-5xl font-heading font-normal mb-6 leading-tight text-white"
+            >
+                {title}
+            </h1>
+        </header>
+
+        {
+            featuredImage && (
+                <div class="mb-12">
+                    <img
+                        src={featuredImage}
+                        alt={title}
+                        class="w-full h-auto object-cover"
+                    />
+                </div>
+            )
+        }
+
+        <div
+            class="prose prose-invert prose-lg mx-auto text-gray-300 leading-relaxed font-light tracking-wide ProseMirror"
+        >
+            <Content />
+        </div>
+    </article>
+</BaseLayout>
