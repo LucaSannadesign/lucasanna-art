@@ -4,21 +4,15 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import PercorsoTrigger from "../../components/PercorsoTrigger.astro";
 import PercorsoOverlay from "../../components/PercorsoOverlay.astro";
 import OperaReattiva from "../../components/OperaReattiva.astro";
-import TempoDiSguardo from "../../components/TempoDiSguardo.astro";
 import RevealNarrativo from "../../components/RevealNarrativo.astro";
 import TestoMutabile from "../../components/TestoMutabile.astro";
-import HoverNarrativo from "../../components/HoverNarrativo.astro";
 import MemoriaVisiva from "../../components/MemoriaVisiva.astro";
-import FocusProgressivo from "../../components/FocusProgressivo.astro";
 
 const INTERACTIONS = {
     reactiveMotion: true,
-    gazeTime: true,
     reveal: true,
     mutableText: true,
-    hoverNarrativo: true,
     memoriaVisiva: true,
-    focusProgressivo: true,
 };
 
 const allWorks: CollectionEntry<"opere">[] = (await getCollection("opere")).filter(
@@ -188,19 +182,17 @@ const percorsoWorks = sortedWorks.map((work) => ({
                         data-fx-card
                         data-reveal-item
                         data-reveal-order={String(index)}
-                        data-hover-narrativo
                         data-memoria-slug={work.slug}
                         data-categoria={category}
                         data-tipo={category}
                         data-tema={tags}
                     >
-                        <div class="opere-media aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative" data-tempo-sguardo>
+                        <div class="opere-media aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative">
                             {work.data.featuredImage ? (
                                 <img
                                     src={work.data.featuredImage}
                                     alt={work.data.title}
                                     data-opera-reattiva
-                                    data-focus-progressivo
                                     data-gaze-media
                                     data-parallax-strength="3"
                                     style={`view-transition-name: opera-${work.slug.replaceAll("/", "-")};`}
@@ -212,21 +204,23 @@ const percorsoWorks = sortedWorks.map((work) => ({
                                 </div>
                             )}
 
-                            <p
-                                class="opere-gaze-copy text-[10px] uppercase tracking-[0.16em] text-gray-300"
-                                data-sguardo-copy
+                            <span
+                                class="opere-card-link-hint"
                                 aria-hidden="true"
                             >
-                                Lo sguardo resta: l'opera cambia tono.
-                            </p>
-
-                            <p
-                                class="opere-hover-copy text-[10px] uppercase tracking-[0.16em] text-gray-300"
-                                data-hover-copy
-                                aria-hidden="true"
-                            >
-                                Un dettaglio emerge solo con uno sguardo più lungo.
-                            </p>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="w-4 h-4"
+                                >
+                                    <path d="M7 17L17 7M7 7h10v10"></path>
+                                </svg>
+                            </span>
                         </div>
                         <div class="text-center">
                             <h2 class="opere-card-title text-xl font-heading text-white mb-2 transition-colors">
@@ -253,10 +247,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
 
     <RevealNarrativo enabled={INTERACTIONS.reveal} selector="[data-reveal-item]" />
     <OperaReattiva enabled={INTERACTIONS.reactiveMotion} selector="[data-opera-reattiva]" />
-    <TempoDiSguardo enabled={INTERACTIONS.gazeTime} selector="[data-tempo-sguardo]" delayMs={3400} />
-    <HoverNarrativo enabled={INTERACTIONS.hoverNarrativo} selector="[data-hover-narrativo]" delayMs={900} />
     <MemoriaVisiva enabled={INTERACTIONS.memoriaVisiva} selector="[data-memoria-slug]" />
-    <FocusProgressivo enabled={INTERACTIONS.focusProgressivo} selector="[data-focus-progressivo]" />
 
     <script is:inline>
         const initOpereFilters = () => {

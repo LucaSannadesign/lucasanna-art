@@ -125,73 +125,55 @@ body {
                 transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.opere-gallery [data-gallery-card].was-seen [data-opera-reattiva] {
+    filter: none !important;
+}
+
 @supports selector(.opere-gallery:has([data-gallery-card]:hover)) {
-    .opere-gallery:has([data-gallery-card]:hover) [data-gallery-card] {
-        opacity: 0.65;
-    }
-
-    .opere-gallery:has([data-gallery-card]:hover) [data-gallery-card]:hover {
-        opacity: 1;
-    }
-
     .opere-gallery:has([data-gallery-card]:hover) [data-gallery-card]:hover [data-opera-reattiva] {
-        transform: scale(1.04) translateZ(0);
-        filter: saturate(1.12) contrast(1.08) brightness(1.02) !important;
+        transform: scale(1.01) translateZ(0);
+        filter: none !important;
         backface-visibility: hidden;
-    }
-
-    .opere-gallery:has([data-gallery-card]:hover) [data-gallery-card]:hover .opere-card-title {
-        opacity: 0.75;
-        transform: translateY(0);
-        color: #e0e0e0;
-    }
-
-    .opere-gallery:has([data-gallery-card]:hover) [data-gallery-card]:hover p[class*="text-xs"] {
-        opacity: 0.7;
-        color: #c0c0c0;
-    }
-
-    .opere-gallery:has([data-gallery-card]:hover) [data-gallery-card]:hover .opere-card-description {
-        opacity: 0.65;
-        color: #d0d0d0 !important;
     }
 }
 
 .opere-gallery.is-gallery-focused [data-gallery-card] {
-    opacity: 0.65;
-}
-
-.opere-gallery.is-gallery-focused [data-gallery-card].is-focused {
     opacity: 1;
 }
 
 .opere-gallery.is-gallery-focused [data-gallery-card].is-focused [data-opera-reattiva] {
-    transform: scale(1.04) translateZ(0);
-    filter: saturate(1.12) contrast(1.08) brightness(1.02) !important;
+    transform: scale(1.01) translateZ(0);
+    filter: none !important;
     backface-visibility: hidden;
-}
-
-.opere-gallery.is-gallery-focused [data-gallery-card].is-focused .opere-card-title,
-[data-gallery-card]:focus-within .opere-card-title {
-    opacity: 0.75;
-    transform: translateY(0);
-    color: #e0e0e0;
-}
-
-.opere-gallery.is-gallery-focused [data-gallery-card].is-focused p[class*="text-xs"],
-[data-gallery-card]:focus-within p[class*="text-xs"] {
-    opacity: 0.7;
-    color: #c0c0c0;
-}
-
-.opere-gallery.is-gallery-focused [data-gallery-card].is-focused .opere-card-description,
-[data-gallery-card]:focus-within .opere-card-description {
-    opacity: 0.65;
-    color: #d0d0d0 !important;
 }
 
 .opere-gallery.is-gallery-focused [data-gallery-card].is-focused.is-grid-break {
     transform: translateY(calc(-0.35rem * var(--opere-fx-factor)));
+}
+
+/* Indicatore discreto (freccia) solo su hover / focus sulla card */
+.opere-card-link-hint {
+    position: absolute;
+    right: 0.65rem;
+    bottom: 0.65rem;
+    width: 1.85rem;
+    height: 1.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: rgba(0, 0, 0, 0.28);
+    color: rgba(255, 255, 255, 0.9);
+    opacity: 0;
+    transform: scale(0.94);
+    transition: opacity 200ms ease, transform 200ms ease;
+    pointer-events: none;
+}
+
+.opere-gallery [data-gallery-card]:hover .opere-card-link-hint,
+.opere-gallery [data-gallery-card]:focus-visible .opere-card-link-hint {
+    opacity: 1;
+    transform: scale(1);
 }
 
 /* Subtle visual rhythm scale effect - minimal and refined */
@@ -200,12 +182,11 @@ body {
     backface-visibility: hidden;
 }
 
-/* Soft depth effect on cards */
+/* Soft depth effect on cards — niente filtro percettivo sulle card lista */
 .opere-gallery [data-gallery-card] [data-opera-reattiva] {
-    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1), 
-                filter 600ms ease;
-    
-    /* Prevent blur during transitions */
+    filter: none;
+    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
+        filter 600ms ease;
     backface-visibility: hidden;
     transform: translateZ(0);
 }
@@ -741,13 +722,18 @@ img[src*=".webp"] {
     will-change: transform, filter;
 }
 
-/* Gallery Hover Effects - optimized for sharpness */
+/* Gallery Hover Effects - optimized for sharpness (esclusa galleria opere) */
 .group:hover img {
     filter: brightness(1.1);
     
     /* Maintain sharpness during hover transform */
     backface-visibility: hidden;
     transform: scale(1.05) translateZ(0);
+}
+
+.opere-gallery .group:hover img {
+    filter: none;
+    transform: translateZ(0);
 }
 
 /* Homepage artwork grid - prevent blur */
