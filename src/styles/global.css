@@ -229,6 +229,10 @@ body {
     line-height: 1.4 !important;
 }
 
+.opere-gallery [data-gallery-card] .opere-card-title {
+    opacity: 0.62;
+}
+
 /* Metadata reduction - smaller and more subtle */
 .opere-gallery [data-gallery-card] p[class*="text-xs"] {
     opacity: 0.35;
@@ -241,21 +245,23 @@ body {
     transition: opacity 400ms ease, color 400ms ease;
 }
 
-/* Description text with line clamp */
-.opere-card-description {
+/* Anteprima descrizione: max 2 righe, galleria / categorie */
+.opere-gallery [data-gallery-card] .opere-card-description {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
-    opacity: 0.4;
-    font-size: clamp(0.7rem, 0.4vw + 0.6rem, 0.8rem) !important;
-    line-height: 1.5 !important;
+    opacity: 0.42;
+    font-size: clamp(0.68rem, 0.35vw + 0.58rem, 0.76rem) !important;
+    line-height: 1.38 !important;
     letter-spacing: 0.02em !important;
     text-transform: none !important;
     font-weight: 300;
     color: #aaaaaa !important;
-    margin-top: 0.5rem;
+    margin-top: 0.35rem;
+    margin-bottom: 0;
     transition: opacity 400ms ease, color 400ms ease;
 }
 
