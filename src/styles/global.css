@@ -28,7 +28,14 @@ html[data-silent="true"] * {
     transition-duration: 0.01ms !important;
 }
 
-html[data-silent="true"] img {
+/* Silenzio visivo: eccezione transizioni hover galleria opere */
+html[data-silent="true"] .opere-gallery [data-gallery-card] [data-opera-reattiva],
+html[data-silent="true"] .opere-gallery [data-gallery-card] .opere-media {
+    transition-duration: 0.42s !important;
+    transition-timing-function: ease !important;
+}
+
+html[data-silent="true"] img:not([data-opera-reattiva]) {
     filter: none !important;
     transform: none !important;
 }
@@ -97,6 +104,109 @@ body {
     transition: filter 1400ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Toolbar filtri /opere — inattivo / hover / attivo ben distinti (markup invariato) */
+button.opere-filter-btn {
+    cursor: pointer;
+    transition:
+        color 0.2s ease-out,
+        border-color 0.2s ease-out,
+        background-color 0.2s ease-out,
+        transform 0.2s ease-out,
+        box-shadow 0.2s ease-out;
+}
+
+/* Inattivo — tenue, quasi assente sul piano luminoso */
+button.opere-filter-btn[aria-pressed="false"] {
+    color: rgba(148, 148, 148, 0.88) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    background-color: rgba(255, 255, 255, 0.02);
+    box-shadow: none;
+    transform: translateZ(0);
+}
+
+/* Attivo — sempre leggibile anche senza hover (più forte dell’hover su inattivo) */
+button.opere-filter-btn[aria-pressed="true"] {
+    color: #f2f2f2 !important;
+    border-color: rgba(255, 255, 255, 0.68) !important;
+    background-color: rgba(255, 255, 255, 0.22);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+        0 2px 14px rgba(0, 0, 0, 0.55);
+    transform: translateZ(0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    button.opere-filter-btn[aria-pressed="false"]:hover {
+        color: #c8c8c8 !important;
+        border-color: rgba(255, 255, 255, 0.42) !important;
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-1px);
+        box-shadow: none;
+    }
+
+    button.opere-filter-btn[aria-pressed="false"]:focus-visible {
+        color: #c6c6c6 !important;
+        border-color: rgba(255, 255, 255, 0.46) !important;
+        background-color: rgba(255, 255, 255, 0.11);
+        transform: translateY(-1px);
+        outline: none;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.38);
+    }
+
+    button.opere-filter-btn[aria-pressed="true"]:hover {
+        color: #ffffff !important;
+        border-color: rgba(255, 255, 255, 0.78) !important;
+        background-color: rgba(255, 255, 255, 0.28);
+        transform: translateY(-1px);
+        box-shadow:
+            inset 0 0 0 1px rgba(255, 255, 255, 0.34),
+            0 3px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    button.opere-filter-btn[aria-pressed="true"]:focus-visible {
+        color: #ffffff !important;
+        border-color: rgba(255, 255, 255, 0.78) !important;
+        background-color: rgba(255, 255, 255, 0.26);
+        transform: translateY(-1px);
+        outline: none;
+        box-shadow:
+            0 0 0 1px rgba(255, 255, 255, 0.52),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+            0 2px 14px rgba(0, 0, 0, 0.55);
+    }
+}
+
+#opere-filter-select {
+    cursor: pointer;
+    color: rgba(180, 180, 180, 0.92) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    background-color: rgba(255, 255, 255, 0.04);
+    transition:
+        border-color 0.2s ease-out,
+        background-color 0.2s ease-out,
+        color 0.2s ease-out,
+        box-shadow 0.2s ease-out;
+}
+
+#opere-filter-select:hover {
+    color: #c6c6c6 !important;
+    border-color: rgba(255, 255, 255, 0.32) !important;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+#opere-filter-select:focus-visible {
+    outline: none;
+    color: #d0d0d0 !important;
+    border-color: rgba(255, 255, 255, 0.44) !important;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.36);
+}
+
+html[data-silent="true"] button.opere-filter-btn,
+html[data-silent="true"] #opere-filter-select {
+    transition-duration: 0.2s !important;
+}
+
 /* Gallery Masonry Layout - CSS Columns */
 .opere-gallery {
     display: block !important;
@@ -148,22 +258,22 @@ body {
     filter: none !important;
 }
 
-@supports selector(.opere-gallery:has([data-gallery-card]:hover)) {
-    .opere-gallery:has([data-gallery-card]:hover) [data-gallery-card]:hover [data-opera-reattiva] {
-        transform: scale(1.01) translateZ(0);
-        filter: none !important;
-        backface-visibility: hidden;
-    }
-}
-
 .opere-gallery.is-gallery-focused [data-gallery-card] {
     opacity: 1;
 }
 
 .opere-gallery.is-gallery-focused [data-gallery-card].is-focused [data-opera-reattiva] {
-    transform: scale(1.01) translateZ(0);
-    filter: none !important;
     backface-visibility: hidden;
+}
+
+html[data-silent="true"] .opere-gallery.is-gallery-focused [data-gallery-card].is-focused [data-opera-reattiva] {
+    filter: brightness(1.06) saturate(1.06) contrast(1.03) !important;
+    transform: translateZ(0) !important;
+}
+
+html[data-silent="false"] .opere-gallery.is-gallery-focused [data-gallery-card].is-focused [data-opera-reattiva] {
+    filter: brightness(1.08) saturate(1.1) contrast(1.05) !important;
+    transform: translateZ(0) scale(1.018) !important;
 }
 
 .opere-gallery.is-gallery-focused [data-gallery-card].is-focused.is-grid-break {
@@ -195,17 +305,10 @@ body {
     transform: scale(1);
 }
 
-/* Subtle visual rhythm scale effect - minimal and refined */
-.opere-gallery [data-gallery-card]:nth-child(3n) [data-opera-reattiva] {
-    transform: scale(1.01) translateZ(0);
-    backface-visibility: hidden;
-}
-
 /* Soft depth effect on cards — niente filtro percettivo sulle card lista */
 .opere-gallery [data-gallery-card] [data-opera-reattiva] {
     filter: none;
-    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
-        filter 600ms ease;
+    transition: transform 0.42s ease, filter 0.42s ease, box-shadow 0.42s ease;
     backface-visibility: hidden;
     transform: translateZ(0);
 }
@@ -219,6 +322,10 @@ body {
     /* Prevent transform blur */
     backface-visibility: hidden;
     transform: translateZ(0);
+}
+
+.opere-gallery [data-gallery-card] .opere-media {
+    transition: box-shadow 0.42s ease;
 }
 
 .opere-media img {
@@ -322,6 +429,36 @@ body {
 
 [data-memoria-slug].was-seen [data-opera-reattiva] {
     filter: var(--perc-filter) grayscale(calc(0.04 + 0.07 * var(--opere-fx-factor))) brightness(calc(0.95 + 0.02 * (1 - var(--opere-fx-factor))));
+}
+
+/* Galleria elenco opere: mai “spegnere” dopo memoria (regola sopra ha priorità sul blocco base) */
+.opere-gallery [data-memoria-slug].was-seen [data-opera-reattiva] {
+    filter: none !important;
+    transform: translateZ(0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    html[data-silent="true"] .opere-gallery [data-gallery-card]:hover [data-opera-reattiva],
+    html[data-silent="true"] .opere-gallery [data-gallery-card]:focus-visible [data-opera-reattiva] {
+        filter: brightness(1.06) saturate(1.06) contrast(1.03) !important;
+        transform: translateZ(0) !important;
+    }
+
+    html[data-silent="true"] .opere-gallery [data-gallery-card]:hover .opere-media,
+    html[data-silent="true"] .opere-gallery [data-gallery-card]:focus-visible .opere-media {
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
+    }
+
+    html[data-silent="false"] .opere-gallery [data-gallery-card]:hover [data-opera-reattiva],
+    html[data-silent="false"] .opere-gallery [data-gallery-card]:focus-visible [data-opera-reattiva] {
+        filter: brightness(1.08) saturate(1.1) contrast(1.05) !important;
+        transform: translateZ(0) scale(1.018) !important;
+    }
+
+    html[data-silent="false"] .opere-gallery [data-gallery-card]:hover .opere-media,
+    html[data-silent="false"] .opere-gallery [data-gallery-card]:focus-visible .opere-media {
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.42);
+    }
 }
 
 [data-tempo-sguardo].is-gazed [data-opera-reattiva] {
@@ -756,6 +893,7 @@ img[src*=".webp"] {
     transform: scale(1.05) translateZ(0);
 }
 
+/* Galleria opere: hover immagine in @media (hover) sopra; qui si evita solo il bright aggressivo della griglia homepage */
 .opere-gallery .group:hover img {
     filter: none;
     transform: translateZ(0);
