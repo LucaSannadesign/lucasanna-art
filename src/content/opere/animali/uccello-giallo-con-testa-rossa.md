@@ -2,7 +2,7 @@
 title: "Uccello Giallo con Testa Rossa"
 date: 2025-05-21T16:01:20+00:00
 description: "Uccello giallo con testa rossa, acrilico su tela: piumaggio e ramo sono dipinti con dettaglio realistico, su uno sfondo verde vibrante."
-featuredImage: "/assets/uploads/yellow-bird.jpg"
+featuredImage: "/assets/uploads/Yellow-Bird-2020--e1722180859163.jpg"
 year: 2022
 technique: "Acrilico su tela"
 tags: []

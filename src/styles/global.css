@@ -371,7 +371,7 @@ html[data-silent="false"] .opere-gallery.is-gallery-focused [data-gallery-card].
     transition: opacity 400ms ease, color 400ms ease;
 }
 
-/* Anteprima descrizione: max 2 righe, galleria / categorie */
+/* Anteprima descrizione: 2 righe mobile, 3 da md — galleria / categorie */
 .opere-gallery [data-gallery-card] .opere-card-description {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -389,6 +389,13 @@ html[data-silent="false"] .opere-gallery.is-gallery-focused [data-gallery-card].
     margin-top: 0.35rem;
     margin-bottom: 0;
     transition: opacity 400ms ease, color 400ms ease;
+}
+
+@media (min-width: 48rem) {
+    .opere-gallery [data-gallery-card] .opere-card-description {
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+    }
 }
 
 [data-tempo-sguardo] [data-sguardo-copy] {
