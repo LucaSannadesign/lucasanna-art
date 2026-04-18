@@ -191,7 +191,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
                             {work.data.featuredImage ? (
                                 <img
                                     src={work.data.featuredImage}
-                                    alt={work.data.title}
+                                    alt={work.data.imageAlt || work.data.title}
                                     data-opera-reattiva
                                     data-gaze-media
                                     data-parallax-strength="3"

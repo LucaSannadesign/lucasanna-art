@@ -64,7 +64,7 @@ const recentPosts: CollectionEntry<"posts">[] = (await getCollection("posts"))
 							{work.data.featuredImage && (
 								<img
 									src={work.data.featuredImage}
-									alt={work.data.title}
+									alt={work.data.imageAlt || work.data.title}
 									class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000 ease-out"
 								/>
 							)}

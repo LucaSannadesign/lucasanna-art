@@ -38,6 +38,9 @@ const opere = defineCollection({
         periodo: z.string().optional(),
         emozione: z.string().optional(),
         originalUrl: z.string().optional(),
+        imageAlt: z.string().optional(),
+        imageTitle: z.string().optional(),
+        imageCaption: z.string().optional(),
         seo: z
             .object({
                 primary: z.string(),

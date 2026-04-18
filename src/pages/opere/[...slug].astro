@@ -435,7 +435,7 @@ const operaPrimarySubheading = !isCategoryPage
     : "";
 
 const operaImageAlt = !isCategoryPage
-    ? `${(entry.data.seo?.primary?.trim() || entry.data.title.trim())} – opera di Luca Sanna`
+    ? entry.data.imageAlt || entry.data.title
     : "";
 
 // If category page, get all artworks in that category
@@ -578,7 +578,7 @@ if (isCategoryPage) {
                                 {work.data.featuredImage ? (
                                     <img
                                         src={work.data.featuredImage}
-                                        alt={work.data.title}
+                                        alt={work.data.imageAlt || work.data.title}
                                         data-opera-reattiva
                                         data-gaze-media
                                         data-parallax-strength="3"
@@ -694,12 +694,19 @@ if (isCategoryPage) {
                     <img
                         src={entry.data.featuredImage}
                         alt={operaImageAlt}
+                        title={entry.data.imageTitle || undefined}
                         data-opera-reattiva
                         style={`view-transition-name: opera-${entry.slug.replaceAll("/", "-")};`}
                         class="w-full h-auto max-h-[85vh] object-contain mx-auto shadow-2xl"
                     />
                 )
             }
+
+            {entry.data.imageCaption && (
+                <p class="text-center text-sm text-gray-400 mt-3 max-w-2xl mx-auto leading-relaxed">
+                    {entry.data.imageCaption}
+                </p>
+            )}
 
             <p
                 class="opere-gaze-copy text-[10px] uppercase tracking-[0.16em] text-gray-300 mt-3 text-center"
@@ -788,7 +795,7 @@ if (isCategoryPage) {
                                 {work.data.featuredImage ? (
                                     <img
                                         src={work.data.featuredImage}
-                                        alt={work.data.title}
+                                        alt={work.data.imageAlt || work.data.title}
                                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                                     />
                                 ) : (
