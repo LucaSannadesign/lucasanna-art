@@ -1,36 +1,35 @@
 ---
-title: "Luca Sanna su Global Art Times: pubblicate tre opere nell’edizione di luglio 2025"
+title: "Global Art Times luglio 2025: tre opere di Luca Sanna"
 date: 2025-07-02T16:37:38+00:00
-description: "Le opere di Luca Sanna pubblicate su Global Art Times, rivista d’arte internazionale. Scopri le immagini e il racconto completo sul blog."
+description: "Pubblicazione su Global Art Times luglio 2025: tre dipinti di Luca Sanna. Titoli, temi, PDF della rivista e collegamento al catalogo opere online."
 featuredImage: "/assets/uploads/Screenshot-2025-07-01-alle-11.06.59.webp"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/luca-sanna-global-art-times-luglio-2025/"
 ---
 
-_Pubblicato il 2 luglio 2025_
+Come collegare una **pubblicazione su rivista d’arte** al catalogo online senza perdere il filo del lavoro? Servono titoli chiari e PDF aperti; qui tre mie opere sono nell’edizione **luglio 2025** di _Global Art Times_, in dialogo con altri artisti.
 
-Sono felice di condividere una novità: alcune mie opere sono state selezionate e pubblicate su **Global Art Times**, edizione di luglio 2025, insieme ad altri artisti contemporanei da tutto il mondo.
+Qui trovi titoli e temi, risorse scaricabili e il collegamento al [catalogo opere](/opere/). Sul paesaggio sardo ho scritto anche di [tramonti e pittura di paesaggio](/tramonti-riflessioni-arte/).
 
-## 🎨 Le opere pubblicate
+## Quali opere sono state pubblicate e di cosa parlano
 
-*   **Cala Mariolu** – luce e silenzio della costa sarda
-*   **Among the Leaves** – un uccello tra le foglie
-*   **Ginepri a Platamona – Small** – poesia del paesaggio quotidiano
+- **Cala Mariolu** — luce e silenzio della costa sarda  
+- **Among the Leaves** — un uccello tra le foglie  
+- **Ginepri a Platamona – Small** — paesaggio quotidiano  
 
-## 🌍 Un progetto editoriale internazionale
+## Global Art Times: che tipo di rivista è
 
-_Global Art Times_ è una rivista d’arte digitale distribuita gratuitamente, letta da oltre 10 milioni di persone nel mondo. Una piattaforma accessibile, inclusiva e in continua crescita.
+_Global Art Times_ è una rivista digitale gratuita, diffusa a livello internazionale, pensata per chi segue **arte contemporanea** e pratiche internazionali.
 
-## 📎 Scarica la rivista
+## PDF ufficiale e sito della rivista
 
-[📥 Scarica il PDF – Luglio 2025](https://lucasanna.art/Global-Art-Times-July-2025_compressed.pdf)
+[Scarica il PDF – luglio 2025](https://lucasanna.art/Global-Art-Times-July-2025_compressed.pdf)
 
-[🌐 Visita il sito ufficiale](https://www.globalarttimes.com)
+[Sito Global Art Times](https://www.globalarttimes.com)
 
-## 🙏 Grazie
+Ringrazio la redazione e chi segue e sostiene questo percorso.
 
-Un sincero grazie alla redazione e a chi continua a seguirmi e supportarmi nel mio percorso.
+**Luca Sanna** — Sassari
 
-**Luca Sanna**
-Artista, pittore, grafico – Sassari
+Le stesse opere, con schede e immagini ad alta risoluzione: [/opere/](/opere/).

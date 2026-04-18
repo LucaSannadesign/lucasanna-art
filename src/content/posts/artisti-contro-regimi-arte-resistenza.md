@@ -1,84 +1,47 @@
 ---
-title: "Artisti Contro i Regimi: Quando l’Arte Diventa Resistenza"
+title: "Arte e resistenza: artisti contro regimi e censura"
 date: 2025-05-02T09:38:14+00:00
-description: "Da Picasso a Pasolini, le storie di chi ha usato l’arte per dire NO a guerra, censura e potere. Un viaggio tra opere che ancora oggi parlano di libertà e disobbedienza."
+description: "Arte e resistenza politica: Guernica, arte degenerata, censura. Picasso, Grosz, Guttuso, Kollwitz, Pasolini — perché queste storie contano oggi."
 featuredImage: "/assets/uploads/Picasso_Guernica.webp"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/artisti-contro-regimi-arte-resistenza/"
 ---
 
-# Artisti Contro i Regimi: Quando l'Arte Diventa Resistenza
+Perché ricordare **artisti contro regimi** e forme nuove di censura — e cosa c’entra chi dipinge oggi? Quando il potere restringe la parola, l’arte può diventare **testimonianza e contraddittorio**; il tema non è solo storia.
 
-Negli ultimi tempi si parla sempre più spesso di **resistenza**. E non solo come ricordo del passato, ma come urgenza del presente.
+Ti propongo una mappa sintetica — con opere e citazioni — tra guerra, dittatura e censura culturale. Il mio lavoro oggi è su **pittura e paesaggio** ([opere](/opere/)); il filo condiviso è la **libertà di espressione**. Su voce pubblica e provocazione in arte contemporanea torna utile anche il testo su [Cattelan e Comedian](/comedian-maurizio-cattelan-significato-poetica-critica-sociale/).
 
-Mentre in Europa — e in particolare in Italia — si alzano nuovi venti di intolleranza, autoritarismo e retoriche reazionarie, l’arte torna ad assumere il suo ruolo più importante: **quello di voce libera, scomoda, necessaria**.
+## Guerra e dittatura: Picasso, Grosz, Guttuso
 
-Oggi voglio rendere omaggio a quegli artisti che **non si sono piegati**. Che hanno avuto il coraggio di dissociarsi, sfidare, resistere — spesso pagando un prezzo altissimo. Perché ricordarli significa **difendere oggi la libertà di espressione**.
+Nel 1937 Picasso dipinge _Guernica_: grido contro il bombardamento dell’omonima città basca; corpi spezzati, cavalli in agonia. Picasso rifiutò di tornare in Spagna fino alla morte di Franco.
 
-## Pablo Picasso – “Guernica” e l’orrore della guerra
+> «L’arte non è fatta per decorare appartamenti. È un’arma di guerra.» — Picasso
 
-Nel 1937, Picasso dipinge _Guernica_: un grido silenzioso contro il bombardamento nazista dell’omonima città basca. L’opera, commissionata per l’Esposizione Universale di Parigi, non mostra eroi, ma vittime: **corpi spezzati, urla pietrificate, cavalli in agonia**.
+**George Grosz** ridicolizza poteri e ipocrisie ne _I pilastri della società_; nel 1933 fugge dalla Germania nazista.
 
-Picasso rifiutò di tornare in Spagna fino alla morte di Franco.
+> «Chi tace diventa complice.» — Grosz
 
-> “L’arte non è fatta per decorare appartamenti. È un’arma di guerra.”
-> — Pablo Picasso
+**Renato Guttuso** (1941, _La Crocifissione_) mette Cristo-popolo e carnefici in abiti moderni, figurativo come lingua politica.
 
-## Renato Guttuso – La Resistenza sulla tela
+> «L’artista non può essere indifferente a ciò che lo circonda.» — Guttuso
 
-Renato Guttuso, pittore italiano e militante del PCI, trasformò la pittura in una forma di lotta. Nel 1941 dipinge _La Crocifissione_: una scena laica, carnale, politica. Il Cristo è il popolo martoriato, e i carnefici indossano abiti moderni.
+## Dolore sociale e corpo politico: Kollwitz, Kahlo, Levi
 
-Scelse il figurativo per parlare al cuore e alla coscienza.
+**Käthe Kollwitz**: xilografie sulla fame e sul lutto; esclusa dall’Accademia nel 1933. _La madre con il figlio morto_ è silenzio che urla.
 
-> “L’artista non può essere indifferente a ciò che lo circonda.”
-> — Renato Guttuso
+> «Voglio agire sul nostro tempo…» — Kollwitz
 
-## George Grosz – Satira contro il nazismo
+**Frida Kahlo**: autoritratti come corpo politico contro dolore e colonialismo. **Carlo Levi**: _Cristo si è fermato a Eboli_ come accusa all’abbandono del Sud e alla retorica fascista.
 
-Espressionista tedesco, irriverente e feroce, Grosz smascherò il potere con la satira. Ne _I pilastri della società_ ridicolizza borghesi, preti e parlamentari con le teste piene di sterco, mentre sullo sfondo brucia la Germania.
+## Voce intellettuale: Pasolini e il prezzo del dissenso
 
-Nel 1933 fuggì dalla Germania nazista, le sue opere erano già etichettate come “arte degenerata”.
+**Pier Paolo Pasolini** — poeta, regista, intellettuale: da _Salò_ a ogni disobbedienza culturale. Pagò censura, isolamento, morte.
 
-> “Chi tace diventa complice.”
-> — George Grosz
+> «Essere di sinistra oggi significa non accettare nulla di ciò che è ovvio.» — Pasolini
 
-## Käthe Kollwitz – L’arte del dolore e del dissenso
+## Perché queste storie contano oggi (e il mio contesto)
 
-Kollwitz non usò la satira, ma l’empatia. Con disegni e xilografie raccontò la fame, il lutto, la miseria. Nel 1933 fu esclusa dall’Accademia delle Arti perché non sostenne il regime.
+La censura cambia forma; il conformismo si veste da neutralità. Questi artisti dissero no con **la loro arte**. _lucasanna.art_ resta un progetto indipendente: storie, memoria, pratica in studio. Io non paragono le mie tele a _Guernica_, ma tengo presente **chi ha pagato** per poter ancora esporre.
 
-Nel suo struggente _La madre con il figlio morto_, le mani della donna proteggono il corpo del figlio. È silenzio che urla.
-
-> “Voglio agire sul nostro tempo, sulle persone, per aiutarle a vedere.”
-> — Käthe Kollwitz
-
-## Pier Paolo Pasolini – Dissidente in ogni forma
-
-Poeta, regista, pittore, intellettuale. Pasolini fu **un corpo estraneo al potere**. Con film come _Salò_ lanciò un’accusa radicale contro fascismo, consumismo e pornografia del potere.
-
-Pagò con l’isolamento, la censura, la morte.
-
-> “Essere di sinistra oggi significa non accettare nulla di ciò che è ovvio.”
-> — Pier Paolo Pasolini
-
-## Frida Kahlo – Un corpo politico
-
-Dietro ogni autoritratto di Frida Kahlo c’è una lotta silenziosa ma incrollabile: contro il dolore fisico, il patriarcato, il colonialismo. Comunista, anticonformista, non scese mai a compromessi.
-
-> “Piedi, perché li voglio se ho ali per volare?”
-> — Frida Kahlo
-
-## Carlo Levi – Esilio e verità
-
-Nel 1935 Carlo Levi fu esiliato in Lucania. Da quell’esperienza nacque _Cristo si è fermato a Eboli_, un atto d’accusa contro l’abbandono del Sud e la retorica fascista.
-
-> “Le classi dirigenti non sono riuscite a far niente per questo popolo, che è rimasto fuori dalla storia.”
-> — Carlo Levi
-
-## Perché parlarne oggi?
-
-Perché la censura è tornata sotto forme nuove. Perché il conformismo si maschera da neutralità. Perché l’arte ha ancora, e sempre, il dovere di prendere posizione.
-
-Tutti questi artisti, con tecniche e sensibilità diverse, hanno detto “NO”. Alla guerra. All’ingiustizia. Alla propaganda. E lo hanno fatto con l’unica arma che avevano: **la loro arte**.
-
-💡 _lucasanna.art_ è un progetto indipendente, libero da pubblicità invasive, ma pieno di storie, memoria, disobbedienza creativa.
+Paesaggio e figura, libertà di ricerca visiva: [/opere/](/opere/).

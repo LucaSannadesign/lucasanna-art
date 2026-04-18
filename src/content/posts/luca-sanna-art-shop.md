@@ -1,39 +1,27 @@
 ---
-title: "Annuncio di Apertura del Luca Sanna Art Shop: Scopri le Nostre Esclusive Creazioni Artistiche"
+title: "Luca Sanna Art Shop: stampe e oggetti dalle opere originali"
 date: 2024-08-07T09:29:01+00:00
-description: "Scopri il nuovo Luca Sanna Art Shop! Esplora una vasta gamma di stampe su tela, t-shirt, tazze in ceramica e altro ancora. Supporta un artista indipendente e arricchisci la tua collezione con creazioni uniche. Visita il nostro shop oggi stesso!"
+description: "Stampe su tela, t-shirt e oggetti dalle opere originali di Luca Sanna. Cosa c’è in catalogo e come lo shop sostiene nuovi dipinti."
 featuredImage: "/assets/uploads/15848766204515820560_2048.jpeg"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/luca-sanna-art-shop/"
 ---
 
-Benvenuti sul Luca Sanna Art Blog! Oggi siamo entusiasti di annunciare l’apertura del nostro nuovo shop online. Dopo mesi di duro lavoro e preparazione, siamo finalmente pronti a offrirvi una vasta gamma di articoli unici e di alta qualità. Il nostro obiettivo è quello di portare l’arte nelle vostre case e nel vostro quotidiano, offrendo prodotti che riflettono la bellezza e la creatività delle opere di Luca Sanna.
+Dove trovare **stampe** e oggetti coerenti con i colori delle opere originali — senza confusione tra merchandising e catalogo? Lo shop raccoglie derivazioni da disegni e dipinti: diffonde il segno oltre la cornice e finanzia nuove produzioni.
 
-### Esplora i Nostri Prodotti
+Qui trovi cosa c’è in catalogo, perché l’ho strutturato così, e dove ordinare. Il lavoro completo resta consultabile in [galleria opere](/opere/); su sostenibilità della pratica ho anche scritto di [monetizzare l’arte online](/monetizzare-arte-online/).
 
-Nel nostro shop, troverete una selezione accuratamente curata di articoli che includono:
+## Cosa trovi nello shop: stampe, indumenti, oggetti
 
-**Stampe su Tela** Le nostre stampe su tela sono perfette per decorare qualsiasi spazio. Realizzate con materiali di alta qualità, ogni stampa è una riproduzione fedele delle opere originali di Luca Sanna, garantendo colori vividi e dettagli eccezionali.
+**Stampe su tela** — riproduzioni curate, colori stabili e dettaglio fedele alle tele. **T-shirt** — grafiche dal mio lavoro, cotone robusto. **Tazze** — due formati (11 oz e 15 oz). **Custodie e cuscini** — pattern dalle opere per telefono e arredo.
 
-**T-shirt Unisex** Le nostre t-shirt unisex in cotone pesante sono un must-have per gli amanti dell’arte. Ogni t-shirt presenta un design esclusivo, stampato con tecniche che assicurano durata e vividezza dei colori. Disponibili in diverse taglie e colori, sono ideali per un look casual ma ricercato.
+## Perché ho aperto questo canale (e come si collega al lavoro in studio)
 
-**Tazze in Ceramica** Perfette per iniziare la giornata con stile, le nostre tazze in ceramica sono disponibili in due dimensioni: 11oz e 15oz. Ogni tazza è decorata con disegni unici, rendendola un regalo ideale per gli amanti di caffè, tè e cioccolata calda.
+Ogni prodotto nasce dal confronto con il disegno o il dipinto di partenza: non è merchandising generico. Prima di approvare una stampa grande controllo **prova colore** accanto alla foto dell’originale in studio. Acquistare qui sostiene **nuove opere** e la loro pubblicazione online — stesso vocabolario cromatico che trovi in galleria.
 
-**Custodie per iPhone** Proteggete il vostro smartphone con stile grazie alle nostre custodie personalizzate. Realizzate con materiali resistenti, offrono una protezione eccellente senza compromettere l’accessibilità e la funzionalità del dispositivo.
+## Dove ordinare e come orientarsi tra shop e originali
 
-**Cuscini in Poliestere** Aggiungi un tocco artistico al tuo arredamento con i nostri cuscini in poliestere. Disponibili in diverse dimensioni, questi cuscini offrono comfort e stile, perfetti per qualsiasi ambiente domestico.
+[Apri lo shop](/shop) per scegliere il pezzo che ti accompagna; ricorda che gli originali e le schede complete restano in [galleria](/opere/).
 
-### Perché Scegliere Luca Sanna Art
-
-Ogni prodotto nel nostro shop è realizzato con cura e attenzione ai dettagli. Utilizziamo solo i migliori materiali per garantire che ogni articolo sia non solo bello, ma anche durevole. Acquistare dal nostro shop significa sostenere un artista indipendente e contribuire alla diffusione dell’arte contemporanea.
-
-### Supporta il Nostro Lavoro
-
-Invitiamo tutti i nostri lettori e visitatori a sostenere il nostro lavoro acquistando i prodotti dal nostro shop. Ogni acquisto non solo arricchisce la vostra collezione personale, ma ci permette anche di continuare a creare e condividere nuove opere d’arte. Vi incoraggiamo a esplorare il nostro shop e a trovare il pezzo perfetto che rispecchia il vostro stile e le vostre passioni.
-
-### Visita il Nostro Shop
-
-Esplora il nostro shop oggi stesso e scopri tutte le meraviglie che abbiamo in serbo per te. [Visita il nostro shop ora](/shop) e porta a casa un pezzo unico di arte contemporanea!
-
-Avviso: JavaScript è obbligatorio per questo contenuto.
+Originali e schede complete, oltre alle stampe: [/opere/](/opere/).
