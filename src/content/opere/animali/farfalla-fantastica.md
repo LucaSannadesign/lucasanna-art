@@ -1,13 +1,19 @@
 ---
 title: "Farfalla Fantastica"
 date: 2024-07-26T14:24:06+00:00
-description: "\"Farfalla Fantastica\" è un'illustrazione artistica su carta che combina la bellezza della farfalla con elementi surreali, creando una composizione unica e affascinante."
+description: "Illustrazione farfalla acquerello su carta: elementi surreali si intrecciano alla figura dell'insetto, in una composizione affascinante e personale."
 featuredImage: "/assets/uploads/Farfalla-illustrazione-fantastica.jpg"
 year: 2007
 technique: "Acquerello su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/farfalla-fantastica/"
+seo:
+  primary: "illustrazione farfalla acquerello"
+  secondary:
+    - "farfalla surreale"
+    - "insetto dipinto artistico"
+
 ---
 
 **Descrizione:**

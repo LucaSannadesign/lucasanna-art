@@ -1,13 +1,19 @@
 ---
 title: "Luna piena sui Monti"
 date: 2024-07-28T14:54:47+00:00
-description: "Scopri il dipinto 'Luna piena sui Monti' di Luca Sanna, che cattura la serenità e la bellezza di una notte illuminata dalla luna piena. Un'opera d'arte che evoca pace e tranquillità."
+description: "Luna piena sui monti, acquerello: notte serena e ampiezza del paesaggio, tra pace visiva e morbidezza delle sfumature."
 featuredImage: "/assets/uploads/Luna-piena-sui-monti-e1722180793733.jpg"
 year: 2020
 technique: "Acquerello su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/luna-piena-sui-monti/"
+seo:
+  primary: "luna piena montagne acquerello"
+  secondary:
+    - "notte monti serena"
+    - "paesaggio lunare"
+
 ---
 
 **Descrizione:**

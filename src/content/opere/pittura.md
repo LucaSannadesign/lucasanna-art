@@ -1,11 +1,17 @@
 ---
 title: "Pittura Archivi: Arte e Design, Sassari Archivi - Arte a Sassari e in Sardegna"
 date: 2025-08-24T20:42:26+00:00
-description: "Scopri le opere pittoriche di Luca Sanna, che esprimono creatività e tecnica attraverso colori vivaci e composizioni uniche. Esplora dipinti che evocano emozioni e raccontano storie."
+description: "Pittura contemporanea e raccolta di dipinti: colori e storie su tela e carta, tra figurazione e sperimentazione cromatica."
 featuredImage: "/assets/uploads/tucano-lucasanna.webp"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/pittura/"
+seo:
+  primary: "pittura contemporanea Sardegna"
+  secondary:
+    - "dipinti artista Sassari"
+    - "collezione pittura"
+
 ---
 
 ☰ Filtro Categorie

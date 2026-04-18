@@ -1,13 +1,19 @@
 ---
 title: "Ginepri a Platamona – Villaggio Selva, Sassari"
 date: 2025-05-26T12:43:57+00:00
-description: "Scopri l'opera \"Ginepri a Platamona\" di Luca Sanna, un dipinto acrilico che cattura la bellezza naturale e gli intricati dettagli dei ginepri nel Villaggio Selva a Sassari. Esplora gli aspetti psicologici e una critica approfondita su questo pezzo di arte contemporanea."
+description: "Ginepri a Platamona, Sassari: acrilico che segue l'intrico della vegetazione, con luce e verde che definiscono la scena."
 featuredImage: "/assets/uploads/ginepro-platamona-villaggio-selva-luca-sanna-2021-scaled.webp"
 year: 2021
 technique: "acrilica su tela, rappresenta un affascinante scorcio di natura sarda. La scena raffigura intricati rami di ginepro che si intersecano creando un groviglio complesso e armonioso, immerso in un vibrante sfondo verde."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/ginepri-a-platamona-villaggio-selva-sassari/"
+seo:
+  primary: "ginepri Platamona Sassari"
+  secondary:
+    - "paesaggio verde Sardegna"
+    - "rami ginepro pittura"
+
 ---
 
 **Descrizione:**

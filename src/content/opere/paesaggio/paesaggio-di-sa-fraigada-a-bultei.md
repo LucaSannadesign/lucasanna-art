@@ -1,13 +1,19 @@
 ---
 title: "Paesaggio di Sa Fraigada a Bultei"
 date: 2024-07-26T14:09:10+00:00
-description: "\"Paesaggio di Sa Fraigada a Bultei\" è un dipinto che cattura un sentiero immerso nella natura rigogliosa, con alberi alti e un cielo sereno, esplorando la bellezza della natura sarda."
+description: "Paesaggio di Sa Fraigada a Bultei: sentiero e natura rigogliosa in acrilico su masonite, con cielo sereno e calma mediterranea."
 featuredImage: "/assets/uploads/Paesaggio-Sa-Fraigada-Bultei.webp"
 year: 2017
 technique: "Acrilico su masonite"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-di-sa-fraigada-a-bultei/"
+seo:
+  primary: "paesaggio Sa Fraigada Bultei"
+  secondary:
+    - "sentiero bosco Sardegna"
+    - "acrilico natura rigogliosa"
+
 ---
 
 **Descrizione:**

@@ -1,13 +1,19 @@
 ---
 title: "Paesaggio e alberi"
 date: 2024-07-20T22:27:20+00:00
-description: "Scopri la magia di 'Landscape at Sunset', un dipinto ad acquerello che rappresenta un tramonto vibrante dietro alberi spogli, con colori vivaci che evocano tensione e armonia."
+description: "Tramonto alberi acquerello: alberi spogli e cielo vibrante, tra tensione e armonia cromatica al calar della luce."
 featuredImage: "/assets/uploads/Landscape-at-sunset-di-Luca-Sanna-1-2.webp"
 year: 2019
 technique: "Acquerello su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-e-alberi/"
+seo:
+  primary: "tramonto alberi acquerello"
+  secondary:
+    - "sunset alberi spogli"
+    - "cielo vibrante acquerello"
+
 ---
 
 **Descrizione:**

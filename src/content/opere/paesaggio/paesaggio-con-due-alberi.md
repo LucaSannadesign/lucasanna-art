@@ -1,13 +1,19 @@
 ---
 title: "Paesaggio con due alberi"
 date: 2024-08-03T11:59:49+00:00
-description: "Scopri \"Paesaggio con Alberi\" di Luca Sanna, un acquerello che cattura la bellezza naturale con colori vibranti e dettagli evocativi, esplorando la tensione tra vita e desolazione."
+description: "Paesaggio con alberi spogli, acquerello: rami contorti verso il cielo e contrasto tra verdi intensi e calore dorato."
 featuredImage: "/assets/uploads/paesaggio-con-alberi.webp"
 year: 2018
 technique: "Acquerello su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-con-due-alberi/"
+seo:
+  primary: "paesaggio alberi spogli acquerello"
+  secondary:
+    - "alberi contorti cielo"
+    - "verde oro contrasto"
+
 ---
 
 **Descrizione:**

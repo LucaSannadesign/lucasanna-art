@@ -1,13 +1,19 @@
 ---
 title: "Uccello Giallo-Verde"
 date: 2025-05-26T12:41:24+00:00
-description: "\"Uccello Giallo-Verde\" ritrae un vivace uccello verde posato su un ramo, dipinto con colori accesi e dettagli realistici, trasmettendo energia e vitalità."
+description: "Uccello giallo-verde acrilico su tela: energia e vitalità tra ramo e piumaggio, con un realismo luminoso e colori accesi."
 featuredImage: "/assets/uploads/Uccello-giallo-rosso-sfondo-verde-acrilico-su-tela-luca-sanna-2022.webp"
 year: 2022
 technique: "Acrilico su tela"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/uccello-giallo-verde/"
+seo:
+  primary: "uccello giallo verde acrilico"
+  secondary:
+    - "uccello ramo dipinto"
+    - "uccelli colorati tela"
+
 ---
 
 **Descrizione:**

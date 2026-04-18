@@ -1,13 +1,19 @@
 ---
 title: "Sunset"
 date: 2024-07-18T22:00:16+00:00
-description: "Scopri \"Tramonto Rosso\", un piccolo acquerello di Luca Sanna che cattura la drammaticità di un tramonto. Toni caldi si fondono con il verde della vegetazione, creando un'opera affascinante e serena."
+description: "Tramonto rosso acquerello: piccolo formato in cui toni caldi incontrano il verde, tra drammaticità del cielo e serenità del paesaggio."
 featuredImage: "/assets/uploads/landscap_sunset_lucasanna.webp"
 year: 2019
 technique: "dell’acquerello, con le sue trasparenze e sovrapposizioni di colore, esalta la delicatezza e la complessità della luce al tramonto, rendendo ogni osservazione un’esperienza unica."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/sunset/"
+seo:
+  primary: "tramonto rosso acquerello"
+  secondary:
+    - "piccolo formato tramonto"
+    - "montagna tramonto luce"
+
 ---
 
 **Descrizione:**

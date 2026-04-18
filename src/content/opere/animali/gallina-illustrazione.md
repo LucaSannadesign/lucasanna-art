@@ -1,13 +1,19 @@
 ---
 title: "Gallina"
 date: 2024-07-18T22:05:36+00:00
-description: "Scopri \"Gallina Dorata\" di Luca Sanna, un acquerello su carta che cattura la bellezza naturale di una gallina con piume dorate e nere, immersa in un ambiente verdeggiante."
+description: "Gallina acquerello su carta: piume dorate e nere in un verde vibrante, tra osservazione del reale e calore della materia acquerellata."
 featuredImage: "/assets/uploads/gallina.webp"
 year: 2018
 technique: "Acquerello"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/gallina-illustrazione/"
+seo:
+  primary: "gallina acquerello"
+  secondary:
+    - "pollame dipinto natura"
+    - "gallina piume dorate"
+
 ---
 
 **Descrizione:**

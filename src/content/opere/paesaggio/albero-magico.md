@@ -1,13 +1,19 @@
 ---
 title: "Albero magico"
 date: 2024-07-20T22:08:56+00:00
-description: "Esplora la bellezza e il mistero di 'Albero Magico', un dipinto ad acquerello che raffigura un albero surreale illuminato dalla luna piena, con rami intricati che contrastano con il paesaggio notturno."
+description: "Albero magico acquerello: notte di luna piena, rami intricati e linee rosse che rendono il tronco quasi visionario, tra reale e immaginazione."
 featuredImage: "/assets/uploads/notte-magica.webp"
 year: 2019
 technique: "Acquerello su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/albero-magico/"
+seo:
+  primary: "albero surreale notturno"
+  secondary:
+    - "luna piena albero acquerello"
+    - "paesaggio onirico"
+
 ---
 
 **Descrizione:**

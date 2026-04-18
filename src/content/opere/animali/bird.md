@@ -1,13 +1,19 @@
 ---
 title: "Bird"
 date: 2024-07-26T15:17:33+00:00
-description: "\"Bird: Il Canto dei Colori nella Notte\" è un dipinto vibrante su carta nera che cattura un uccello dai colori accesi, realizzato con tecnica acrilica."
+description: "\"Bird: Il Canto dei Colori nella Notte\" è un dipinto uccello acrilico su carta nera: la tecnica acrilica fa vibrare i colori accesi contro il fondo scuro, con equilibrio tra immediatezza e contrasto."
 featuredImage: "/assets/uploads/Bird2-Acrilico-su-carta-nera.jpg"
 year: 2011
 technique: "acrilica su carta nera che mette in risalto la vivacità e l’energia della natura. Il dipinto raffigura un uccellino dai colori accesi, con piume gialle e rosse che contrastano fortemente con lo sfondo scuro. Questo contrasto di colori crea un effetto visivo potente, catturando immediatamente l’attenzione dell’osservatore."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/bird/"
+seo:
+  primary: "dipinto uccello acrilico carta nera"
+  secondary:
+    - "uccellino colori accesi"
+    - "contrasto cromatico acrilico"
+
 ---
 
 **Descrizione:**

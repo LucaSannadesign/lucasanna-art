@@ -1,13 +1,19 @@
 ---
 title: "Civetta"
 date: 2024-07-26T15:32:33+00:00
-description: "\"Civetta in Acquerello\" cattura la presenza magnetica di una civetta con colori vibranti e dettagli accurati, immergendo l'osservatore nel mistero della natura."
+description: "Civetta acquerello: presenza magnetica e sguardo penetrante, tra calore del piumaggio e mistero della natura notturna."
 featuredImage: "/assets/uploads/civetta-acquerello.jpg"
 year: 2017
 technique: "dell’acquerello, questa pittura ritrae una civetta dai colori caldi e naturali, con occhi penetranti che sembrano seguire l’osservatore. Il verde dello sfondo contrasta con le tonalità terrose del piumaggio, mettendo in risalto la figura della civetta. Ogni pennellata è accuratamente posizionata per rappresentare la texture delle piume e l’intensità dello sguardo del rapace notturno. Questa opera trasporta l’osservatore nel regno silenzioso e misterioso della natura notturna, evocando un senso di meraviglia e rispetto per questi affascinanti uccelli."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/civetta/"
+seo:
+  primary: "civetta acquerello"
+  secondary:
+    - "rapace notturno dipinto"
+    - "gufo civetta dettagli"
+
 ---
 
 **Descrizione:**

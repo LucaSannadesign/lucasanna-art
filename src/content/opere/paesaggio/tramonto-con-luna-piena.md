@@ -1,13 +1,19 @@
 ---
 title: "Tramonto con Luna Piena"
 date: 2025-05-26T10:56:54+00:00
-description: "\"Scopri 'Tramonto con Luna Piena', un'opera affascinante di Luca Sanna che cattura la bellezza di un tramonto con luna piena in Sardegna. Esplora la magia e la serenità di questo dipinto ad olio su tela, che celebra l'arte contemporanea sarda.\""
+description: "Tramonto con luna piena in Sardegna: mare e cielo in acrilico, tra luce calda e presenza della luna sull'orizzonte costiero."
 featuredImage: "/assets/uploads/Tramonto-con-luna-piena-acrilico-su-tela-2023.webp"
 year: 2023
 technique: "ad acrilico su tela, scelta dall’artista, amplifica la vivacità dei colori e la profondità dei dettagli. Ogni pennellata sembra voler trattenere il movimento della luce sull’acqua e il silenzio dell’orizzonte, trasformando il paesaggio in un’esperienza sensoriale.Questo dipinto non si limita a rappresentare un paesaggio sardo; è un invito a vedere oltre. Tramonto Serale con Luna Piena non è solo una finestra sulla natura, ma anche un riflesso delle emozioni dell’osservatore. Con questa opera, Luca Sanna celebra la bellezza della transizione, quella breve danza tra luce e oscurità che ci ricorda quanto sia prezioso il momento presente."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/tramonto-con-luna-piena/"
+seo:
+  primary: "tramonto luna piena Sardegna"
+  secondary:
+    - "mare cielo acrilico"
+    - "costa sarda tramonto"
+
 ---
 
 **Descrizione:**

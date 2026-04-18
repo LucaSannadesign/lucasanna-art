@@ -1,13 +1,19 @@
 ---
 title: "Ritratto di un Clown"
 date: 2024-07-28T10:14:03+00:00
-description: "Scopri il \"Ritratto di un Clown\" di Luca Sanna, un'opera che cattura l'essenza e la drammaticità della figura del clown, rivelando la complessità emotiva e la vulnerabilità nascosta dietro la maschera."
+description: "Ritratto clown digitale: maschera e fragilità, drammaticità e vulnerabilità dietro il personaggio, con resa nitida e teatrale."
 featuredImage: "/assets/uploads/ritratto-di-un-clown-luca-sanna.jpg"
 year: 2023
 technique: "Digitale"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/grafica/ritratto-di-un-clown/"
+seo:
+  primary: "ritratto clown digitale"
+  secondary:
+    - "maschera emotività clown"
+    - "ritratto teatro digitale"
+
 ---
 
 **Descrizione:**

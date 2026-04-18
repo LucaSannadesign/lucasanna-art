@@ -1,13 +1,19 @@
 ---
 title: "Uccello Giallo con Testa Rossa"
 date: 2025-05-21T16:01:20+00:00
-description: "\"Uccello Giallo con Testa Rossa\" raffigura un uccello dal piumaggio giallo e una testa rossa, posato su un ramo in un vivace sfondo verde. Dipinto con colori vivaci e dettagli realistici."
+description: "Uccello giallo con testa rossa, acrilico su tela: piumaggio e ramo sono dipinti con dettaglio realistico, su uno sfondo verde vibrante."
 featuredImage: "/assets/uploads/yellow-bird.jpg"
 year: 2022
 technique: "Acrilico su tela"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/uccello-giallo-con-testa-rossa/"
+seo:
+  primary: "uccello giallo testa rossa"
+  secondary:
+    - "acrilico fauna aviaria"
+    - "uccello ramo verde"
+
 ---
 
 **Descrizione:**

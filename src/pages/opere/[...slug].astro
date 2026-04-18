@@ -9,6 +9,376 @@ import MemoriaVisiva from "../../components/MemoriaVisiva.astro";
 import PercorsoTrigger from "../../components/PercorsoTrigger.astro";
 import PercorsoOverlay from "../../components/PercorsoOverlay.astro";
 
+const CATEGORY_LABELS: Record<string, string> = {
+    animali: "Animali",
+    pittura: "Pittura",
+    grafica: "Grafica",
+    paesaggio: "Paesaggio",
+    ritratti: "Ritratti",
+};
+
+/** Testo introduttivo per le pagine categoria (sopra la griglia opere). */
+const CATEGORY_INTRO_PARAGRAPHS: Record<string, string[]> = {
+    animali: [
+        "Questa sezione raccoglie dipinti di uccelli, ritratti di animali e figure della fauna: il soggetto nasce dall’osservazione e dall’incontro con il vivente, non da una galleria illustrativa.",
+        "Tra acquerello, acrilico, carta nera e grafica, ogni opera indaga presenza, movimento e sguardo; il piumaggio e il pelo diventano linguaggio pittorico, spazio di memoria e di attenzione.",
+        "È un percorso aperto, dove dipinti di uccelli e ritratti di animali si affiancano senza ordine enciclopedico: conta il rapporto personale con la natura e con la figura.",
+    ],
+    paesaggio: [
+        "Qui si incontrano paesaggi della Sardegna e visioni più ampie del territorio: coste, macchia, borghi, notturni e luce mediterranea, tra luoghi nominati e stati d’animo.",
+        "Acquerello, acrilico e digitale si alternano per raccontare orizzonte, cielo e terra; il paesaggio non è decorazione, ma presenza viva, luce e tempo sul supporto.",
+        "Scorrono paesaggi italiani e mediterranei filtrati dal gesto: mare, colline, alberi e luna compongono un archivio di silenzi e di sguardi posati sul reale.",
+    ],
+    grafica: [
+        "La grafica è qui intesa come disegno e ricerca sul segno: matita, carboncino, inchiostro e, quando serve, digitale, per dare conto di volti, natura e tensioni simboliche.",
+        "Le opere esplorano il tratto come pensiero visivo, tra densità materica e leggerezza della linea; non un elenco di stili, ma un laboratorio di composizione e inquietudine.",
+        "Attraverso il segno grafico si attraversano ritratti, paesaggi interiori e astrazioni leggere, invitando a una lettura lenta, appoggiata al dettaglio e al vuoto della carta.",
+    ],
+    pittura: [
+        "Questa parte del catalogo è dedicata alla pittura come pratica primaria: colore, strato e superficie su carta o tela, con acquerello, acrilico e soluzioni che seguono il gesto.",
+        "Il soggetto cambia — figura, natura, transizioni più libere — ma resta centrale l’equilibrio tra pennellata, trasparenza e materia; ogni opera nasce da una decisione cromatica chiara.",
+        "Non si tratta di una rassegna tematica rigida: è un campione della pittura contemporanea personale, tra immediatezza del segno e lentezza dello sguardo.",
+    ],
+    ritratti: [
+        "I ritratti qui raccolti sono volti e memorie: figure reali o legate alla cultura, rese con acrilico, digitale o supporti che richiedono decisione e fermezza del tratto.",
+        "Il ritratto non cerca l’effetto né la riproduzione fredda: si orienta verso espressione, dignità e tensione del soggetto, tra somiglianza e interpretazione.",
+        "Ogni opera aggiunge un passo nella conversazione tra identità e immagine, invitando a fermarsi su occhi, mani e silenzio che attraversano il volto.",
+    ],
+};
+
+const TITLE_MAX = 60;
+/** Lunghezza massima meta description singola opera (CTR). */
+const META_DESC_MAX = 155;
+
+function techniqueForOperaTitle(technique: string | undefined): string {
+    const raw = technique?.trim();
+    if (!raw) return "opera";
+    const first = raw.split(/[.!?]/)[0]?.trim();
+    if (first && first.length >= 3 && first.length <= 42) return first;
+    if (raw.length <= 40) return raw;
+    return raw.slice(0, 37).trimEnd() + "…";
+}
+
+function shortenTitlePart(s: string, max: number): string {
+    const t = s.replace(/\s+/g, " ").trim();
+    if (t.length <= max) return t;
+    return t.slice(0, max - 1).trimEnd() + "…";
+}
+
+function titlePartsOverlap(primary: string, other: string): boolean {
+    if (!other || other.length < 4) return true;
+    const pl = primary.toLowerCase();
+    const ol = other.toLowerCase();
+    if (ol.length >= 10 && pl.includes(ol.slice(0, 10))) return true;
+    if (pl.length >= 10 && ol.includes(pl.slice(0, 10))) return true;
+    return false;
+}
+
+function pickDistinctiveOperaTitle(
+    entry: CollectionEntry<"opere">,
+    primary: string,
+): string {
+    const tryParts: (string | undefined)[] = [
+        entry.data.tema?.trim(),
+        entry.data.emozione?.trim(),
+        entry.data.seo?.secondary?.[0]?.trim(),
+        entry.data.seo?.secondary?.[1]?.trim(),
+    ];
+    for (const raw of tryParts) {
+        if (!raw) continue;
+        const part = shortenTitlePart(raw, 30);
+        if (!titlePartsOverlap(primary, part)) return part;
+    }
+    const name = entry.data.title.trim();
+    if (name.length >= 2 && name.length <= 26 && !titlePartsOverlap(primary, name)) {
+        return name;
+    }
+    const desc = normalizeDescriptionField(entry.data.description);
+    if (desc) {
+        const first = desc.split(/[.;]/)[0]?.trim() || desc;
+        const frag = shortenTitlePart(first, 26);
+        if (frag.length >= 8 && !titlePartsOverlap(primary, frag)) return frag;
+    }
+    const tech = techniqueForOperaTitle(entry.data.technique);
+    if (tech && tech !== primary && !titlePartsOverlap(primary, tech)) {
+        return shortenTitlePart(tech, 26);
+    }
+    const y = entry.data.year != null && entry.data.year !== "" ? String(entry.data.year) : "";
+    if (y) return `Presenza e luce · ${y}`;
+    return "Segno, luce e contrasto";
+}
+
+const SUBHEADING_MAX = 80;
+
+/** Normalizza la keyword primaria (connettori IT), minuscolo. */
+function applyPrimaryNaturalConnectorsLower(s: string): string {
+    let t = s.replace(/\s+/g, " ").trim().toLowerCase();
+    if (!t) return "";
+
+    t = t.replace(
+        /^(dipinto|ritratto|illustrazione|disegno)\s+(?!di\b)(?!a\b)/,
+        (_, w: string) => `${w} di `,
+    );
+
+    t = t.replace(/\bdisegno di matita\b/g, "disegno a matita");
+
+    if (!/\bin acrilico\b/.test(t)) t = t.replace(/\s+acrilico\b/g, " in acrilico");
+    if (!/\bin acquerello\b/.test(t)) t = t.replace(/\s+acquerello\b/g, " in acquerello");
+    if (!/\bin digitale\b/.test(t)) t = t.replace(/\s+digitale\b/g, " in digitale");
+    if (!/\bin carboncino\b/.test(t)) t = t.replace(/\s+carboncino\b/g, " in carboncino");
+
+    if (!/\bsu carta nera\b/.test(t)) {
+        t = t.replace(/\bcarta nera\b/g, "su carta nera");
+    }
+
+    t = t.replace(/\s+/g, " ").trim();
+    t = t.replace(/\bin in\b/g, "in");
+
+    return t;
+}
+
+/** Rende la keyword primaria più leggibile (connettori IT) senza rimuovere parole. */
+function naturalizeSubheadingFromPrimary(s: string): string {
+    let t = applyPrimaryNaturalConnectorsLower(s);
+    if (!t) return "";
+
+    if (t.length > SUBHEADING_MAX) {
+        let cut = t.slice(0, SUBHEADING_MAX - 1).trimEnd();
+        const sp = cut.lastIndexOf(" ");
+        if (sp > 24) cut = cut.slice(0, sp);
+        t = cut + "…";
+    }
+
+    return t.charAt(0).toUpperCase() + t.slice(1);
+}
+
+/** Sottotitolo sotto l'H1: keyword primaria SEO (stessi dati del <title>, senza elemento distintivo). */
+function operaPrimarySubheadingLine(entry: CollectionEntry<"opere">): string {
+    const raw =
+        entry.data.seo?.primary?.trim() || techniqueForOperaTitle(entry.data.technique);
+    let s = raw.replace(/\s+/g, " ").trim();
+    if (!s || s.toLowerCase() === "opera") return "";
+    const title = entry.data.title.trim();
+    if (title && s.toLowerCase() === title.toLowerCase()) return "";
+    return naturalizeSubheadingFromPrimary(s);
+}
+
+/** Titolo singola opera: [keyword primaria] – [elemento distintivo] | Luca Sanna (max ~60). */
+function buildOperaPageTitle(entry: CollectionEntry<"opere">): string {
+    const suffix = " | Luca Sanna";
+    const sep = " – ";
+    const fixed = suffix.length + sep.length;
+    let primary =
+        entry.data.seo?.primary?.trim() || techniqueForOperaTitle(entry.data.technique);
+    let distinctive = pickDistinctiveOperaTitle(entry, primary);
+
+    const room = () => TITLE_MAX - fixed;
+    let full = () => `${primary}${sep}${distinctive}${suffix}`;
+
+    while (full().length > TITLE_MAX && distinctive.length > 8) {
+        distinctive = distinctive.slice(0, -2).trimEnd() + "…";
+    }
+    const maxPrimary = Math.max(14, room() - distinctive.length);
+    if (primary.length > maxPrimary) {
+        primary = shortenTitlePart(primary, maxPrimary);
+    }
+    let out = full();
+    if (out.length > TITLE_MAX) {
+        out = out.slice(0, TITLE_MAX - 1).trimEnd() + "…";
+    }
+    return out;
+}
+
+function normalizeDescriptionField(description: string | undefined): string {
+    if (!description?.trim()) return "";
+    return description
+        .replace(/^["']|["']$/g, "")
+        .replace(/\\"/g, '"')
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+/** Coda evocativa (luce, colore, atmosfera) per CTR; non riusa il testo della pagina. */
+const EVOCATIVE_BY_CATEGORY: Record<string, string> = {
+    animali:
+        "contrasti intensi e luce vibrante in una composizione essenziale",
+    paesaggio:
+        "atmosfera luminosa e profondità cromatica nel paesaggio",
+    ritratti: "intimità del volto, luce raccolta e presenza emotiva",
+    grafica:
+        "tensione del segno, contrasto e respiro materico sul foglio",
+    pittura: "strato e colore che dialogano sulla superficie",
+};
+
+function buildOperaMetaDescription(
+    entry: CollectionEntry<"opere">,
+    categoryKey: string,
+): string {
+    const title = entry.data.title.trim();
+    const rawPrimary =
+        entry.data.seo?.primary?.trim() || techniqueForOperaTitle(entry.data.technique);
+
+    let primaryLead: string;
+    if (rawPrimary && rawPrimary.toLowerCase() !== "opera") {
+        const lower = applyPrimaryNaturalConnectorsLower(rawPrimary);
+        primaryLead = lower
+            ? lower.charAt(0).toUpperCase() + lower.slice(1)
+            : title;
+    } else {
+        primaryLead = title;
+    }
+
+    const tail =
+        EVOCATIVE_BY_CATEGORY[categoryKey] ||
+        "luce, colore e atmosfera in una composizione personale.";
+
+    let text = `${primaryLead}: ${tail}`;
+    text = text.replace(/\s+/g, " ").trim();
+
+    if (text.length > META_DESC_MAX) {
+        const cut = text.slice(0, META_DESC_MAX - 1);
+        const lastSpace = cut.lastIndexOf(" ");
+        text =
+            (lastSpace > META_DESC_MAX / 2 ? cut.slice(0, lastSpace) : cut).trimEnd() +
+            "…";
+    }
+    return text;
+}
+
+function isOperaBodyMinimal(markdown: string): boolean {
+    const stripped = markdown
+        .replace(/```[\s\S]*?```/g, " ")
+        .replace(/\[[^\]]*\]\([^)]*\)/g, " ")
+        .replace(/[#*_`>|]/g, " ")
+        .replace(/\*\*[^*]+\*\*/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    return stripped.length < 28;
+}
+
+function buildOperaFallbackCopy(
+    entry: CollectionEntry<"opere">,
+    categoryKey: string,
+): { descriptionParas: string[]; techniquePara: string; inspirationPara: string } {
+    const categoryLabel = CATEGORY_LABELS[categoryKey] || categoryKey;
+    const title = entry.data.title.trim();
+    const tech = entry.data.technique?.trim() || "";
+    const descClean = normalizeDescriptionField(entry.data.description);
+    const tema = entry.data.tema?.trim();
+    const emozione = entry.data.emozione?.trim();
+    const year = entry.data.year;
+    const tags = (entry.data.tags || []).filter(Boolean);
+
+    const descriptionParas: string[] = [];
+    if (descClean) {
+        const sentences = descClean.split(/(?<=[.!?])\s+/).filter((s) => s.trim());
+        descriptionParas.push(...sentences.slice(0, 3).map((s) => s.trim()));
+    } else {
+        descriptionParas.push(
+            `${title} è un'opera del catalogo ${categoryLabel} di Luca Sanna${year != null && year !== "" ? ` (${year})` : ""}. Il lavoro nasce dall'osservazione attenta del soggetto e dalla ricerca di un equilibrio tra segno, colore e spazio.`,
+        );
+        descriptionParas.push(
+            `La composizione dialoga con la tradizione della sezione ${categoryLabel}, proponendo una lettura personale che invita lo spettatore a fermarsi sul dettaglio e sulla materia.`,
+        );
+    }
+    if (tema || emozione) {
+        descriptionParas.push(
+            tema
+                ? `Nel percorso tematico, l'opera si collega a: ${tema}.`
+                : `L'attenzione emotiva dell'opera si orienta verso: ${emozione}.`,
+        );
+    } else if (tags.length) {
+        descriptionParas.push(
+            `Elementi ricorrenti nel linguaggio visivo: ${tags.slice(0, 4).join(", ")}.`,
+        );
+    }
+
+    const techniquePara = tech
+        ? tech
+        : "Tecnica eseguita nell'ambito della pratica pittorica e grafica dell'autore, con attenzione alla resa materica e al rapporto con il supporto.";
+
+    const inspirationPara =
+        tema ||
+        emozione ||
+        `Contesto: opera inserita nel filone ${categoryLabel.toLowerCase()}, tra paesaggio interiore e ricerca figurativa.`;
+
+    return { descriptionParas: descriptionParas.slice(0, 4), techniquePara, inspirationPara };
+}
+
+function pickRelatedWorks(
+    entry: CollectionEntry<"opere">,
+    all: CollectionEntry<"opere">[],
+    categoryKey: string,
+): CollectionEntry<"opere">[] {
+    const others = all.filter(
+        (w) => w.slug.includes("/") && w.slug !== entry.slug,
+    );
+    const mySecondary = new Set(
+        (entry.data.seo?.secondary ?? [])
+            .map((s) => s.trim().toLowerCase())
+            .filter(Boolean),
+    );
+    const sameCategory = (w: CollectionEntry<"opere">) =>
+        w.slug.startsWith(`${categoryKey}/`);
+    const sharesSecondary = (w: CollectionEntry<"opere">) => {
+        if (mySecondary.size === 0) return false;
+        for (const s of w.data.seo?.secondary ?? []) {
+            const t = s.trim().toLowerCase();
+            if (t && mySecondary.has(t)) return true;
+        }
+        return false;
+    };
+    const candidates = others.filter(
+        (w) => sameCategory(w) || sharesSecondary(w),
+    );
+
+    const score = (w: CollectionEntry<"opere">) => {
+        const sc = sameCategory(w);
+        const sh = sharesSecondary(w);
+        if (sc && sh) return 3;
+        if (sc) return 2;
+        return 1;
+    };
+
+    const prioritized =
+        candidates.length > 0
+            ? [...candidates].sort((a, b) => {
+                  const ds = score(b) - score(a);
+                  if (ds !== 0) return ds;
+                  return (
+                      new Date(b.data.date || 0).getTime() -
+                      new Date(a.data.date || 0).getTime()
+                  );
+              })
+            : [];
+
+    const seen = new Set<string>();
+    const out: CollectionEntry<"opere">[] = [];
+
+    for (const w of prioritized) {
+        if (out.length >= 3) break;
+        if (seen.has(w.slug)) continue;
+        seen.add(w.slug);
+        out.push(w);
+    }
+
+    if (out.length < 3) {
+        const byRecent = [...others].sort(
+            (a, b) =>
+                new Date(b.data.date || 0).getTime() -
+                new Date(a.data.date || 0).getTime(),
+        );
+        for (const w of byRecent) {
+            if (out.length >= 3) break;
+            if (seen.has(w.slug)) continue;
+            seen.add(w.slug);
+            out.push(w);
+        }
+    }
+
+    return out;
+}
+
 const INTERACTIONS = {
     reactiveMotion: true,
     gazeTime: true,
@@ -37,6 +407,36 @@ const { Content } = await entry.render();
 // Detect if this is a category page (no "/" in slug) or individual artwork
 const isCategoryPage = !entry.slug.includes("/");
 const currentCategory = isCategoryPage ? entry.slug : null;
+const artworkCategoryKey = entry.slug.includes("/")
+    ? entry.slug.split("/")[0]!.toLowerCase()
+    : "";
+
+const pageTitle = isCategoryPage
+    ? `${entry.data.title} | Opere Luca Sanna`
+    : buildOperaPageTitle(entry);
+
+const pageDescription = isCategoryPage
+    ? entry.data.description
+    : buildOperaMetaDescription(entry, artworkCategoryKey);
+
+const showOperaFallback = !isCategoryPage && isOperaBodyMinimal(entry.body);
+const fallbackCopy = showOperaFallback
+    ? buildOperaFallbackCopy(entry, artworkCategoryKey)
+    : null;
+
+let relatedWorks: CollectionEntry<"opere">[] = [];
+if (!isCategoryPage) {
+    const allOpere = await getCollection("opere");
+    relatedWorks = pickRelatedWorks(entry, allOpere, artworkCategoryKey);
+}
+
+const operaPrimarySubheading = !isCategoryPage
+    ? operaPrimarySubheadingLine(entry)
+    : "";
+
+const operaImageAlt = !isCategoryPage
+    ? `${(entry.data.seo?.primary?.trim() || entry.data.title.trim())} – opera di Luca Sanna`
+    : "";
 
 // If category page, get all artworks in that category
 let categoryWorks: CollectionEntry<"opere">[] = [];
@@ -105,19 +505,11 @@ if (isCategoryPage) {
         emozione: inferEmozione(work),
     }));
 }
-
-const CATEGORY_LABELS: Record<string, string> = {
-    animali: "Animali",
-    pittura: "Pittura",
-    grafica: "Grafica",
-    paesaggio: "Paesaggio",
-    ritratti: "Ritratti",
-};
 ---
 
 <BaseLayout
-    title={entry.data.title + " | Opere Luca Sanna"}
-    description={entry.data.description}
+    title={pageTitle}
+    description={pageDescription}
     context="blog"
 >
     {isCategoryPage ? (
@@ -141,6 +533,20 @@ const CATEGORY_LABELS: Record<string, string> = {
                     className="text-xs uppercase tracking-[0.16em] text-gray-500"
                 />
             </div>
+
+            {currentCategory &&
+                CATEGORY_INTRO_PARAGRAPHS[currentCategory] && (
+                    <section
+                        class="max-w-3xl mx-auto mb-14 md:mb-20 px-2 text-center text-gray-400 text-sm md:text-base leading-relaxed font-light tracking-wide space-y-4"
+                        aria-label="Introduzione alla sezione"
+                    >
+                        {CATEGORY_INTRO_PARAGRAPHS[currentCategory].map(
+                            (paragraph) => (
+                                <p>{paragraph}</p>
+                            ),
+                        )}
+                    </section>
+                )}
 
             <PercorsoTrigger />
 
@@ -242,12 +648,18 @@ const CATEGORY_LABELS: Record<string, string> = {
         <div class="max-w-6xl mx-auto px-4 pt-5 pb-12 md:pt-8 md:pb-20">
         <div class="mb-6 md:mb-8 text-center">
             <h1
-                class="text-4xl md:text-7xl font-heading font-normal text-white mb-5 md:mb-6 uppercase tracking-widest leading-tight"
+                class="text-4xl md:text-7xl font-heading font-normal text-white mb-5 md:mb-6 tracking-wide leading-tight"
                 data-reveal-item
                 data-reveal-order="1"
             >
                 {entry.data.title}
             </h1>
+
+            {operaPrimarySubheading && (
+                <p class="text-sm md:text-base text-gray-400 font-light tracking-wide max-w-2xl mx-auto mb-4 md:mb-5">
+                    {operaPrimarySubheading}
+                </p>
+            )}
 
             <TestoMutabile
                 enabled={INTERACTIONS.mutableText}
@@ -281,7 +693,7 @@ const CATEGORY_LABELS: Record<string, string> = {
                 entry.data.featuredImage && (
                     <img
                         src={entry.data.featuredImage}
-                        alt={entry.data.title}
+                        alt={operaImageAlt}
                         data-opera-reattiva
                         style={`view-transition-name: opera-${entry.slug.replaceAll("/", "-")};`}
                         class="w-full h-auto max-h-[85vh] object-contain mx-auto shadow-2xl"
@@ -298,17 +710,110 @@ const CATEGORY_LABELS: Record<string, string> = {
             </p>
         </div>
 
-        <div
-            class="single-opera-content prose prose-invert prose-lg mx-auto text-gray-300 leading-relaxed font-light tracking-wide max-w-2xl text-center"
+        {showOperaFallback && fallbackCopy ? (
+            <article
+                class="single-opera-content prose prose-invert prose-lg mx-auto text-gray-300 leading-relaxed font-light tracking-wide max-w-2xl text-left"
+                data-reveal-item
+                data-reveal-order="4"
+            >
+                <section aria-labelledby="opera-desc-heading">
+                    <h2 id="opera-desc-heading" class="not-prose text-xl font-heading text-white mb-4">
+                        Descrizione
+                    </h2>
+                    {fallbackCopy.descriptionParas.map((para) => (
+                        <p class="mb-4">{para}</p>
+                    ))}
+                    <p class="mb-4 text-gray-400">{fallbackCopy.inspirationPara}</p>
+                </section>
+                <section class="mt-10" aria-labelledby="opera-tech-heading">
+                    <h2 id="opera-tech-heading" class="not-prose text-xl font-heading text-white mb-4">
+                        Tecnica
+                    </h2>
+                    <p>{fallbackCopy.techniquePara}</p>
+                </section>
+            </article>
+        ) : (
+            <article
+                class="single-opera-content prose prose-invert prose-lg mx-auto text-gray-300 leading-relaxed font-light tracking-wide max-w-2xl text-center"
+                data-reveal-item
+                data-reveal-order="4"
+            >
+                <Content />
+            </article>
+        )}
+
+        <nav
+            class="mt-14 max-w-2xl mx-auto text-center text-sm text-gray-400 leading-relaxed"
+            aria-label="Navigazione opere"
             data-reveal-item
-            data-reveal-order="4"
+            data-reveal-order="5"
         >
-            <Content />
-        </div>
+            <p class="mb-3">
+                <a
+                    href={`/opere/${artworkCategoryKey}/`}
+                    class="text-gray-300 underline underline-offset-4 decoration-white/20 hover:decoration-white"
+                >
+                    {CATEGORY_LABELS[artworkCategoryKey] || artworkCategoryKey}
+                </a>
+                <span class="mx-2 text-gray-600" aria-hidden="true">·</span>
+                <a
+                    href="/opere/"
+                    class="text-gray-300 underline underline-offset-4 decoration-white/20 hover:decoration-white"
+                >
+                    Tutte le opere
+                </a>
+            </p>
+        </nav>
+
+        {relatedWorks.length > 0 && (
+            <section
+                class="mt-16 max-w-5xl mx-auto"
+                aria-labelledby="opere-correlate-heading"
+                data-reveal-item
+                data-reveal-order="6"
+            >
+                <h2
+                    id="opere-correlate-heading"
+                    class="text-center text-xs uppercase tracking-[0.2em] text-gray-500 mb-10"
+                >
+                    Opere correlate
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-10">
+                    {relatedWorks.map((work) => (
+                        <a
+                            href={`/opere/${work.slug}`}
+                            class="group block text-center"
+                        >
+                            <div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-4">
+                                {work.data.featuredImage ? (
+                                    <img
+                                        src={work.data.featuredImage}
+                                        alt={work.data.title}
+                                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                                    />
+                                ) : (
+                                    <div class="w-full h-full flex items-center justify-center text-gray-600 text-xs tracking-widest uppercase">
+                                        No Image
+                                    </div>
+                                )}
+                            </div>
+                            <h3 class="text-lg font-heading text-white mb-1 group-hover:text-gray-200 transition-colors">
+                                {work.data.title}
+                            </h3>
+                            {work.data.year != null && work.data.year !== "" && (
+                                <p class="text-[10px] text-gray-500 uppercase tracking-widest">
+                                    {work.data.year}
+                                </p>
+                            )}
+                        </a>
+                    ))}
+                </div>
+            </section>
+        )}
 
         <div class="mt-20 pt-8 border-t border-white/5 text-center">
             <a
-                href="/opere"
+                href="/opere/"
                 class="inline-block text-xs uppercase tracking-[0.2em] text-gray-500 hover:text-white transition-colors duration-300 border-b border-transparent hover:border-white py-1"
                 >Torna alla Galleria</a
             >

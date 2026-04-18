@@ -1,11 +1,17 @@
 ---
 title: "Ritratti Archivi: Arte e Design, Sassari Archivi - Arte a Sassari e in Sardegna"
 date: 2024-08-25T11:55:37+00:00
-description: "Scopri i ritratti di Luca Sanna, che catturano l'essenza delle persone attraverso dettagli raffinati e colori vivaci. Esplora opere che raccontano storie attraverso volti espressivi."
+description: "Ritratti artistici: volti e presenze raccontati con dettaglio e colore, tra realismo emotivo e interpretazione personale."
 featuredImage: "/assets/uploads/mia-madre-speranza-canu.jpg"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/ritratti/"
+seo:
+  primary: "ritratti artistici Sassari"
+  secondary:
+    - "ritratto arte contemporanea"
+    - "volti espressivi pittura"
+
 ---
 
 ☰ Filtro Categorie

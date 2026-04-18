@@ -1,13 +1,19 @@
 ---
 title: "Sa Fraigada, paesaggio in Sardegna"
 date: 2024-07-20T22:12:23+00:00
-description: "Immergiti nella tranquillità di 'Sa Fraigada', un dipinto che cattura la bellezza di un bosco soleggiato, con un albero maestoso in primo piano e un gioco di luci e ombre sul prato verde."
+description: "Sa Fraigada, bosco Sardegna in acrilico: albero maestoso e prato verde, giochi di luce e ombra che invitano alla calma."
 featuredImage: "/assets/uploads/sa-fraigada-lucasanna.webp"
 year: 2019
 technique: "Acrilico su tela"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/sa-fraigada-paesaggio-in-sardegna/"
+seo:
+  primary: "bosco Sardegna dipinto"
+  secondary:
+    - "Sa Fraigada paesaggio"
+    - "luce ombre prato"
+
 ---
 
 **Descrizione:**

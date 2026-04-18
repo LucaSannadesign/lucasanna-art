@@ -1,11 +1,17 @@
 ---
 title: "Archivi Opere - Arte a Sassari e in SardegnaArchivi Opere | Luca Sanna - Arte a Sassari e in Sardegna"
 date: 2025-11-25T14:08:29+00:00
-description: "Scopri le opere d'arte di Luca Sanna, artista sardo di Sassari, specializzato in pittura italiana. Esplora la sua collezione unica di dipinti in Sardegna."
+description: "Catalogo opere di Luca Sanna: pittura e disegno tra Sardegna e ricerca personale, con percorsi per tema e tecnica."
 featuredImage: "/assets/uploads/ginepri-a-platamona-villaggio-selva-sassari-Luca-Sanna-acrilico.jpg"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/"
+seo:
+  primary: "catalogo opere Luca Sanna"
+  secondary:
+    - "arte Sassari Sardegna"
+    - "collezione dipinti artista"
+
 ---
 
 ☰ Filtro Categorie

@@ -1,13 +1,19 @@
 ---
 title: "Radici e volti (2025)"
 date: 2025-08-24T20:42:16+00:00
-description: "Radici e volti” unisce grafite e ciano-magenta in un dittico su sketchbook: identità, memoria e metamorfosi tra volto umano e radici."
+description: "Radici e volti, dittico su sketchbook: grafite e ciano-magenta intrecciano identità e metamorfosi tra radici e volti."
 featuredImage: "/assets/uploads/radici-e-volti-scaled.webp"
 year: 2025
 technique: "Matita su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/grafica/radici-e-volti/"
+seo:
+  primary: "dittico radici volti matita"
+  secondary:
+    - "identità memoria disegno"
+    - "sketchbook grafite"
+
 ---
 
 **Descrizione:**

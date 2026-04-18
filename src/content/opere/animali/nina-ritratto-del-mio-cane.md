@@ -1,13 +1,19 @@
 ---
 title: "Ritratto di Nina – Omaggio in Acrilico su Masonite"
 date: 2024-08-25T11:55:37+00:00
-description: "Scopri il ritratto di Nina, il mio amato cane scomparso, realizzato con acrilico su masonite. Un'opera personale che cattura la sua dolcezza e la sua bellezza, un tributo emozionante a un fedele compagno di vita."
+description: "Ritratto cane acrilico su masonite, dedicato a Nina: un tributo intimo, tra dolcezza del soggetto e solidità del supporto."
 featuredImage: "/assets/uploads/nina_ritratto_luca_sanna.jpg"
 year: 2018
 technique: "Acrilico su masonite"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/nina-ritratto-del-mio-cane/"
+seo:
+  primary: "ritratto cane acrilico masonite"
+  secondary:
+    - "omaggio cane dipinto"
+    - "ritratto animale memoria"
+
 ---
 
 **Descrizione:**

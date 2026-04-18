@@ -1,13 +1,19 @@
 ---
 title: "Segni"
 date: 2024-07-22T14:32:04+00:00
-description: "Scopri \"Senza Titolo\" di Luca Sanna, un'opera realizzata con inchiostro e pennino su carta, che esplora il potenziale espressivo della linea e del segno grafico, creando una texture ricca e complessa."
+description: "Segni con inchiostro e pennino su carta: linee che costruiscono texture complessa, tra astrazione e tensione del tratto."
 featuredImage: "/assets/uploads/senza-titolo-segni-carta-china-lucasanna.webp"
 year: 2005
 technique: "e una sensibilità artistica nel manipolare il segno grafico per creare un’opera che sfida i confini tra astrazione e rappresentazione. “Senza Titolo” invita lo spettatore a immergersi in un viaggio visivo, esplorando le infinite possibilità offerte dalla combinazione di linee e spazi."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/grafica/segni/"
+seo:
+  primary: "inchiostro pennino segno grafico"
+  secondary:
+    - "astrazione linea carta"
+    - "texture linee inchiostro"
+
 ---
 
 **Descrizione:**

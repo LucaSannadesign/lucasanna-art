@@ -1,11 +1,17 @@
 ---
 title: "Animali Archivi - Arte a Sassari e in Sardegna"
 date: 2025-11-25T14:08:29+00:00
-description: "Esplora le opere d'arte dedicate agli animali di Luca Sanna. Scopri ritratti unici e paesaggi naturali che catturano l'essenza e la bellezza degli animali attraverso tecniche artistiche raffinate."
+description: "Arte animali a Sassari e in Sardegna: ritratti e nature che raccontano fauna e presenza animale, tra tecniche diverse e attenzione al soggetto."
 featuredImage: "/assets/uploads/nina_ritratto_luca_sanna.jpg"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/"
+seo:
+  primary: "arte animali Sassari"
+  secondary:
+    - "dipinti fauna Sardegna"
+    - "ritratti animali arte"
+
 ---
 
 ☰ Filtro Categorie

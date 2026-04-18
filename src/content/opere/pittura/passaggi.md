@@ -1,13 +1,19 @@
 ---
 title: "Passaggi"
 date: 2024-07-28T14:48:12+00:00
-description: "Esplora 'Passaggi', un dipinto ad acquerello che rappresenta figure astratte in transizione in un paesaggio etereo, evocando temi di isolamento, ricerca e trasformazione."
+description: "Passaggi, figure astratte in acquerello: paesaggio etereo e transizione, tra isolamento, ricerca interiore e trasformazione."
 featuredImage: "/assets/uploads/Passaggi-lucasanna.webp"
 year: 1992
 technique: "Acquerello su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/pittura/passaggi/"
+seo:
+  primary: "figure astratte acquerello"
+  secondary:
+    - "paesaggio etereo transizione"
+    - "isolamento trasformazione"
+
 ---
 
 **Descrizione:**

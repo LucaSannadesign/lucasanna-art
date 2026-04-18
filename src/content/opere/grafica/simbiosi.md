@@ -1,13 +1,19 @@
 ---
 title: "Simbiosi"
 date: 2024-07-20T22:32:39+00:00
-description: "Esplora 'Simbiosi', un disegno a matita su carta di Luca Sanna, che intreccia volti e profili per rappresentare la complessità e l'interconnessione delle relazioni umane."
+description: "Simbiosi, disegno a matita: volti e profili che si fondono, metafora delle relazioni e dell'intreccio tra identità."
 featuredImage: "/assets/uploads/simbiosi-luca-sanna-matita-carta.webp"
 year: 1993
 technique: "Matita su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/grafica/simbiosi/"
+seo:
+  primary: "volti intrecciati matita"
+  secondary:
+    - "relazioni umane disegno"
+    - "matita profili multipli"
+
 ---
 
 **Descrizione:**

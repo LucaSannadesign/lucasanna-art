@@ -1,13 +1,19 @@
 ---
 title: "Merlo, disegno a Carboncino"
 date: 2025-11-25T14:08:29+00:00
-description: "\"Merlo Disegnato a Carboncino\" è un ritratto realistico di un merlo, disegnato a carboncino su carta. L'opera cattura i dettagli sottili e l'essenza naturale dell'uccello."
+description: "Merlo disegno a carboncino su carta: resa quasi fotografica di piume e volume, con uno sfondo vegetale che mette in risalto il soggetto."
 featuredImage: "/assets/uploads/Merlo-matita-su-cartoncino.jpg"
 year: 2011
 technique: "Carboncino su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/merlo-disegno-a-carboncino/"
+seo:
+  primary: "merlo disegno carboncino"
+  secondary:
+    - "uccello realistico carboncino"
+    - "ritratto uccello carta"
+
 ---
 
 **Descrizione:**

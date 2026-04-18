@@ -1,13 +1,19 @@
 ---
 title: "Paesaggio con alberi"
 date: 2024-07-24T13:29:59+00:00
-description: "Scopri un paesaggio naturale ad acquerello di Luca Sanna, raffigurante due alberi in un ambiente sereno e bucolico con colori vivaci che catturano l'essenza della natura."
+description: "Paesaggio alberi acquerello: ambiente bucolico e due alberi che ancorano la scena, con verde intenso e serenità."
 featuredImage: "/assets/uploads/paesaggio-acquerello-lucasanna-3-web.jpg"
 year: 2019
 technique: "dell’acquerello. L’artista ha scelto di rappresentare un ambiente sereno e bucolico, utilizzando una palette di colori vivaci che catturano l’essenza della natura."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-con-alberi/"
+seo:
+  primary: "paesaggio alberi acquerello"
+  secondary:
+    - "natura bucolica due alberi"
+    - "verde intenso acquerello"
+
 ---
 
 **Descrizione:**

@@ -1,13 +1,19 @@
 ---
 title: "Paesaggio a Badde Salighes"
 date: 2024-07-26T14:20:42+00:00
-description: "\"Paesaggio di Badde Salighes\" è un dipinto su carta che cattura la bellezza naturale della località sarda attraverso l'uso di colori acrilici, esprimendo serenità e connessione con la natura"
+description: "Paesaggio Badde Salighes su carta, con acrilici: serenità e legame con un luogo sardo, tra colore e presenza della natura."
 featuredImage: "/assets/uploads/badde-salighes-paesaggio-lucasanna.webp"
 year: 2018
 technique: "Acquerello su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-a-badde-salighes/"
+seo:
+  primary: "paesaggio Badde Salighes"
+  secondary:
+    - "acquerello Sardegna"
+    - "luogo Sardegna dipinto"
+
 ---
 
 **Descrizione:**

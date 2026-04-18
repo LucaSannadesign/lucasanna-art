@@ -1,13 +1,19 @@
 ---
 title: "Rami, groviglio"
 date: 2024-07-20T22:36:38+00:00
-description: "Esplora 'Rami', un disegno a matita di Luca Sanna che rappresenta l'intricata bellezza e complessità dei rami intrecciati di un albero, con dettagli sottili e sfumature profonde."
+description: "Disegno rami a matita: groviglio di rami e dettaglio minuto, tra osservazione naturalistica e fascino del segno."
 featuredImage: "/assets/uploads/Rami-groviglio.webp"
 year: 2015
 technique: "Matita su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/grafica/rami-groviglio/"
+seo:
+  primary: "disegno rami matita"
+  secondary:
+    - "albero rami intricati"
+    - "grafite dettaglio natura"
+
 ---
 
 **Descrizione:**

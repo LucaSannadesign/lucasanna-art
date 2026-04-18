@@ -1,13 +1,19 @@
 ---
 title: "Uccello Verde tra i rami – Among the Leaves"
 date: 2025-07-03T22:18:23+00:00
-description: "\"Uccello Verde tra li rami\" ritrae un uccello verde posato su un ramo, immerso in un vibrante sfondo naturale. Dipinto con colori accesi e dettagli realistici."
+description: "Uccello verde tra i rami, in acrilico su tela: un ramo e un vibrante sfondo naturale avvolgono il soggetto, tra dettaglio realistico e energia cromatica."
 featuredImage: "/assets/uploads/Uccello-Verde-tra-i-rami-Luca-Sanna-2022-acrilico-su-tela.webp"
 year: 2022
 technique: "Acrilico su tela"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/uccello-verde-tra-i-rami/"
+seo:
+  primary: "uccello verde tra i rami"
+  secondary:
+    - "acrilico uccello su ramo"
+    - "dipinto fauna uccelli"
+
 ---
 
 **Descrizione:**

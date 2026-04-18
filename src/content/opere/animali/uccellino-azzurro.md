@@ -1,13 +1,19 @@
 ---
 title: "Uccellino Azzurro"
 date: 2024-07-26T13:46:24+00:00
-description: "\"Uccellino Azzurro\", un delicato dipinto acrilico su carta nera che ritrae un uccellino dai toni azzurri. Dipinto realizzato nel 2011."
+description: "Uccellino azzurro acrilico su carta nera (2011): toni freddi e pennellate precise costruiscono un piccolo soggetto intenso e luminoso."
 featuredImage: "/assets/uploads/FB_IMG_1554324970591.jpg"
 year: 2011
 technique: "della pittura acrilica su carta nera, che permette di ottenere una profondità cromatica e un’intensità di colore notevoli. Le pennellate precise e le sfumature delicate conferiscono all’opera un senso di realismo e tridimensionalità, mentre l’attenzione ai dettagli riflette un’osservazione accurata del mondo naturale."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/uccellino-azzurro/"
+seo:
+  primary: "uccellino azzurro acrilico"
+  secondary:
+    - "carta nera uccellino"
+    - "toni freddi uccello"
+
 ---
 
 **Descrizione:**

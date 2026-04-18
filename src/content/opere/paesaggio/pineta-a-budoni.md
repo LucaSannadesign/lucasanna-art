@@ -1,13 +1,19 @@
 ---
 title: "Pineta a Budoni"
 date: 2024-07-26T15:26:14+00:00
-description: "\"Pineta a Budoni: Un Rifugio di Tranquillità\" è un paesaggio in acrilico che ritrae una serena pineta con vista sul mare a Budoni, catturando la bellezza naturale della costa."
+description: "Pineta a Budoni con vista mare: acrilico che unisce sabbia, pini e acqua blu, tra calma costiera e luce filtrata."
 featuredImage: "/assets/uploads/pineta-a-Budoni.jpg"
 year: 2017
 technique: "acrilica, la pittura ritrae una fila di alberi che si aprono su un mare blu brillante. I tronchi degli alberi si stagliano contro il cielo azzurro, mentre il verde delle chiome crea un piacevole contrasto con il blu dell’acqua. La luce del sole filtra tra i rami, creando ombre leggere sulla sabbia e sull’acqua, enfatizzando la calma e la pace del paesaggio. Quest’opera invita l’osservatore a immergersi nella tranquillità della natura e a godere della bellezza della costa."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/pineta-a-budoni/"
+seo:
+  primary: "pineta Budoni mare"
+  secondary:
+    - "costa pineta acrilico"
+    - "sabbia mare pineta"
+
 ---
 
 **Descrizione:**

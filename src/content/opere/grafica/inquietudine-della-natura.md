@@ -1,13 +1,19 @@
 ---
 title: "L’inquietudine della natura"
 date: 2025-09-21T21:10:29+00:00
-description: "L’inquietudine della natura – Disegno digitale di Luca Sanna (2024). Paesaggio surreale in cui alberi, rocce e animali assumono volti e sguardi nascosti."
+description: "Paesaggio surreale digitale (Procreate): alberi, rocce e animali che accennano volti e sguardi, tra inquietudine e meraviglia."
 featuredImage: "/assets/uploads/linquietudine-della-natura-luca-sanna-grafica-scaled.webp"
 year: 2024
 technique: "Disegno digitale (Procreate)"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/grafica/inquietudine-della-natura/"
+seo:
+  primary: "paesaggio surreale digitale Procreate"
+  secondary:
+    - "illustrazione digitale natura"
+    - "volti nascosti paesaggio"
+
 ---
 
 **Descrizione:**

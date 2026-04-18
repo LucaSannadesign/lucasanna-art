@@ -1,13 +1,19 @@
 ---
 title: "Tucano"
 date: 2025-05-21T17:12:10+00:00
-description: "Scopri \"Tucano\" di Luca Sanna, un vivace acquerello che cattura l'essenza esuberante di questo uccello tropicale con colori intensi e dettagli espressivi."
+description: "Tucano acquerello: l'uccello tropicale prende vita con colori intensi e pennellate espressive, tra esuberanza e leggerezza della tecnica."
 featuredImage: "/assets/uploads/tucano-lucasanna.webp"
 year: 2017
 technique: "Acquerello"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/pittura/tucano/"
+seo:
+  primary: "tucano acquerello"
+  secondary:
+    - "uccello tropicale acquerello"
+    - "uccello esotico pittura"
+
 ---
 
 **Descrizione:**

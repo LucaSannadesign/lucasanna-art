@@ -1,13 +1,19 @@
 ---
 title: "Tucano – Acrilico su Carta Nera – 2011"
 date: 2024-07-27T12:24:47+00:00
-description: "\"Tucano\" è un dipinto di Luca Sanna che cattura la vivacità del tucano con colori acrilici su carta nera. Realizzato nel 2011, l'opera evidenzia l'energia esotica dell'uccello tropicale attraverso un uso sapiente dei colori."
+description: "Tucano acrilico su carta nera (2011): il soggetto tropicale emerge con energia esotica, tra pennellate dense e un uso sapiente del colore."
 featuredImage: "/assets/uploads/tucano-acrilico-carta-nera.jpg"
 year: 2011
 technique: "Acrilico su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/tucano-acrilico-su-carta-nera-2011/"
+seo:
+  primary: "tucano acrilico carta nera"
+  secondary:
+    - "uccello tropicale dipinto"
+    - "tucano colori saturi"
+
 ---
 
 **Descrizione:**

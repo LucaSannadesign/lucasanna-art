@@ -1,13 +1,19 @@
 ---
 title: "Luna"
 date: 2024-07-25T08:25:49+00:00
-description: "Scopri un paesaggio notturno digitale di Luca Sanna, illuminato dalla luna con colori vivaci e contrastanti che creano un'atmosfera onirica e surreale."
+description: "Paesaggio notturno digitale: luce lunare e contrasti vivaci, tra digital painting e pastello ad olio, in un'atmosfera onirica."
 featuredImage: "/assets/uploads/luca-luca-sanna.jpg"
 year: 2018
 technique: "che unisce digital painting e pastelli ad olio. L’artista ha scelto di utilizzare colori vivaci e contrastanti per creare un’atmosfera onirica e surreale."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/luna/"
+seo:
+  primary: "paesaggio notturno digitale"
+  secondary:
+    - "luna digitale painting"
+    - "atmosfera onirica notturna"
+
 ---
 
 **Descrizione:**

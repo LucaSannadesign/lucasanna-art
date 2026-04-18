@@ -1,13 +1,19 @@
 ---
 title: "Paesaggio con Alberi"
 date: 2024-07-26T15:35:40+00:00
-description: "\"Paesaggio con Alberi in Acquerello\" offre una visione vibrante della natura, catturando la bellezza dei boschi con colori vivaci e un tocco impressionista."
+description: "Paesaggio bosco acquerello: toni verdi, tocchi impressionisti e luce che filtra nel fogliame, tra respiro e movimento."
 featuredImage: "/assets/uploads/Paesaggio-con-alberi-.jpg"
 year: 2019
 technique: "dell’acquerello, questa pittura rappresenta un angolo di bosco con una ricca varietà di tonalità verdi, mescolate con tocchi di rosso e viola che danno profondità e dinamismo alla scena. L’uso fluido e sfumato del colore cattura la luce che filtra attraverso il fogliame, creando un’atmosfera di pace e riflessione. Ogni dettaglio, dalle fronde degli alberi ai ciuffi di erba, è reso con un tocco impressionista, invitando l’osservatore a immergersi nella bellezza naturale del paesaggio."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-con-alberi-2/"
+seo:
+  primary: "paesaggio bosco acquerello"
+  secondary:
+    - "alberi luce impressionista"
+    - "verde bosco dipinto"
+
 ---
 
 **Descrizione:**

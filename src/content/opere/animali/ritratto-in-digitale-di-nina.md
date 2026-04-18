@@ -1,13 +1,19 @@
 ---
 title: "Ritratto in digitale di Nina"
 date: 2024-07-28T10:15:14+00:00
-description: "\"Ritratto Digitale di Nina\", un'opera del 2014 che rappresenta un cane su uno sfondo vivace e colorato. Tecnica digitale che cattura la personalità dell'animale."
+description: "Ritratto digitale di Nina (2014): il cane emerge su uno sfondo vivace, con una resa quasi fotografica e attenta alla personalità dell'animale."
 featuredImage: "/assets/uploads/Nina-ritratto-digitale-luca-sanna.jpg"
 year: 2014
 technique: "digitale permette di ottenere una texture morbida e dettagliata, che conferisce al ritratto una qualità quasi fotografica."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/ritratto-in-digitale-di-nina/"
+seo:
+  primary: "ritratto digitale cane"
+  secondary:
+    - "ritratto animale digitale"
+    - "cane ritratto realistico"
+
 ---
 
 **Descrizione:**

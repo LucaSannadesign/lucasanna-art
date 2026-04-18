@@ -1,13 +1,19 @@
 ---
 title: "Paesaggio notturno, luna piena"
 date: 2024-07-20T21:58:06+00:00
-description: "Scopri \"Paesaggio Notturno al Chiaro di Luna\" di Luca Sanna, un acquerello che cattura la magia di una notte illuminata dalla luna con riflessi suggestivi e colori vibranti."
+description: "Paesaggio notturno luna piena in acquerello: magia del chiaro di luna, riflessi sull'acqua e colori che restano poetici e luminosi."
 featuredImage: "/assets/uploads/Moonlight-landscape-paesaggio-notturno.webp"
 year: 2019
 technique: "dell’acquerello, utilizzando la trasparenza e la fluidità del medium per creare un’opera che è al contempo realistica e poetica."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-notturno-luna-piena/"
+seo:
+  primary: "paesaggio notturno luna piena"
+  secondary:
+    - "acquerello chiaro di luna"
+    - "riflessi acqua notturna"
+
 ---
 
 **Descrizione:**

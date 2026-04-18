@@ -1,13 +1,19 @@
 ---
 title: "Tucano dai colori vivaci"
 date: 2024-07-26T14:17:43+00:00
-description: "\"Tucano dai colori vivaci\" è un dipinto su carta nera realizzato con colori acrilici che rappresenta un tucano colorato su uno sfondo verde, catturando l'essenza esotica e vibrante dell'uccello."
+description: "Tucano acrilico su carta nera, con sfondo verde: l'essenza esotica dell'uccello si coglie tra piume e becco resi con precisione."
 featuredImage: "/assets/uploads/tucano.jpg"
 year: 2011
 technique: "meticolosa per rappresentare i dettagli del becco e delle piume, conferendo profondità e realismo all’opera. Lo sfondo astratto aggiunge un elemento di modernità e innovazione alla composizione tradizionale, creando un’opera unica e accattivante."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/tucano-dai-colori-vivaci/"
+seo:
+  primary: "tucano acrilico carta nera"
+  secondary:
+    - "tucano sfondo verde"
+    - "uccello esotico dipinto"
+
 ---
 
 **Descrizione:**

@@ -1,11 +1,17 @@
 ---
 title: "Paesaggio Archivi: Arte e Design, Sassari Archivi - Arte a Sassari e in Sardegna"
 date: 2025-05-26T12:43:57+00:00
-description: "Scopri le opere di paesaggio di Luca Sanna, che catturano la bellezza naturale e la tranquillità attraverso tecniche artistiche uniche. Esplora dipinti che evocano emozioni e meraviglia."
+description: "Paesaggio artistico in Sardegna: opere che raccolgono luce, luoghi e silenzi naturali, tra emozione e osservazione del territorio."
 featuredImage: "/assets/uploads/luca-luca-sanna.jpg"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/"
+seo:
+  primary: "paesaggio artistico Sardegna"
+  secondary:
+    - "dipinti paesaggio contemporaneo"
+    - "arte paesaggio Sassari"
+
 ---
 
 ☰ Filtro Categorie

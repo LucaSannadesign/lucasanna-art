@@ -1,13 +1,19 @@
 ---
 title: "Piccione variopinto"
 date: 2024-07-26T14:13:29+00:00
-description: "\"Piccione variopinto\" è un dipinto su carta nera realizzato con colori acrilici che rappresenta un uccello dai colori vivaci su uno sfondo viola, catturando la bellezza e la vivacità della natura."
+description: "Piccione dipinto acrilico su carta nera: piume vivaci e sfondo viola creano contrasto, tra realismo delle piume e tocco contemporaneo."
 featuredImage: "/assets/uploads/Piccione-variopinto.webp"
 year: 2011
 technique: "meticolosa per rappresentare i dettagli delle piume e del ramo, conferendo profondità e realismo all’opera. Lo sfondo astratto aggiunge un elemento di modernità e innovazione alla composizione tradizionale, creando un’opera unica e accattivante."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/piccione-variopinto/"
+seo:
+  primary: "piccione dipinto acrilico"
+  secondary:
+    - "uccello carta nera viola"
+    - "piccione piume colorate"
+
 ---
 
 **Descrizione:**
