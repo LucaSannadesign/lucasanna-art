@@ -23,6 +23,25 @@ html[data-modalita-percettiva="rumore"] {
     --perc-ui-opacity: 1;
 }
 
+html[data-silent="true"] * {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+}
+
+html[data-silent="true"] img {
+    filter: none !important;
+    transform: none !important;
+}
+
+html[data-silent="true"] .shadow-2xl {
+    opacity: 0.85;
+}
+
+html[data-silent="true"] .decorative,
+html[data-silent="true"] .hover-effects {
+    opacity: 0.7;
+}
+
 html {
     background-color: var(--color-bg-main);
     color: var(--color-text-main);

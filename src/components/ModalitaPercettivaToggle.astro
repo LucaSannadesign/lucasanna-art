@@ -11,7 +11,8 @@ const { enabled = true } = Astro.props;
     class="modalita-toggle"
     data-modalita-toggle
     data-enabled={enabled ? "true" : "false"}
-    aria-label="Cambia modalità percettiva"
+    aria-label="Modalità percettiva: Silenzio o Rumore. Riduce movimenti e stimoli visivi per una visione più calma delle opere."
+    title="Riduce movimenti e stimoli visivi per una visione più calma delle opere"
 >
     <span class="modalita-toggle__label">Modalità</span>
     <span class="modalita-toggle__value" data-modalita-value>Silenzio</span>
@@ -32,6 +33,10 @@ const { enabled = true } = Astro.props;
         const applyMode = (mode) => {
             const normalized = validModes.has(mode) ? mode : "silenzio";
             document.documentElement.setAttribute("data-modalita-percettiva", normalized);
+            document.documentElement.setAttribute(
+                "data-silent",
+                normalized === "silenzio" ? "true" : "false",
+            );
             if (valueNode) valueNode.textContent = normalized === "silenzio" ? "Silenzio" : "Rumore";
             localStorage.setItem(MODALITA_KEY, normalized);
         };
