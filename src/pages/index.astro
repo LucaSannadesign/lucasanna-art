@@ -36,7 +36,7 @@ const recentPosts: CollectionEntry<"posts">[] = (await getCollection("posts"))
 				<img
 					src={entry.data.featuredImage}
 					alt="Luca Sanna"
-					class="w-full max-h-[62vh] object-cover mb-10 md:mb-12 grayscale hover:grayscale-0 transition-all duration-1000 ease-in-out shadow-2xl"
+					class="w-full max-h-[62vh] object-cover mb-10 md:mb-12 transition-all duration-1000 ease-in-out shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:grayscale [@media(hover:hover)_and_(pointer:fine)]:hover:grayscale-0"
 				/>
 			)
 		}
