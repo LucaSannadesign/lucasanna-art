@@ -1,7 +1,7 @@
 ---
-title: "Archivi Opere - Arte a Sassari e in SardegnaArchivi Opere | Luca Sanna - Arte a Sassari e in Sardegna"
+title: "Archivio opere — Luca Sanna"
 date: 2025-11-25T14:08:29+00:00
-description: "Catalogo opere di Luca Sanna: pittura e disegno tra Sardegna e ricerca personale, con percorsi per tema e tecnica."
+description: "Catalogo opere: pittura e disegno tra Sardegna e ricerca personale; percorsi per tema e tecnica con schede sintetiche e immagini delle opere."
 featuredImage: "/assets/uploads/ginepri-a-platamona-villaggio-selva-sassari-Luca-Sanna-acrilico.jpg"
 tags: []
 categories: []
@@ -28,7 +28,7 @@ seo:
 
 [
 
-### Bird
+### Uccellino su carta nera
 
 ](https://lucasanna.art/opere/animali/bird/)
 

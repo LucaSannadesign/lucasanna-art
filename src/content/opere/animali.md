@@ -1,7 +1,7 @@
 ---
-title: "Animali Archivi - Arte a Sassari e in Sardegna"
+title: "Animali — archivio"
 date: 2025-11-25T14:08:29+00:00
-description: "Arte animali a Sassari e in Sardegna: ritratti e nature che raccontano fauna e presenza animale, tra tecniche diverse e attenzione al soggetto."
+description: "Opere con fauna e animali domestici: acquerello, acrilico e digitale tra ritratti, nature e dettaglio anatomico; selezione dalla produzione dell'artista."
 featuredImage: "/assets/uploads/nina_ritratto_luca_sanna.jpg"
 tags: []
 categories: []
@@ -22,7 +22,7 @@ seo:
 
 [
 
-### Bird
+### Uccellino su carta nera
 
 ](https://lucasanna.art/opere/animali/bird/)
 

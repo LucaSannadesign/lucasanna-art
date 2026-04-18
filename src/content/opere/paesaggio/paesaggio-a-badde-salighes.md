@@ -1,7 +1,7 @@
 ---
-title: "Paesaggio a Badde Salighes"
+title: "Badde Salighes — sentiero nel bosco (acquerello)"
 date: 2024-07-26T14:20:42+00:00
-description: "Paesaggio Badde Salighes su carta, con acrilici: serenità e legame con un luogo sardo, tra colore e presenza della natura."
+description: "Bosco e sentiero a Badde Salighes: verdi e luce filtrata in acquerello; velature e trasparenze restano sul piano osservativo, lontano da effetti simbolici."
 featuredImage: "/assets/uploads/badde-salighes-paesaggio-lucasanna.webp"
 year: 2018
 technique: "Acquerello su carta"
@@ -18,7 +18,7 @@ seo:
 
 **Descrizione:**
 
-“Paesaggio di Badde Salighes” è un dipinto su carta che rappresenta un tranquillo scorcio della località sarda. Realizzato con colori acrilici, il dipinto cattura la bellezza serena della natura, con alberi rigogliosi e un sottobosco verde che si estende fino all’orizzonte. Le pennellate decise e i colori vibranti evocano la vitalità e la calma della natura, trasmettendo una sensazione di pace e armonia.
+“Paesaggio di Badde Salighes” è un dipinto su carta che rappresenta un tranquillo scorcio della località sarda. Realizzato in **acquerello**, il dipinto cattura la bellezza serena della natura con velature e sovrapposizioni leggere: alberi rigogliosi e sottobosco verde che si estende verso l’orizzonte. Le pennellate fluide evocano vitalità e calma, tra trasparenze e contrasti morbidi.
 
 La composizione è dominata da un albero imponente in primo piano, con rami che si estendono verso l’alto e fogliame che varia dal verde al giallo, suggerendo un cambiamento stagionale. Il fondo del dipinto presenta un sentiero che invita l’osservatore a immergersi nel paesaggio e a esplorare la profondità della foresta. Le tecniche di sfumatura e sovrapposizione dei colori contribuiscono a creare un senso di profondità e tridimensionalità, facendo sentire l’osservatore parte della scena.
 

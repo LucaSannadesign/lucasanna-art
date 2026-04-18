@@ -1,10 +1,10 @@
 ---
-title: "Paesaggio notturno con alberi"
+title: "Notturno: albero solitario sotto la luna (acquerello)"
 date: 2024-07-20T22:04:14+00:00
-description: "Paesaggio notturno con alberi, acquerello: albero solitario sotto la luna, immerso in blu e verdi che creano quiete e introspezione."
+description: "Acquerello: un albero centrale sotto la luna, cielo e suolo in blu e verdi; punto luce sulla chioma e resa liquida per la quiete della scena."
 featuredImage: "/assets/uploads/paesaggio-notturno-con-alberi.webp"
 year: 2018
-technique: "ad acquerello, rappresenta un albero solitario in primo piano, con rami spogli che si stagliano contro un cielo notturno. Le colline lontane e la vegetazione circostante sono immerse in tonalità bluastre e verdi, creando un’atmosfera onirica e contemplativa. La scelta dei colori e la composizione trasmettono una sensazione di quiete e introspezione, invitando l’osservatore a riflettere sulla bellezza e la solitudine della natura notturna."
+technique: "Acquerello su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-notturno-con-alberi/"

@@ -1,7 +1,7 @@
 ---
-title: "Ginepri a Platamona – Villaggio Selva"
+title: "Ginepri a Platamona (2024) — studio ravvicinato"
 date: 2025-05-26T10:49:58+00:00
-description: "Ginepri a Platamona (Villaggio Selva): paesaggio natura sarda in acrilico su tela, tra dettaglio dei rami e serenità cromatica (2024)."
+description: "Acrilico su tela (2024): ginepri sardi, rametti in dettaglio; serenità cromatica da osservazione ravvicinata, accanto alla veduta con Sassari nel titolo."
 featuredImage: "/assets/uploads/Ginepri-Villaggio-Selva-Platamona-Sassari-Luca-Sanna-2024.webp"
 year: 2024
 technique: "Acrilico su tela"

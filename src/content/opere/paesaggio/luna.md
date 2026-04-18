@@ -1,24 +1,24 @@
 ---
-title: "Luna"
+title: "Notturno digitale: luna su colline"
 date: 2024-07-25T08:25:49+00:00
-description: "Paesaggio notturno digitale: luce lunare e contrasti vivaci, tra digital painting e pastello ad olio, in un'atmosfera onirica."
+description: "Pittura digitale: luna piena tra colline e alberi, cielo blu dominante; giallo, verde e viola si alternano in un notturno stilizzato e leggibile."
 featuredImage: "/assets/uploads/luca-luca-sanna.jpg"
 year: 2018
-technique: "che unisce digital painting e pastelli ad olio. L’artista ha scelto di utilizzare colori vivaci e contrastanti per creare un’atmosfera onirica e surreale."
+technique: "Digitale (digital painting)"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/luna/"
 seo:
   primary: "paesaggio notturno digitale"
   secondary:
-    - "luna digitale painting"
+    - "luna pittura digitale"
     - "atmosfera onirica notturna"
 
 ---
 
 **Descrizione:**
 
-Quest’opera raffigura un paesaggio notturno illuminato dalla luna, realizzato con una tecnica che unisce digital painting e pastelli ad olio. L’artista ha scelto di utilizzare colori vivaci e contrastanti per creare un’atmosfera onirica e surreale.
+Paesaggio notturno digitale: luna piena in alto, colline e alberi in primo piano, palette fredda con accenti caldi — lavoro tra pennellata digitale e effetto pastello.
 
 **Tecnica:**
 
@@ -35,6 +35,6 @@ Quest’opera raffigura un paesaggio notturno illuminato dalla luna, realizzato 
 *   **Atmosfera:** L’atmosfera dell’opera è tranquilla e contemplativa, con un senso di mistero e magia che pervade la scena. La luce della luna crea un effetto calmante e invita l’osservatore a riflettere.
 *   **Espressione:** L’uso di colori contrastanti e la rappresentazione stilizzata del paesaggio evocano un senso di meraviglia e stupore, trasportando l’osservatore in un mondo immaginario.
 
-**Tecnica:** Digitale
+**Tecnica:** Digitale (digital painting)
 
 **Anno di esecuzione:** 2018

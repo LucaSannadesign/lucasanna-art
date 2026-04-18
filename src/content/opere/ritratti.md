@@ -1,7 +1,7 @@
 ---
-title: "Ritratti Archivi: Arte e Design, Sassari Archivi - Arte a Sassari e in Sardegna"
+title: "Ritratti — archivio"
 date: 2024-08-25T11:55:37+00:00
-description: "Ritratti artistici: volti e presenze raccontati con dettaglio e colore, tra realismo emotivo e interpretazione personale."
+description: "Ritratti dipinti e digitali: volti con attenzione a struttura, luce e colore; tra osservazione realistica e interpretazione personale del soggetto."
 featuredImage: "/assets/uploads/mia-madre-speranza-canu.jpg"
 tags: []
 categories: []
@@ -34,7 +34,7 @@ seo:
 
 [
 
-### Mia madrea Speranza
+### Mia madre Speranza
 
 ](https://lucasanna.art/opere/ritratti/ritratto-speranza-canu/)
 

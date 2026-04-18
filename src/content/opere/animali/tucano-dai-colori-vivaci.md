@@ -1,10 +1,10 @@
 ---
-title: "Tucano dai colori vivaci"
+title: "Tucano tra foglie verdi (acrilico su carta nera, 2011)"
 date: 2024-07-26T14:17:43+00:00
-description: "Tucano acrilico su carta nera, con sfondo verde: l'essenza esotica dell'uccello si coglie tra piume e becco resi con precisione."
+description: "Sul carta nera: tucano su ramo con becco multicolore e piumaggio nero-giallo; il verde vegetale nello sfondo isola il soggetto e ne aumenta il contrasto."
 featuredImage: "/assets/uploads/tucano.jpg"
 year: 2011
-technique: "meticolosa per rappresentare i dettagli del becco e delle piume, conferendo profondità e realismo all’opera. Lo sfondo astratto aggiunge un elemento di modernità e innovazione alla composizione tradizionale, creando un’opera unica e accattivante."
+technique: "Acrilico su carta nera"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/tucano-dai-colori-vivaci/"
@@ -22,6 +22,6 @@ seo:
 
 Questo dipinto cattura l’essenza esotica e vibrante del tucano attraverso l’uso audace dei colori e delle forme. L’artista ha utilizzato una tecnica meticolosa per rappresentare i dettagli del becco e delle piume, conferendo profondità e realismo all’opera. Lo sfondo astratto aggiunge un elemento di modernità e innovazione alla composizione tradizionale, creando un’opera unica e accattivante.
 
-**Tecnica:** Acquerello su carta
+**Tecnica:** Acrilico su carta nera
 
 **Anno di esecuzione:** 2011

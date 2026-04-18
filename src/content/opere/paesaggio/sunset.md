@@ -1,10 +1,10 @@
 ---
-title: "Sunset"
+title: "Tramonto rosso tra le colline (acquerello, piccolo formato)"
 date: 2024-07-18T22:00:16+00:00
-description: "Tramonto rosso acquerello: piccolo formato in cui toni caldi incontrano il verde, tra drammaticità del cielo e serenità del paesaggio."
+description: "Piccolo formato: sole tra colline, cielo rosso-arancio e verde sotto; in acquerello, contrasto tra fuoco e vegetazione senza slavina di dettaglio."
 featuredImage: "/assets/uploads/landscap_sunset_lucasanna.webp"
 year: 2019
-technique: "dell’acquerello, con le sue trasparenze e sovrapposizioni di colore, esalta la delicatezza e la complessità della luce al tramonto, rendendo ogni osservazione un’esperienza unica."
+technique: "Acquerello su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/sunset/"
@@ -24,6 +24,6 @@ Le nuvole, intrise di sfumature rosse e nere, sembrano sospese in un’atmosfera
 
 Questo acquerello non è solo una rappresentazione visiva di un tramonto, ma un invito a perdersi nella tranquillità e bellezza della natura, catturando un momento effimero di pura serenità. La tecnica dell’acquerello, con le sue trasparenze e sovrapposizioni di colore, esalta la delicatezza e la complessità della luce al tramonto, rendendo ogni osservazione un’esperienza unica.
 
-**Tecnica:** Acquerello
+**Tecnica:** Acquerello su carta
 
 **Anno di esecuzione:** 2019

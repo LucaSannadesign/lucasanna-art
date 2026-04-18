@@ -1,10 +1,10 @@
 ---
-title: "Segni"
+title: "Segni — rete di inchiostro (china su carta)"
 date: 2024-07-22T14:32:04+00:00
-description: "Segni con inchiostro e pennino su carta: linee che costruiscono texture complessa, tra astrazione e tensione del tratto."
+description: "Inchiostro e pennino: tratti curvilinei fitti come tessuto; nero su bianco e movimento compatto — astrazione del segno senza tema narrativo esterno."
 featuredImage: "/assets/uploads/senza-titolo-segni-carta-china-lucasanna.webp"
 year: 2005
-technique: "e una sensibilità artistica nel manipolare il segno grafico per creare un’opera che sfida i confini tra astrazione e rappresentazione. “Senza Titolo” invita lo spettatore a immergersi in un viaggio visivo, esplorando le infinite possibilità offerte dalla combinazione di linee e spazi."
+technique: "China su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/grafica/segni/"

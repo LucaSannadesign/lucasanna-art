@@ -1,10 +1,10 @@
 ---
-title: "Diavoletto"
+title: "Diavoletto — testa e corno (matita su carta)"
 date: 2024-07-20T07:59:18+00:00
-description: "Disegno a matita fantastico: figura demoniaca tra segno preciso e ombre, con un'atmosfera che invita a restare nel dubbio e nel meraviglioso."
+description: "Matita: volto fantastico con corno e chiaroscuro netto; volume e materia senza racconto illustrativo, in linea con altri disegni ma con tono più ironico."
 featuredImage: "/assets/uploads/diavoletto-lucasanna.webp"
 year: 2015
-technique: "che conferisce vita e movimento all’immagine, trasformando il “Diavoletto” in un’opera che sfida e affascina lo spettatore, invitandolo a confrontarsi con le proprie paure e curiosità interiori."
+technique: "Matita su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/diavoletto-disegno/"

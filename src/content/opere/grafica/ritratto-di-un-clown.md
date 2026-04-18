@@ -1,7 +1,7 @@
 ---
-title: "Ritratto di un Clown"
+title: "Clown — ritratto digitale sul limite della maschera"
 date: 2024-07-28T10:14:03+00:00
-description: "Ritratto clown digitale: maschera e fragilità, drammaticità e vulnerabilità dietro il personaggio, con resa nitida e teatrale."
+description: "Digitale: trucco da clown nitido, teatralità controllata; fragilità sul bordo della maschera — ritratto come messa in scena statica, senza pathos facile."
 featuredImage: "/assets/uploads/ritratto-di-un-clown-luca-sanna.jpg"
 year: 2023
 technique: "Digitale"

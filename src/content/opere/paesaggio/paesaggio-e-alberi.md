@@ -1,7 +1,7 @@
 ---
-title: "Paesaggio e alberi"
+title: "Silhouette di alberi al tramonto (acquerello su carta)"
 date: 2024-07-20T22:27:20+00:00
-description: "Tramonto alberi acquerello: alberi spogli e cielo vibrante, tra tensione e armonia cromatica al calar della luce."
+description: "Tramonto in acquerello: fila di alberi spogli su cielo arancio, giallo, rosso e viola; caldo-freddo marcato e profilo scuro in primo piano ben leggibile."
 featuredImage: "/assets/uploads/Landscape-at-sunset-di-Luca-Sanna-1-2.webp"
 year: 2019
 technique: "Acquerello su carta"

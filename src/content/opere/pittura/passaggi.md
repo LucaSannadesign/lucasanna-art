@@ -1,7 +1,7 @@
 ---
-title: "Passaggi"
+title: "Passaggi — figure e transizione (acquerello, 1992)"
 date: 2024-07-28T14:48:12+00:00
-description: "Passaggi, figure astratte in acquerello: paesaggio etereo e transizione, tra isolamento, ricerca interiore e trasformazione."
+description: "Figurazione liquida: massa rosso-nera, figura lontana, luna scura; l'acquerello resta sul passaggio di stato, non su narrazione illustrativa."
 featuredImage: "/assets/uploads/Passaggi-lucasanna.webp"
 year: 1992
 technique: "Acquerello su carta"
@@ -18,7 +18,7 @@ seo:
 
 **Descrizione:**
 
-Passaggi – “Passaggi” è un dipinto che esplora le profondità dell’esperienza umana attraverso forme astratte e un uso emotivo del colore. L’artista utilizza l’acquerello per creare figure indistinte che sembrano emergere e dissolversi nel paesaggio circostante. La figura centrale, dai toni rosso accesi e nero, si distingue per la sua presenza imponente ma sfuggente, quasi come un ricordo o un’ombra che si muove attraverso un mondo etereo. Sullo sfondo, un’altra figura appare più distante, suggerendo un senso di viaggio o di transizione. La luna scura e il cielo nebuloso conferiscono all’opera un’atmosfera di mistero e introspezione. L’intera composizione evoca temi di isolamento, ricerca e trasformazione, invitando l’osservatore a riflettere sui passaggi della propria vita.
+Passaggi — acquerello su carta: figure che emergono e si dissolvono nel fondo; massa centrale rosso-nero, seconda figura più lontana, luna scura e cielo nebuloso.
 
 **Tecnica:** Acquerello su carta
 

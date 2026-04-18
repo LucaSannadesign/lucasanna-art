@@ -1,7 +1,7 @@
 ---
-title: "Rami, groviglio"
+title: "Rami: groviglio (disegno a matita)"
 date: 2024-07-20T22:36:38+00:00
-description: "Disegno rami a matita: groviglio di rami e dettaglio minuto, tra osservazione naturalistica e fascino del segno."
+description: "Matita su carta: groviglio di rami con dettaglio minuto e tratti incrociati; osservazione naturalistica che resta sul segno e sulla texture del foglio."
 featuredImage: "/assets/uploads/Rami-groviglio.webp"
 year: 2015
 technique: "Matita su carta"

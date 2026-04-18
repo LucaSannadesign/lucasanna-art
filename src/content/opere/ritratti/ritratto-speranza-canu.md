@@ -1,7 +1,7 @@
 ---
-title: "Mia madrea Speranza"
+title: "Ritratto di mia madre Speranza (acrilico su masonite)"
 date: 2024-07-17T14:57:49+00:00
-description: "Ritratto in acrilico su masonite: figura femminile resa con materia compatta e luce studiata, tra intimità e solidità del supporto."
+description: "Acrilico su masonite: figura femminile con materia densa e luce studiata; masonite sostiene la pittura e l'intimità — ritratto di famiglia, non generico."
 featuredImage: "/assets/uploads/mia-madre-speranza-canu.jpg"
 year: 2017
 technique: "Acrilico su masonite"

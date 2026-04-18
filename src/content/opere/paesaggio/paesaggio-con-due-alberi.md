@@ -1,7 +1,7 @@
 ---
-title: "Paesaggio con due alberi"
+title: "Due alberi spogli su verde e cielo caldo (acquerello)"
 date: 2024-08-03T11:59:49+00:00
-description: "Paesaggio con alberi spogli, acquerello: rami contorti verso il cielo e contrasto tra verdi intensi e calore dorato."
+description: "Acquerello: rami nudi in alto, tappeto verde sotto e nuvole calde; silhouette nette rispetto al tramonto ad alberi filari altrove nel catalogo."
 featuredImage: "/assets/uploads/paesaggio-con-alberi.webp"
 year: 2018
 technique: "Acquerello su carta"

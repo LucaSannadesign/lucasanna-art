@@ -1,10 +1,10 @@
 ---
-title: "Piccione variopinto"
+title: "Piccione su ramo in diagonale (acrilico su carta nera)"
 date: 2024-07-26T14:13:29+00:00
-description: "Piccione dipinto acrilico su carta nera: piume vivaci e sfondo viola creano contrasto, tra realismo delle piume e tocco contemporaneo."
+description: "Carta nera: piccione in diagonale, piume blu rosse gialle; viola-rosa dietro esalta saturazione — composizione diversa dall'uccellino minuto centrale."
 featuredImage: "/assets/uploads/Piccione-variopinto.webp"
 year: 2011
-technique: "meticolosa per rappresentare i dettagli delle piume e del ramo, conferendo profondità e realismo all’opera. Lo sfondo astratto aggiunge un elemento di modernità e innovazione alla composizione tradizionale, creando un’opera unica e accattivante."
+technique: "Acrilico su carta nera"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/piccione-variopinto/"
@@ -22,6 +22,6 @@ seo:
 
 Questo dipinto cattura la bellezza e la vivacità della natura attraverso l’uso audace dei colori e delle forme. L’artista ha utilizzato una tecnica meticolosa per rappresentare i dettagli delle piume e del ramo, conferendo profondità e realismo all’opera. Lo sfondo astratto aggiunge un elemento di modernità e innovazione alla composizione tradizionale, creando un’opera unica e accattivante.
 
-**Tecnica:** Acquerello su carta
+**Tecnica:** Acrilico su carta nera
 
 **Anno di esecuzione:** 2011

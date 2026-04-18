@@ -1,7 +1,7 @@
 ---
-title: "Farfalla Fantastica"
+title: "Farfalla con ali-volto (acquerello su carta)"
 date: 2024-07-26T14:24:06+00:00
-description: "Illustrazione farfalla acquerello su carta: elementi surreali si intrecciano alla figura dell'insetto, in una composizione affascinante e personale."
+description: "Ali che diventano volti: arancio, rosso, viola; natura e simbolo nello stesso tratto d'acquerello, senza spiegazione oltre la superficie pittorica."
 featuredImage: "/assets/uploads/Farfalla-illustrazione-fantastica.jpg"
 year: 2007
 technique: "Acquerello su carta"

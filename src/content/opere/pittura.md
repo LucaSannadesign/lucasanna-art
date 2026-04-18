@@ -1,7 +1,7 @@
 ---
-title: "Pittura Archivi: Arte e Design, Sassari Archivi - Arte a Sassari e in Sardegna"
+title: "Pittura — archivio"
 date: 2025-08-24T20:42:26+00:00
-description: "Pittura contemporanea e raccolta di dipinti: colori e storie su tela e carta, tra figurazione e sperimentazione cromatica."
+description: "Pittura su carta e tela: figurazione e colore tra nature, astratto leggero e sperimentazione cromatica; selezione dalla pratica pittorica personale."
 featuredImage: "/assets/uploads/tucano-lucasanna.webp"
 tags: []
 categories: []
@@ -28,7 +28,7 @@ seo:
 
 [
 
-### Bird
+### Uccellino su carta nera
 
 ](https://lucasanna.art/opere/animali/bird/)
 

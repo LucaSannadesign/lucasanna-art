@@ -1,10 +1,10 @@
 ---
-title: "Ritratto di Nina acquerello su carta"
+title: "Nina in acquerello (ritratto su carta)"
 date: 2024-07-24T13:24:10+00:00
-description: "Ritratto cane acquerello su carta: morbide sfumature e contrasti cromatici raccontano Nina, tra osservazione e affetto."
+description: "Acquerello: Nina morbida tra manto e muso; colore liquido e sguardo affettivo, variante sullo stesso soggetto rispetto ad acrilico compatto e digitale."
 featuredImage: "/assets/uploads/Nina-acquerello-lucasanna.jpg"
 year: 2019
-technique: "dell’acquerello. Ho scelto di ritrarre il cane utilizzando una combinazione di colori caldi e freddi che mettono in evidenza la naturale bellezza dell’animale e la sua personalità unica."
+technique: "Acquerello su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/ritratto-di-nina-acquerello-su-carta/"

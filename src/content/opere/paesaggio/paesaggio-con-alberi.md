@@ -1,10 +1,10 @@
 ---
-title: "Paesaggio con alberi"
+title: "Due tronchi nel sottobosco (acquerello su carta)"
 date: 2024-07-24T13:29:59+00:00
-description: "Paesaggio alberi acquerello: ambiente bucolico e due alberi che ancorano la scena, con verde intenso e serenità."
+description: "Acquerello: due alberi in primo piano, fogliame verde e blu fusi; prospettiva leggera e tocco bucolico senza uniformarsi agli altri boschi del catalogo."
 featuredImage: "/assets/uploads/paesaggio-acquerello-lucasanna-3-web.jpg"
 year: 2019
-technique: "dell’acquerello. L’artista ha scelto di rappresentare un ambiente sereno e bucolico, utilizzando una palette di colori vivaci che catturano l’essenza della natura."
+technique: "Acquerello su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-con-alberi/"

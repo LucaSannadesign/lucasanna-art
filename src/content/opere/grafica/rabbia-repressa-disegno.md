@@ -1,10 +1,10 @@
 ---
-title: "Rabbia Repressa – Disegno a Matita (2005)"
+title: "Rabbia repressa — volto diviso (matita, 2005)"
 date: 2024-08-10T09:46:25+00:00
-description: "Disegno a matita sulle emozioni (2005): volto diviso tra tensione e calma, con un linguaggio grafico diretto e simbolico."
+description: "Matita (2005): metà volto in tensione, metà in calma; simbolismo nel segno, senza scena esterna — il disegno regge da solo il significato stesso."
 featuredImage: "/assets/uploads/rabbia-repressa.jpg"
 year: 2005
-technique: "di disegno a matita, l’opera presenta un volto umano diviso in due metà contrastanti. La parte sinistra del viso mostra un’espressione distorta e contorta, con occhi spalancati e denti serrati, simbolo della rabbia e del tormento interiore. La parte destra, invece, raffigura un volto calmo e controllato, con un’espressione neutra e rilassata."
+technique: "Matita su carta"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/grafica/rabbia-repressa-disegno/"

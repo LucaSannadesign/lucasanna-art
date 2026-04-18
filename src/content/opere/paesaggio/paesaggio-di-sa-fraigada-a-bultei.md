@@ -1,7 +1,7 @@
 ---
-title: "Paesaggio di Sa Fraigada a Bultei"
+title: "Sentiero a Sa Fraigada, Bultei (acrilico su masonite)"
 date: 2024-07-26T14:09:10+00:00
-description: "Paesaggio di Sa Fraigada a Bultei: sentiero e natura rigogliosa in acrilico su masonite, con cielo sereno e calma mediterranea."
+description: "Acrilico su masonite: sentiero e vegetazione a Sa Fraigada (Bultei), cielo sereno; supporto rigido, resa compatta rispetto al bosco-prato omonimo."
 featuredImage: "/assets/uploads/Paesaggio-Sa-Fraigada-Bultei.webp"
 year: 2017
 technique: "Acrilico su masonite"

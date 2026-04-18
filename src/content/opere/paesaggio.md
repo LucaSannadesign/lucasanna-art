@@ -1,7 +1,7 @@
 ---
-title: "Paesaggio Archivi: Arte e Design, Sassari Archivi - Arte a Sassari e in Sardegna"
+title: "Paesaggio — archivio"
 date: 2025-05-26T12:43:57+00:00
-description: "Paesaggio artistico in Sardegna: opere che raccolgono luce, luoghi e silenzi naturali, tra emozione e osservazione del territorio."
+description: "Paesaggi dipinti: acquerello e acrilico tra luce, luoghi sardi e silenzi naturali; opere costruite su osservazione diretta e controllo della tavolozza."
 featuredImage: "/assets/uploads/luca-luca-sanna.jpg"
 tags: []
 categories: []

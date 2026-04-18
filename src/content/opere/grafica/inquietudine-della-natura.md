@@ -1,7 +1,7 @@
 ---
-title: "L’inquietudine della natura"
+title: "Inquietudine della natura (Procreate, 2024)"
 date: 2025-09-21T21:10:29+00:00
-description: "Paesaggio surreale digitale (Procreate): alberi, rocce e animali che accennano volti e sguardi, tra inquietudine e meraviglia."
+description: "Procreate: rocce, alberi e fauna dove le forme sfumano in volti; freddo e caldo si scontrano — digitale per inquietudine, non per effetto realistico."
 featuredImage: "/assets/uploads/linquietudine-della-natura-luca-sanna-grafica-scaled.webp"
 year: 2024
 technique: "Disegno digitale (Procreate)"

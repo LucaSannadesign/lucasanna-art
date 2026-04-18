@@ -1,7 +1,7 @@
 ---
-title: "Uccello Giallo-Verde"
+title: "Uccello giallo e rosso su verde intenso (acrilico su tela)"
 date: 2025-05-26T12:41:24+00:00
-description: "Uccello giallo-verde acrilico su tela: energia e vitalità tra ramo e piumaggio, con un realismo luminoso e colori accesi."
+description: "Acrilico su tela: giallo e rosso su ramo; verde saturo che isola il soggetto e ne esalta linee e volume rispetto agli altri uccelli in catalogo."
 featuredImage: "/assets/uploads/Uccello-giallo-rosso-sfondo-verde-acrilico-su-tela-luca-sanna-2022.webp"
 year: 2022
 technique: "Acrilico su tela"
@@ -9,18 +9,18 @@ tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/uccello-giallo-verde/"
 seo:
-  primary: "uccello giallo verde acrilico"
+  primary: "uccello giallo rosso acrilico tela"
   secondary:
-    - "uccello ramo dipinto"
-    - "uccelli colorati tela"
+    - "sfondo verde uccello dipinto"
+    - "fauna acrilico Sardegna"
 
 ---
 
 **Descrizione:**
 
-“Uccello Giallo-Verde” è un’opera che mette in evidenza la bellezza e la vivacità della fauna aviaria. Questo dipinto, realizzato con colori acrilici su tela, raffigura un uccello dal piumaggio verde intenso, con una caratteristica testa rossa, posato su un ramo. I colori accesi e la cura dei dettagli nelle piume e nel ramo conferiscono all’opera un senso di realismo e dinamismo. Lo sfondo verde sfumato, con ombre e luci ben bilanciate, esalta ulteriormente il soggetto principale, creando un contrasto che attira lo sguardo dell’osservatore.
+Il dipinto in **acrilico su tela** raffigura un uccello posato su un ramo, con piumaggio **giallo e rosso** che risalta su uno **sfondo verde** sfumato. Il verde intenso del fondo e la resa delle piume definiscono volume e contrasto, senza attenuare la luminosità del soggetto.
 
-**Aspetti psicologici:** L’opera trasmette un forte senso di vitalità e energia, grazie all’uso di colori vivaci e alla rappresentazione dinamica dell’uccello. Il verde predominante può evocare sentimenti di tranquillità e connessione con la natura, mentre il contrasto con il rosso della testa dell’uccello aggiunge un tocco di sorpresa e interesse. “Uccello Giallo-Verde” invita l’osservatore a immergersi nella bellezza naturale e a riflettere sulla ricchezza della vita animale.
+**Aspetti psicologici:** L’opera trasmette vitalità e energia attraverso il contrasto tra il verde dello sfondo e i toni caldi del piumaggio. Invita a una lettura diretta della natura e del colore.
 
 **Tecnica:** Acrilico su tela
 

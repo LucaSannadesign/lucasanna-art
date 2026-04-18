@@ -1,7 +1,7 @@
 ---
-title: "Ritratto di Nina – Omaggio in Acrilico su Masonite"
+title: "Nina — ritratto in acrilico su masonite"
 date: 2024-08-25T11:55:37+00:00
-description: "Ritratto cane acrilico su masonite, dedicato a Nina: un tributo intimo, tra dolcezza del soggetto e solidità del supporto."
+description: "Acrilico su masonite: Nina con pelliccia compatta e luce studiata; masonite sostiene materia e intimità — stesso cane dell'acquerello e del digitale."
 featuredImage: "/assets/uploads/nina_ritratto_luca_sanna.jpg"
 year: 2018
 technique: "Acrilico su masonite"

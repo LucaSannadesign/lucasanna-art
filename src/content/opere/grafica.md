@@ -1,9 +1,8 @@
 ---
-title: "Grafica Archivi: Arte e Design, Sassari Archivi - Arte a Sassari e in Sardegna"
+title: "Grafica — archivio"
 date: 2025-11-25T14:08:29+00:00
-description: "Grafica artistica e disegno: illustrazioni e composizioni tra segno, ricerca e immaginazione, con radici nella pratica sarda."
+description: "Disegno e illustrazione: inchiostro, matita e digitale tra segno, ricerca figurativa e immaginazione, con radici nella pratica artistica personale."
 featuredImage: "/assets/uploads/senza-titolo-segni-carta-china-lucasanna.webp"
-technique: ", capace di catturare l’attenzione e l’immaginazione. Esplorate le diverse sfaccettature dell’arte grafica e lasciatevi ispirare dalle creazioni uniche di Luca Sanna."
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/grafica/"

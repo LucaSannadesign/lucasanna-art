@@ -1,7 +1,7 @@
 ---
-title: "Radici e volti (2025)"
+title: "Radici e volti — dittico su sketchbook (2025)"
 date: 2025-08-24T20:42:16+00:00
-description: "Radici e volti, dittico su sketchbook: grafite e ciano-magenta intrecciano identità e metamorfosi tra radici e volti."
+description: "Doppia pagina: grafite sotto, ciano-magenta sopra; piega centrale taglia tra radici e volti — identità e metamorfosi in un solo oggetto di studio."
 featuredImage: "/assets/uploads/radici-e-volti-scaled.webp"
 year: 2025
 technique: "Matita su carta"

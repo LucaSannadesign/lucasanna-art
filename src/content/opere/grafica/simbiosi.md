@@ -1,7 +1,7 @@
 ---
-title: "Simbiosi"
+title: "Simbiosi — profili che si fondono (matita)"
 date: 2024-07-20T22:32:39+00:00
-description: "Simbiosi, disegno a matita: volti e profili che si fondono, metafora delle relazioni e dell'intreccio tra identità."
+description: "Matita: profili sovrapposti nella stessa massa; due metà del foglio dialogano — intreccio visivo più che illustrazione di un tema psicologico astratto."
 featuredImage: "/assets/uploads/simbiosi-luca-sanna-matita-carta.webp"
 year: 1993
 technique: "Matita su carta"

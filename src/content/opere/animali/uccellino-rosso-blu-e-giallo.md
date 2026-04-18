@@ -1,10 +1,10 @@
 ---
-title: "Uccellino Rosso Blu e Giallo"
+title: "Uccellino tropicale multicolore (acrilico su carta nera)"
 date: 2024-07-26T13:38:14+00:00
-description: "Uccellino multicolore acrilico su carta nera: colori intensi e dettaglio minuzioso danno volume all'uccellino, tra tridimensionalità e luce."
+description: "Multicolore su carta nera: minuzia sulle piume, fondo che sostiene volume; cromia complessa rispetto ad azzurro isolato o piccione in diagonale."
 featuredImage: "/assets/uploads/uccellino-rosso-blu-giall.jpg"
 year: 2011
-technique: "della pittura acrilica su carta nera per creare dettagli minuziosi e texture realistiche, conferendo profondità e tridimensionalità all’uccellino. Le linee precise e le sfumature morbide delineano le piume e i tratti distintivi dell’uccello, rendendo l’immagine viva e dinamica."
+technique: "Acrilico su carta nera"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/uccellino-rosso-blu-e-giallo/"

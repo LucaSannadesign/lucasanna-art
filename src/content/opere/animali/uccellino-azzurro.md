@@ -1,10 +1,10 @@
 ---
-title: "Uccellino Azzurro"
+title: "Uccellino azzurro in controluce viola (2011, carta nera)"
 date: 2024-07-26T13:46:24+00:00
-description: "Uccellino azzurro acrilico su carta nera (2011): toni freddi e pennellate precise costruiscono un piccolo soggetto intenso e luminoso."
+description: "2011, carta nera: piumaggio azzurro su ramo; viola piatto taglia lo spazio e mette a fuoco il dettaglio, tono diverso dal piccione variopinto."
 featuredImage: "/assets/uploads/FB_IMG_1554324970591.jpg"
 year: 2011
-technique: "della pittura acrilica su carta nera, che permette di ottenere una profondità cromatica e un’intensità di colore notevoli. Le pennellate precise e le sfumature delicate conferiscono all’opera un senso di realismo e tridimensionalità, mentre l’attenzione ai dettagli riflette un’osservazione accurata del mondo naturale."
+technique: "Acrilico su carta nera"
 tags: []
 categories: []
 originalUrl: "https://lucasanna.art/opere/animali/uccellino-azzurro/"
@@ -22,6 +22,6 @@ seo:
 
 L’artista ha utilizzato la tecnica della pittura acrilica su carta nera, che permette di ottenere una profondità cromatica e un’intensità di colore notevoli. Le pennellate precise e le sfumature delicate conferiscono all’opera un senso di realismo e tridimensionalità, mentre l’attenzione ai dettagli riflette un’osservazione accurata del mondo naturale.
 
-**Tecnica:** Acrilico su carta
+**Tecnica:** Acrilico su carta nera
 
 **Anno di esecuzione:** 2011

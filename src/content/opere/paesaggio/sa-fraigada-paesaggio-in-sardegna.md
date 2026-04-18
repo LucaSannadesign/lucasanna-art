@@ -1,7 +1,7 @@
 ---
-title: "Sa Fraigada, paesaggio in Sardegna"
+title: "Sa Fraigada: bosco e prato (acrilico su tela)"
 date: 2024-07-20T22:12:23+00:00
-description: "Sa Fraigada, bosco Sardegna in acrilico: albero maestoso e prato verde, giochi di luce e ombra che invitano alla calma."
+description: "Acrilico su tela: albero e prato nel bosco di Sa Fraigada; luce e ombra strutturano lo spazio — visione d'ambiente oltre il sentiero a Bultei."
 featuredImage: "/assets/uploads/sa-fraigada-lucasanna.webp"
 year: 2019
 technique: "Acrilico su tela"
