@@ -28,14 +28,10 @@ Link utili: [Privacy](/privacy-policy/) [Termini](/termini-e-condizioni/)
 
 Per velocizzare la risposta
 
-Indicami **soggetto**, **dimensioni**, **scadenza** e un **budget**. Se hai una foto o un riferimento, allegalo nel messaggio (WhatsApp) o nel form.
+Indicami **soggetto**, **dimensioni**, **scadenza** e un **budget**. Se hai una foto o un riferimento, allegalo al messaggio su WhatsApp o inviala in email.
 
 Commissioni più richieste: **ritratti da foto**, **paesaggi**, opere simboliche con palette concordata.
 
-Scrivimi dal form
-
-Compila i campi: ti rispondo entro **24–48h**. Se è urgente, usa WhatsApp.
-
-Avviso: JavaScript è obbligatorio per questo contenuto.
+Scrivimi su WhatsApp o via email: ti rispondo entro **24–48h**. Se è urgente, WhatsApp è di solito il canale più veloce.
 
 Nota: se mi indichi già **dimensioni** e **scadenza**, posso dirti subito fattibilità e tempi.
