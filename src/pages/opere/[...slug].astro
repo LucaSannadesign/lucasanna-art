@@ -438,6 +438,44 @@ const operaImageAlt = !isCategoryPage
     ? entry.data.imageAlt || entry.data.title
     : "";
 
+const siteBase = Astro.site ?? new URL("https://lucasanna.art");
+const operaShareUrl = !isCategoryPage
+    ? new URL(`/opere/${entry.slug}/`, siteBase).href
+    : "";
+const operaShareTitle = !isCategoryPage ? entry.data.title.trim() : "";
+const operaShareImageUrl =
+    !isCategoryPage && entry.data.featuredImage
+        ? new URL(entry.data.featuredImage, siteBase).href
+        : "";
+
+let shareLinks: {
+    facebook: string;
+    linkedin: string;
+    reddit: string;
+    pinterest: string;
+    whatsapp: string;
+    telegram: string;
+    instagramProfile: string;
+} | null = null;
+
+if (!isCategoryPage && operaShareUrl) {
+    const u = encodeURIComponent(operaShareUrl);
+    const titleEnc = encodeURIComponent(operaShareTitle);
+    const waText = encodeURIComponent(`${operaShareTitle} — ${operaShareUrl}`);
+    const mediaEnc = operaShareImageUrl
+        ? encodeURIComponent(operaShareImageUrl)
+        : "";
+    shareLinks = {
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${u}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${u}`,
+        reddit: `https://www.reddit.com/submit?url=${u}&title=${titleEnc}`,
+        pinterest: `https://www.pinterest.com/pin/create/button/?url=${u}&description=${titleEnc}${mediaEnc ? `&media=${mediaEnc}` : ""}`,
+        whatsapp: `https://wa.me/?text=${waText}`,
+        telegram: `https://t.me/share/url?url=${u}&text=${titleEnc}`,
+        instagramProfile: "https://www.instagram.com/lucasanna_art",
+    };
+}
+
 // If category page, get all artworks in that category
 let categoryWorks: CollectionEntry<"opere">[] = [];
 let percorsoWorks: any[] = [];
@@ -772,12 +810,104 @@ if (isCategoryPage) {
             </p>
         </nav>
 
+        {shareLinks && (
+            <nav
+                class="mt-12 max-w-2xl mx-auto text-center border-t border-white/5 pt-8"
+                aria-labelledby="opera-share-heading"
+                data-reveal-item
+                data-reveal-order="6"
+            >
+                <h2
+                    id="opera-share-heading"
+                    class="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-5 font-light"
+                >
+                    Condividi
+                </h2>
+                <ul
+                    class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-[10px] uppercase tracking-[0.14em] text-gray-400"
+                >
+                    <li>
+                        <a
+                            href={shareLinks.facebook}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="hover:text-white transition-colors border-b border-transparent hover:border-white/30"
+                            >Facebook</a
+                        >
+                    </li>
+                    <li class="text-gray-700" aria-hidden="true">·</li>
+                    <li>
+                        <a
+                            href={shareLinks.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="hover:text-white transition-colors border-b border-transparent hover:border-white/30"
+                            >LinkedIn</a
+                        >
+                    </li>
+                    <li class="text-gray-700" aria-hidden="true">·</li>
+                    <li>
+                        <a
+                            href={shareLinks.reddit}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="hover:text-white transition-colors border-b border-transparent hover:border-white/30"
+                            >Reddit</a
+                        >
+                    </li>
+                    <li class="text-gray-700" aria-hidden="true">·</li>
+                    <li>
+                        <a
+                            href={shareLinks.pinterest}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="hover:text-white transition-colors border-b border-transparent hover:border-white/30"
+                            >Pinterest</a
+                        >
+                    </li>
+                    <li class="text-gray-700" aria-hidden="true">·</li>
+                    <li>
+                        <a
+                            href={shareLinks.whatsapp}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="hover:text-white transition-colors border-b border-transparent hover:border-white/30"
+                            >WhatsApp</a
+                        >
+                    </li>
+                    <li class="text-gray-700" aria-hidden="true">·</li>
+                    <li>
+                        <a
+                            href={shareLinks.telegram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="hover:text-white transition-colors border-b border-transparent hover:border-white/30"
+                            >Telegram</a
+                        >
+                    </li>
+                </ul>
+                <p class="mt-6 text-[10px] uppercase tracking-[0.14em] text-gray-600">
+                    <a
+                        href={shareLinks.instagramProfile}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-gray-400 hover:text-white transition-colors border-b border-transparent hover:border-white/20"
+                        >Instagram</a
+                    >
+                    <span class="text-gray-700 normal-case tracking-normal">
+                        {" "}
+                        — profilo dell’artista
+                    </span>
+                </p>
+            </nav>
+        )}
+
         {relatedWorks.length > 0 && (
             <section
                 class="mt-16 max-w-5xl mx-auto"
                 aria-labelledby="opere-correlate-heading"
                 data-reveal-item
-                data-reveal-order="6"
+                data-reveal-order="7"
             >
                 <h2
                     id="opere-correlate-heading"
