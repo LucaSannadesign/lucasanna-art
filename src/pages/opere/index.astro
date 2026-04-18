@@ -264,7 +264,11 @@ const percorsoWorks = sortedWorks.map((work) => ({
                 cards.forEach((card) => {
                     const categoria = (card.getAttribute("data-categoria") || "").toLowerCase();
                     const visible = active === "all" || categoria === active;
-                    card.style.display = visible ? "block" : "none";
+                    if (visible) {
+                        card.style.removeProperty("display");
+                    } else {
+                        card.style.setProperty("display", "none", "important");
+                    }
                 });
 
                 buttons.forEach((button) => {
