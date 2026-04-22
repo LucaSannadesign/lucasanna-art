@@ -30,7 +30,7 @@ const recentPosts: CollectionEntry<"posts">[] = (await getCollection("posts"))
 
 <BaseLayout title={entry.data.title} description={entry.data.description}>
 	<!-- Hero / Intro -->
-	<section class="max-w-5xl mx-auto mb-14 md:mb-20 pt-8 md:pt-12 text-center">
+	<section class="max-w-5xl mx-auto mb-14 md:mb-20 pt-3 md:pt-6 text-center">
 		{
 			entry.data.featuredImage && (
 				<img
