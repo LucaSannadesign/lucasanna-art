@@ -450,6 +450,10 @@ const operaShareImageUrl =
 const operaCanonicalUrl = !isCategoryPage
     ? new URL(`/opere/${entry.slug}/`, siteBase).href
     : Astro.url.href;
+const operaYoutubeEmbedUrl =
+    !isCategoryPage && entry.slug === "grafica/inquietudine-della-natura"
+        ? "https://www.youtube.com/embed/885YsQvUc4E"
+        : "";
 
 let shareLinks: {
     facebook: string;
@@ -906,6 +910,33 @@ if (isCategoryPage) {
                     </span>
                 </p>
             </nav>
+        )}
+
+        {operaYoutubeEmbedUrl && (
+            <section
+                class="mt-14 max-w-2xl mx-auto border-t border-white/5 pt-8"
+                aria-labelledby="opera-video-heading"
+                data-reveal-item
+                data-reveal-order="6.5"
+            >
+                <h2
+                    id="opera-video-heading"
+                    class="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-5 font-light text-center"
+                >
+                    Video
+                </h2>
+                <div class="relative w-full overflow-hidden bg-black/30 aspect-[9/16] max-h-[70vh] mx-auto">
+                    <iframe
+                        src={operaYoutubeEmbedUrl}
+                        title={`Video ${entry.data.title}`}
+                        class="absolute inset-0 w-full h-full"
+                        loading="lazy"
+                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            </section>
         )}
 
         {relatedWorks.length > 0 && (
