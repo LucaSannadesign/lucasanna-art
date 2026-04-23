@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <title>Netlify Forms Registry</title>
+</head>
+<body>
+  <form
+    name="contatti"
+    method="POST"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+    hidden
+  >
+    <input type="hidden" name="form-name" value="contatti" />
+    <input type="text" name="nome" />
+    <input type="email" name="email" />
+    <input type="text" name="tipo-richiesta" />
+    <textarea name="messaggio"></textarea>
+    <input type="text" name="bot-field" />
+  </form>
+
+  <form
+    name="richiesta-opera"
+    method="POST"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+    hidden
+  >
+    <input type="hidden" name="form-name" value="richiesta-opera" />
+    <input type="text" name="nome" />
+    <input type="email" name="email" />
+    <input type="text" name="tipo-richiesta" />
+    <textarea name="messaggio"></textarea>
+    <input type="text" name="opera_url" />
+    <input type="text" name="opera_titolo" />
+    <input type="text" name="opera_slug" />
+    <input type="text" name="bot-field" />
+  </form>
+</body>
+</html>
