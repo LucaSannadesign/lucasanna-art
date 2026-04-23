@@ -10,7 +10,7 @@ originalUrl: "https://lucasanna.art/contatti/"
 
 Opere originali e dipinti su commissione — risposta in 24–48h
 
-# Contatti
+## Richiedi informazioni
 
 Se vuoi acquistare un’opera o richiedere una commissione, scrivimi indicando **soggetto**, **dimensioni**, **tempi** e (se possibile) un **budget indicativo**.
 
