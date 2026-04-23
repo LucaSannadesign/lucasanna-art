@@ -29,6 +29,7 @@ const { entry, type } = Astro.props;
 const { Content } = await entry.render();
 
 const layoutContext = type === "post" ? "blog" : "page";
+const isBiographyPage = type === "page" && entry.slug === "biografia-luca-sanna";
 
 // Helper to access data safely across types
 const title = entry.data.title;
@@ -49,8 +50,10 @@ const formatDate = (d: Date | string) => {
 ---
 
 <BaseLayout title={title} description={description} context={layoutContext}>
-    <article class="max-w-3xl mx-auto px-4 py-12">
-        <header class="mb-12 text-center">
+    <article
+        class={`max-w-3xl mx-auto px-4 ${isBiographyPage ? "pt-0 pb-12 md:pt-2" : "py-12"}`}
+    >
+        <header class={isBiographyPage ? "mb-6 md:mb-7 text-center" : "mb-12 text-center"}>
             {
                 type === "post" && date && (
                     <div class="text-gray-500 text-xs uppercase tracking-[0.2em] mb-4">
