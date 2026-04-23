@@ -58,11 +58,8 @@ Mi chiamo **Luca Sanna** (Sassari, Ottobre 1973). Dopo la formazione all’Accad
 ho sviluppato un percorso che intreccia _paesaggio, natura e surrealismo_.
 Vivo e lavoro in Sardegna, dove porto avanti una ricerca che unisce pittura e disegno con il digitale.
 
-Parallelamente, ho aperto i miei spazi online:
-[lucasanna.eu](https://lucasanna.eu),
-il mio primo sito, personale e storico, e
-[lswebagency.com](https://lswebagency.com),
-realtà più aziendale e specializzata nei servizi digitali e di comunicazione.
+Nel tempo ho raccolto questo percorso anche online, mantenendo il focus sulle opere,
+sui testi e sul dialogo con chi segue la mia ricerca.
 
 ## Seguimi
 
@@ -74,27 +71,5 @@ realtà più aziendale e specializzata nei servizi digitali e di comunicazione.
 Per mostre, collaborazioni o commissioni:
 [info@lucasanna.art](mailto:info@lucasanna.art)
 
-## **Mostre e Progetti**
-
-**Luca Sanna** ha esposto le sue opere in numerose mostre, ricevendo apprezzamenti per la sua capacità di esprimere emozioni profonde attraverso l’arte. Ha partecipato a esposizioni sia in Italia che all’estero, collaborando con gallerie d’arte e curatori rinomati. Ogni mostra è stata un’opportunità per Luca di connettersi con il pubblico e di ricevere feedback che hanno ulteriormente affinato il suo lavoro.
-
-Il suo **portfolio di lavori** include dipinti, grafiche digitali e progetti su commissione. Tra i suoi progetti più significativi, vi sono collaborazioni con altri artisti e creativi per la realizzazione di installazioni multimediali e performance artistiche. Luca è sempre alla ricerca di nuove sfide e opportunità per espandere il suo repertorio e condividere la sua visione artistica. Puoi vedere le sue opere qui: [Galleria Opere](/opere/).
-
-## **
-Il Connubio tra Arte e Tecnologia**
-
-Particolarmente notevole è la sua capacità di immergersi completamente nel processo creativo, utilizzando tecniche avanzate di **web design e grafica digitale**. Il sito web [**lucasanna.eu**](https://www.lucasanna.eu) è una vetrina del suo talento artistico e come **web designer**, che dimostra l’efficacia delle strategie **SEO** e della presenza sui social media nell’arte contemporanea.
-
-**Luca Sanna** rappresenta l’esemplare unione tra **arte e innovazione digitale**, riuscendo a creare un dialogo unico tra questi due mondi. Il suo lavoro è un viaggio attraverso la complessità dell’espressione artistica, che trova risonanza nell’ambiente digitale. Utilizzando le più recenti tecnologie, Luca riesce a mantenere viva la tradizione artistica, integrandola perfettamente con le nuove forme di espressione.
-
-**Luca Sanna** rappresenta l’esemplare unione tra **arte e innovazione digitale**, riuscendo a creare un dialogo unico tra questi due mondi. Il suo lavoro è un viaggio attraverso la complessità dell’espressione artistica, che trova risonanza nell’ambiente digitale. Attraverso le sue opere, Luca continua a esplorare nuovi orizzonti artistici, mantenendo viva la sua passione per l’arte e la sua dedizione alla sperimentazione.
-
-Per ulteriori informazioni, [**contatta Luca Sanna**](https://lucasanna.art/contatti) o visita la [**galleria**](/opere/) per esplorare le sue opere.
-
-[
-
-](/biografia/)
-
-Sei interessato alle opere di Luca Sanna? Vuoi saperne di più sulle opere in visione? Non esitare a contattarci!
-
-[Contattami per maggiori informazioni](/contatti/)
+Per approfondire il mio lavoro puoi visitare la [Galleria Opere](/opere/) o
+[contattarmi](/contatti/) direttamente.

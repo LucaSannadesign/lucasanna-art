@@ -1,5 +1,5 @@
 ---
-title: "Luca Sanna  pittura contemporanea a Sassari, Sardegna"
+title: "Luca Sanna — pittura e grafica contemporanea"
 date: 2025-11-25T19:49:34+00:00
 description: "Scopri le opere di Luca Sanna, pittore a Sassari: dipinti originali e commissioni su misura (ritratti, paesaggi), con spedizione in Italia."
 featuredImage: "/assets/uploads/Uccello-Verde-tra-i-rami-Luca-Sanna-2022-acrilico-su-tela.webp"
@@ -19,15 +19,15 @@ pittura contemporanea a Sassari, Sardegna
 
 Esplora le creazioni di **Luca Sanna**, artista che vive e lavora a **Sassari, Sardegna**: una collezione in evoluzione fatta di dipinti, composizioni e studi visivi, dove ogni opera è una tappa di un viaggio tra immaginazione, materia e segno.
 
-[Scopri la mia biografia](/biografia/)
+[Scopri la mia biografia](/biografia-luca-sanna/)
 
 ### [Visita la galleria opere di Luca Sanna](/opere/)
 
 [Scopri](https://lucasanna.art/opere/)
 
-### [Biografia dell'Artista](/biografia/)
+### [Biografia dell'Artista](/biografia-luca-sanna/)
 
-[Scopri](https://lucasanna.art/biografia)
+[Scopri](https://lucasanna.art/biografia-luca-sanna/)
 
 ## Scopri le opere di Luca Sanna
 
@@ -59,7 +59,7 @@ Tecnica: Acrilico su tela
 
 Anno: 2025
 
-](https://lucasanna.art/opere/pittura/cala-mariolu-dipinto-acrilico/)
+](https://lucasanna.art/opere/)
 
 [
 
