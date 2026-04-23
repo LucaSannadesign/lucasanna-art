@@ -22,6 +22,81 @@ const { Content } = await entry.render();
         <div class="contact-page-content prose prose-invert mx-auto text-gray-300 font-light leading-relaxed tracking-wide">
             <Content />
         </div>
+
+        <section class="mt-12 md:mt-14 border-t border-white/10 pt-8 md:pt-10">
+            <h2 class="text-xs uppercase tracking-[0.2em] text-gray-500 mb-6 text-center">
+                Invia una richiesta
+            </h2>
+            <form
+                name="contatti"
+                method="POST"
+                action="/grazie-contatti/"
+                data-netlify="true"
+                netlify-honeypot="bot-field"
+                class="max-w-2xl mx-auto grid grid-cols-1 gap-5"
+            >
+                <input type="hidden" name="form-name" value="contatti" />
+                <p class="hidden">
+                    <label>
+                        Non compilare questo campo: <input name="bot-field" />
+                    </label>
+                </p>
+
+                <label class="block">
+                    <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Nome</span>
+                    <input
+                        type="text"
+                        name="nome"
+                        required
+                        class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-white/40"
+                    />
+                </label>
+
+                <label class="block">
+                    <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Email</span>
+                    <input
+                        type="email"
+                        name="email"
+                        required
+                        class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-white/40"
+                    />
+                </label>
+
+                <label class="block">
+                    <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Tipo richiesta</span>
+                    <select
+                        name="tipo-richiesta"
+                        required
+                        class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-white/40"
+                    >
+                        <option value="">Seleziona</option>
+                        <option value="Acquisto opera">Acquisto opera</option>
+                        <option value="Commissione personalizzata">Commissione personalizzata</option>
+                        <option value="Collaborazione">Collaborazione</option>
+                        <option value="Informazioni generali">Informazioni generali</option>
+                    </select>
+                </label>
+
+                <label class="block">
+                    <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Messaggio</span>
+                    <textarea
+                        name="messaggio"
+                        rows="6"
+                        required
+                        class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-white/40"
+                    ></textarea>
+                </label>
+
+                <div class="pt-2 text-center">
+                    <button
+                        type="submit"
+                        class="inline-block border border-white/25 px-6 py-3 text-xs uppercase tracking-[0.2em] text-gray-200 hover:text-white hover:border-white/50 transition-colors"
+                    >
+                        Invia richiesta
+                    </button>
+                </div>
+            </form>
+        </section>
     </div>
 
     <script>
