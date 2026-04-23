@@ -9,6 +9,14 @@ const EXCLUDED_PAGE_SLUGS = new Set(["index"]);
 const EXCLUDED_POST_SLUGS = new Set(["blog-arte", "luca-sanna-art-shop"]);
 const EXCLUDED_OPERE_SLUGS = new Set(["opere"]);
 
+/** Legacy / non-content paths that must not appear in the sitemap (defensive). */
+const EXCLUDED_SITEMAP_PATHS = new Set([
+  "/comments/feed/",
+  "/shop__trashed/",
+  "/opere/grafica/inquietudine-",
+  "/opere/grafica/inquietudine-/",
+]);
+
 function toUrl(path: string): string {
   return new URL(path, SITE_URL).toString();
 }
@@ -46,6 +54,10 @@ export async function GET() {
   for (const opera of opere) {
     if (EXCLUDED_OPERE_SLUGS.has(opera.slug)) continue;
     urls.add(toUrl(`/opere/${opera.slug}/`));
+  }
+
+  for (const u of [...urls]) {
+    if (EXCLUDED_SITEMAP_PATHS.has(new URL(u).pathname)) urls.delete(u);
   }
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>

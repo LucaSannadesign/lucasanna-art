@@ -1,5 +1,6 @@
 # Legacy URL da Search Console — 301 permanenti
 /arte /opere/ 301
+/arte/ /opere/ 301
 /biografia /biografia-luca-sanna/ 301
 /biografia/ /biografia-luca-sanna/ 301
 /contatti /contatti/ 301
@@ -8,6 +9,7 @@
 /blog/ /blog-arte/ 301
 /arte-intelligenza-artificiale /lintelligenza-artificiale-nellarte/ 301
 /opere/grafica/inquietudine- /opere/grafica/inquietudine-della-natura/ 301
+/opere/grafica/inquietudine-/ /opere/grafica/inquietudine-della-natura/ 301
 /opere/grafica/inquietudine-della-natura /opere/grafica/inquietudine-della-natura/ 301
 /page/2/ / 301
 /page/2 / 301
