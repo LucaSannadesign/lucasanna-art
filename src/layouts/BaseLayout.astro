@@ -10,10 +10,20 @@ interface Props {
     title: string;
     description?: string;
     image?: string;
+    canonicalUrl?: string;
+    ogType?: "website" | "article";
     context?: "home" | "blog" | "page";
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, canonicalUrl, ogType } = Astro.props;
+const metaDescription =
+    description || "Luca Sanna - Arte Visiva e Paesaggi Onirici in Sardegna";
+const absoluteImage = image
+    ? new URL(image, Astro.site ?? new URL("https://lucasanna.art")).href
+    : "";
+const resolvedCanonicalUrl = canonicalUrl || Astro.url.href;
+const resolvedOgType = ogType || "website";
+const twitterCard = absoluteImage ? "summary_large_image" : "summary";
 const ENABLE_PERCEPTIVE_TOGGLE = true;
 const ENABLE_EVANESCENTE_UI = true;
 const ENABLE_PERCETTIVE_TRANSITIONS = true;
@@ -23,16 +33,21 @@ const ENABLE_PERCETTIVE_TRANSITIONS = true;
 <html lang="it" data-modalita-percettiva="silenzio" data-silent="true">
     <head>
         <meta charset="UTF-8" />
-        <meta
-            name="description"
-            content={description ||
-                "Luca Sanna - Arte Visiva e Paesaggi Onirici in Sardegna"}
-        />
+        <meta name="description" content={metaDescription} />
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="canonical" href={Astro.url.href} />
+        <link rel="canonical" href={resolvedCanonicalUrl} />
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:url" content={resolvedCanonicalUrl} />
+        <meta property="og:type" content={resolvedOgType} />
+        {absoluteImage && <meta property="og:image" content={absoluteImage} />}
+        <meta name="twitter:card" content={twitterCard} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={metaDescription} />
+        {absoluteImage && <meta name="twitter:image" content={absoluteImage} />}
         <script is:inline>
             document.documentElement.classList.add("js");
         </script>

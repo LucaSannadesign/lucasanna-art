@@ -447,6 +447,9 @@ const operaShareImageUrl =
     !isCategoryPage && entry.data.featuredImage
         ? new URL(entry.data.featuredImage, siteBase).href
         : "";
+const operaCanonicalUrl = !isCategoryPage
+    ? new URL(`/opere/${entry.slug}/`, siteBase).href
+    : Astro.url.href;
 
 let shareLinks: {
     facebook: string;
@@ -548,6 +551,9 @@ if (isCategoryPage) {
 <BaseLayout
     title={pageTitle}
     description={pageDescription}
+    image={!isCategoryPage ? operaShareImageUrl : entry.data.featuredImage}
+    canonicalUrl={operaCanonicalUrl}
+    ogType={!isCategoryPage ? "article" : "website"}
     context="blog"
 >
     {isCategoryPage ? (
