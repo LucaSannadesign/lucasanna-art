@@ -33,7 +33,7 @@ const { Content } = await entry.render();
                 action="/grazie-contatti/"
                 data-netlify="true"
                 netlify-honeypot="bot-field"
-                class="max-w-2xl mx-auto grid grid-cols-1 gap-5"
+                class="max-w-xl mx-auto grid grid-cols-1 gap-5"
             >
                 <input type="hidden" name="form-name" value="contatti" />
                 <p class="hidden">
@@ -98,6 +98,24 @@ const { Content } = await entry.render();
             </form>
         </section>
     </div>
+
+    <form
+        name="richiesta-opera"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        hidden
+    >
+        <input type="hidden" name="form-name" value="richiesta-opera" />
+        <input type="text" name="nome" />
+        <input type="email" name="email" />
+        <input type="text" name="tipo-richiesta" />
+        <textarea name="messaggio"></textarea>
+        <input type="text" name="opera_url" />
+        <input type="text" name="opera_titolo" />
+        <input type="text" name="opera_slug" />
+        <input type="text" name="bot-field" />
+    </form>
 
     <script>
         const contactRoot = document.querySelector(".contact-page-content");
