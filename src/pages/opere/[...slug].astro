@@ -1032,17 +1032,17 @@ if (isCategoryPage) {
                 aria-label="Chiudi modulo richiesta"
                 data-opera-request-close
             ></button>
-            <div class="relative w-full max-w-2xl border border-white/15 bg-[#121212] p-6 md:p-8 shadow-2xl">
-                <div class="flex items-start justify-between gap-4 mb-6">
+            <div class="relative w-full max-w-xl max-h-[85vh] overflow-y-auto rounded-2xl border border-white/20 bg-[#121212] p-5 md:p-6 shadow-2xl">
+                <div class="sticky top-0 z-10 -mx-5 md:-mx-6 px-5 md:px-6 py-3 mb-5 flex items-start justify-between gap-4 border-b border-white/10 bg-[#121212]">
                     <h2
                         id="opera-request-modal-title"
-                        class="text-sm uppercase tracking-[0.2em] text-gray-300"
+                        class="text-xs md:text-sm uppercase tracking-[0.18em] text-gray-200"
                     >
                         Richiedi informazioni sull'opera
                     </h2>
                     <button
                         type="button"
-                        class="text-gray-400 hover:text-white transition-colors text-xs uppercase tracking-[0.16em]"
+                        class="text-gray-300 hover:text-white transition-colors text-[11px] uppercase tracking-[0.16em] border border-white/20 px-3 py-1.5"
                         data-opera-request-close
                     >
                         Chiudi
@@ -1053,7 +1053,7 @@ if (isCategoryPage) {
                     method="POST"
                     data-netlify="true"
                     netlify-honeypot="bot-field"
-                    class="grid grid-cols-1 gap-5"
+                    class="grid grid-cols-1 gap-4"
                 >
                     <input type="hidden" name="form-name" value="richiesta-opera" />
                     <input type="hidden" name="opera_url" value={operaCanonicalUrl} />
@@ -1110,7 +1110,7 @@ if (isCategoryPage) {
                         ></textarea>
                     </label>
 
-                    <div class="pt-2 text-center">
+                    <div class="pt-1 text-center">
                         <button
                             type="submit"
                             class="inline-block border border-white/25 px-6 py-3 text-xs uppercase tracking-[0.2em] text-gray-200 hover:text-white hover:border-white/50 transition-colors"
