@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Uccello-Verde-tra-i-rami-Luca-Sanna-2022-acrilic
 year: 2022
 technique: "Acrilico su tela"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/uccello-verde-tra-i-rami/"
 seo:
   primary: "uccello giallo verde acrilico tela"

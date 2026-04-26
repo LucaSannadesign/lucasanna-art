@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/ritratto-di-un-clown-luca-sanna.jpg"
 year: 2023
 technique: "Digitale"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/grafica/ritratto-di-un-clown/"
 seo:
   primary: "ritratto clown digitale"

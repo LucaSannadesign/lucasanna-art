@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Paesaggio-Sa-Fraigada-Bultei.webp"
 year: 2017
 technique: "Acrilico su masonite"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-di-sa-fraigada-a-bultei/"
 seo:
   primary: "paesaggio Sa Fraigada Bultei"

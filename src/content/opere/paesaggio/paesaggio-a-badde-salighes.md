@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/badde-salighes-paesaggio-lucasanna.webp"
 year: 2018
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-a-badde-salighes/"
 seo:
   primary: "paesaggio Badde Salighes"

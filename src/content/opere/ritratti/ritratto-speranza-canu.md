@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/mia-madre-speranza-canu.jpg"
 year: 2017
 technique: "Acrilico su masonite"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/ritratti/ritratto-speranza-canu/"
 seo:
   primary: "ritratto acrilico masonite"

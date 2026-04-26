@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/tucano-lucasanna.webp"
 year: 2017
 technique: "Acquerello"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/pittura/tucano/"
 seo:
   primary: "tucano acquerello"

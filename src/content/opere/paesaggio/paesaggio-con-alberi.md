@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/paesaggio-acquerello-lucasanna-3-web.jpg"
 year: 2019
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-con-alberi/"
 seo:
   primary: "paesaggio alberi acquerello"

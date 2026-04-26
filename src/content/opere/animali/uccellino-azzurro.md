@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/FB_IMG_1554324970591.jpg"
 year: 2011
 technique: "Acrilico su carta nera"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/uccellino-azzurro/"
 seo:
   primary: "uccellino azzurro acrilico"

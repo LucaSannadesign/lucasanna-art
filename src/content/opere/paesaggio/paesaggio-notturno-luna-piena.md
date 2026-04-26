@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Moonlight-landscape-paesaggio-notturno.webp"
 year: 2019
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-notturno-luna-piena/"
 seo:
   primary: "paesaggio notturno luna piena"

@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Landscape-at-sunset-di-Luca-Sanna-1-2.webp"
 year: 2019
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-e-alberi/"
 seo:
   primary: "tramonto alberi acquerello"

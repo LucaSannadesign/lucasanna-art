@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/pineta-a-Budoni.jpg"
 year: 2017
 technique: "Acrilico su tela"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/pineta-a-budoni/"
 seo:
   primary: "pineta Budoni mare"

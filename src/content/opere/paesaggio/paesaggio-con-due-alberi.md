@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/paesaggio-con-alberi.webp"
 year: 2018
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/paesaggio-con-due-alberi/"
 seo:
   primary: "paesaggio alberi spogli acquerello"

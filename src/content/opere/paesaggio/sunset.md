@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/landscap_sunset_lucasanna.webp"
 year: 2019
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/sunset/"
 seo:
   primary: "tramonto rosso acquerello"

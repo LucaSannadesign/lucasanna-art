@@ -7,7 +7,8 @@ ogImage: "/assets/uploads/ginepri-platamona-villaggio-selva-luca-sanna.webp"
 year: 2021
 technique: "Acrilico su tela"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/ginepri-a-platamona-villaggio-selva-sassari/"
 seo:
   primary: "ginepri Platamona Sassari"

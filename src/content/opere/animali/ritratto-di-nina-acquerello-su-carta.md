@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Nina-acquerello-lucasanna.jpg"
 year: 2019
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/ritratto-di-nina-acquerello-su-carta/"
 seo:
   primary: "ritratto cane acquerello"

@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/radici-e-volti-scaled.webp"
 year: 2025
 technique: "Matita su carta"
 tags: []
-categories: []
+categories:
+  - "Grafica"
 originalUrl: "https://lucasanna.art/opere/grafica/radici-e-volti/"
 seo:
   primary: "dittico radici volti matita"

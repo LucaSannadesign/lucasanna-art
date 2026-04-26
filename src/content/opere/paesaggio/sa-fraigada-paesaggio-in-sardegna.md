@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/sa-fraigada-lucasanna.webp"
 year: 2019
 technique: "Acrilico su tela"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/sa-fraigada-paesaggio-in-sardegna/"
 seo:
   primary: "bosco Sardegna dipinto"

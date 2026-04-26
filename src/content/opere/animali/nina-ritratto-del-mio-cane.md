@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/nina_ritratto_luca_sanna.jpg"
 year: 2018
 technique: "Acrilico su masonite"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/nina-ritratto-del-mio-cane/"
 seo:
   primary: "ritratto cane acrilico masonite"

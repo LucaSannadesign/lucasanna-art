@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Luna-piena-sui-monti-e1722180793733.jpg"
 year: 2020
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/luna-piena-sui-monti/"
 seo:
   primary: "luna piena montagne acquerello"

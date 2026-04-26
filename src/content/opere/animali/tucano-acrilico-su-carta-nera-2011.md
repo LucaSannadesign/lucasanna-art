@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/tucano-acrilico-carta-nera.jpg"
 year: 2011
 technique: "Acrilico su carta nera"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/tucano-acrilico-su-carta-nera-2011/"
 seo:
   primary: "tucano acrilico carta nera"

@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/senza-titolo-segni-carta-china-lucasanna.webp"
 year: 2005
 technique: "China su carta"
 tags: []
-categories: []
+categories:
+  - "Grafica"
 originalUrl: "https://lucasanna.art/opere/grafica/segni/"
 seo:
   primary: "inchiostro pennino segno grafico"

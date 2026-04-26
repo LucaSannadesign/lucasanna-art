@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Ginepri-Villaggio-Selva-Platamona-Sassari-Luca-S
 year: 2024
 technique: "Acrilico su tela"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/ginepri-a-platamona-villaggio-selva/"
 seo:
   primary: "ginepri Platamona dipinto"

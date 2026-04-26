@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Farfalla-illustrazione-fantastica.jpg"
 year: 2007
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/farfalla-fantastica/"
 seo:
   primary: "illustrazione farfalla acquerello"

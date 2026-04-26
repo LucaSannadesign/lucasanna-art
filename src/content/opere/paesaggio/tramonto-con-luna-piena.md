@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Tramonto-con-luna-piena-acrilico-su-tela-2023.we
 year: 2023
 technique: "Acrilico su tela"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/tramonto-con-luna-piena/"
 seo:
   primary: "tramonto luna piena Sardegna"

@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Yellow-Bird-2020--e1722180859163.jpg"
 year: 2020
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/yellow-bird/"
 seo:
   primary: "uccello giallo acquerello"

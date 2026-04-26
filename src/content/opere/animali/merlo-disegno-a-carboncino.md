@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Merlo-matita-su-cartoncino.jpg"
 year: 2011
 technique: "Carboncino su carta"
 tags: []
-categories: []
+categories:
+  - "Grafica"
 originalUrl: "https://lucasanna.art/opere/animali/merlo-disegno-a-carboncino/"
 seo:
   primary: "merlo disegno carboncino"

@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/luca-luca-sanna.jpg"
 year: 2018
 technique: "Digitale (digital painting)"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/luna/"
 seo:
   primary: "paesaggio notturno digitale"

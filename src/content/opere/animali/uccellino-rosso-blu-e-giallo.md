@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/uccellino-rosso-blu-giall.jpg"
 year: 2011
 technique: "Acrilico su carta nera"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/uccellino-rosso-blu-e-giallo/"
 seo:
   primary: "uccellino multicolore acrilico"

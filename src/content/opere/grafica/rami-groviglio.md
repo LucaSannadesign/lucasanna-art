@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Rami-groviglio.webp"
 year: 2015
 technique: "Matita su carta"
 tags: []
-categories: []
+categories:
+  - "Grafica"
 originalUrl: "https://lucasanna.art/opere/grafica/rami-groviglio/"
 seo:
   primary: "disegno rami matita"

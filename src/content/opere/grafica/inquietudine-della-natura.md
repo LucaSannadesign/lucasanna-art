@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/linquietudine-della-natura-luca-sanna-grafica-sc
 year: 2024
 technique: "Disegno digitale (Procreate)"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/grafica/inquietudine-della-natura/"
 seo:
   primary: "paesaggio surreale digitale Procreate"

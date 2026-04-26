@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/civetta-acquerello.jpg"
 year: 2017
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/civetta/"
 seo:
   primary: "civetta acquerello"

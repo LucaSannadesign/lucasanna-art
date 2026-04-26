@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/ritratto-di-Fedor-Dostoevskij-.jpg"
 year: 2023
 technique: "Carboncino su carta"
 tags: []
-categories: []
+categories:
+  - "Grafica"
 originalUrl: "https://lucasanna.art/opere/grafica/ritratto-di-fedor-dostoevskij/"
 seo:
   primary: "ritratto Dostoevskij carboncino"

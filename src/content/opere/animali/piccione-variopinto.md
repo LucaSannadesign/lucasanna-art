@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Piccione-variopinto.webp"
 year: 2011
 technique: "Acrilico su carta nera"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/piccione-variopinto/"
 seo:
   primary: "piccione dipinto acrilico"

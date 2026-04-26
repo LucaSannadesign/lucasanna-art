@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Nina-ritratto-digitale-luca-sanna.jpg"
 year: 2014
 technique: "Digitale"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/ritratto-in-digitale-di-nina/"
 seo:
   primary: "ritratto digitale cane"

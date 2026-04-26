@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/notte-magica.webp"
 year: 2019
 technique: "Acquerello su cartoncino"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/albero-magico/"
 seo:
   primary: "albero surreale notturno"

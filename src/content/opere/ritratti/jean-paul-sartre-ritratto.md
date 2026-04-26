@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Jean_Paul_Sartre_Ritratto_di_Un_Genio.png"
 year: 2023
 technique: "Digitale"
 tags: []
-categories: []
+categories:
+  - "Grafica"
 originalUrl: "https://lucasanna.art/opere/ritratti/jean-paul-sartre-ritratto/"
 seo:
   primary: "ritratto Sartre digitale"

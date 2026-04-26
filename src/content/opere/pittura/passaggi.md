@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Passaggi-lucasanna.webp"
 year: 1992
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/pittura/passaggi/"
 seo:
   primary: "figure astratte acquerello"

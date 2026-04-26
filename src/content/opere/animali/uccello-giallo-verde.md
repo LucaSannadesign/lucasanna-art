@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Uccello-giallo-rosso-sfondo-verde-acrilico-su-te
 year: 2022
 technique: "Acrilico su tela"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/uccello-giallo-verde/"
 seo:
   primary: "uccello giallo rosso acrilico tela"

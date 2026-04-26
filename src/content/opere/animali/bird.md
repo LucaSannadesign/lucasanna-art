@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Bird2-Acrilico-su-carta-nera.jpg"
 year: 2011
 technique: "Acrilico su carta nera"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/bird/"
 seo:
   primary: "dipinto uccello acrilico carta nera"

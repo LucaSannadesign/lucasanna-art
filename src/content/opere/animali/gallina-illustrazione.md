@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/gallina.webp"
 year: 2018
 technique: "Acquerello su carta"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/gallina-illustrazione/"
 seo:
   primary: "gallina acquerello"

@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/tucano.jpg"
 year: 2011
 technique: "Acrilico su carta nera"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/tucano-dai-colori-vivaci/"
 seo:
   primary: "tucano acrilico carta nera"

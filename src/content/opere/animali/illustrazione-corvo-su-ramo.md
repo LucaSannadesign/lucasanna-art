@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/illustrazione-corvo-su-ramo.jpg--768x1115.jpg"
 year: 2024
 technique: "Acrilico su tela"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/animali/illustrazione-corvo-su-ramo/"
 seo:
   primary: "illustrazione corvo su ramo"

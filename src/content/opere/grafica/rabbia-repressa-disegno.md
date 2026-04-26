@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/rabbia-repressa.jpg"
 year: 2005
 technique: "Matita su carta"
 tags: []
-categories: []
+categories:
+  - "Grafica"
 originalUrl: "https://lucasanna.art/opere/grafica/rabbia-repressa-disegno/"
 seo:
   primary: "disegno matita emozioni"

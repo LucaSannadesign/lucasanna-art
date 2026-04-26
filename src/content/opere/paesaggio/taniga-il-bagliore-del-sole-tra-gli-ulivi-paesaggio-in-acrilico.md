@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/Paesaggio-Taniga.-.jpg"
 year: 2017
 technique: "Acrilico su tela"
 tags: []
-categories: []
+categories:
+  - "Pittura"
 originalUrl: "https://lucasanna.art/opere/paesaggio/taniga-il-bagliore-del-sole-tra-gli-ulivi-paesaggio-in-acrilico/"
 seo:
   primary: "uliveto Taniga acrilico"

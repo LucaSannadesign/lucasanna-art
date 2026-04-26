@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/diavoletto-lucasanna.webp"
 year: 2015
 technique: "Matita su carta"
 tags: []
-categories: []
+categories:
+  - "Grafica"
 originalUrl: "https://lucasanna.art/opere/animali/diavoletto-disegno/"
 seo:
   primary: "disegno matita fantastico"

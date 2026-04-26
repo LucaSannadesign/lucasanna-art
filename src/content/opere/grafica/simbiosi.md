@@ -6,7 +6,8 @@ featuredImage: "/assets/uploads/simbiosi-luca-sanna-matita-carta.webp"
 year: 1993
 technique: "Matita su carta"
 tags: []
-categories: []
+categories:
+  - "Grafica"
 originalUrl: "https://lucasanna.art/opere/grafica/simbiosi/"
 seo:
   primary: "volti intrecciati matita"
