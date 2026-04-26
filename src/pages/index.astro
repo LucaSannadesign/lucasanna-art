@@ -47,6 +47,61 @@ const recentPosts: CollectionEntry<"posts">[] = (await getCollection("posts"))
 		</div>
 	</section>
 
+	<style is:global>
+		.home-hero-cta {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 1rem;
+			margin-top: 0.5rem;
+			margin-bottom: 0.5rem;
+		}
+		@media (min-width: 640px) {
+			.home-hero-cta {
+				flex-direction: row;
+				flex-wrap: wrap;
+				gap: 1.5rem;
+			}
+		}
+		.home-editorial-content .home-hero-cta-primary {
+			display: inline-block;
+			margin: 0;
+			padding: 0.5rem 1.25rem;
+			font-size: 0.75rem;
+			font-weight: 500;
+			letter-spacing: 0.2em;
+			text-transform: uppercase;
+			text-decoration: none;
+			color: #e8e8e8;
+			border: 1px solid rgba(255, 255, 255, 0.22);
+			border-radius: 0.125rem;
+			transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+		}
+		.home-editorial-content .home-hero-cta-primary:hover {
+			color: #ffffff;
+			border-color: rgba(255, 255, 255, 0.42);
+			background-color: rgba(255, 255, 255, 0.04);
+		}
+		.home-editorial-content .home-hero-cta-secondary {
+			display: inline-block;
+			margin: 0;
+			font-size: 0.875rem;
+			font-weight: 300;
+			letter-spacing: 0.04em;
+			text-transform: none;
+			text-decoration: none;
+			color: #9ca3af;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+			padding-bottom: 0.15rem;
+			transition: color 0.2s ease, border-color 0.2s ease;
+		}
+		.home-editorial-content .home-hero-cta-secondary:hover {
+			color: #d1d5db;
+			border-color: rgba(255, 255, 255, 0.28);
+		}
+	</style>
+
 	<!-- Recent Works Section -->
 	<section class="mb-16 md:mb-24">
 		<h2
@@ -149,6 +204,28 @@ const recentPosts: CollectionEntry<"posts">[] = (await getCollection("posts"))
 
 	<script>
 		const editorialRoot = document.querySelector(".home-editorial-content");
+
+		function initHomeEditorialCta() {
+			const root = document.querySelector(".home-editorial-content");
+			if (!root || root.querySelector(".home-hero-cta")) return;
+			const a1 = root.querySelector('a[href="/opere/"]');
+			const a2 = root.querySelector('a[href="/biografia-luca-sanna/"]');
+			if (!a1 || !a2) return;
+			const p1 = a1.parentElement;
+			const p2 = a2.parentElement;
+			if (p1?.tagName !== "P" || p2?.tagName !== "P" || p1.nextElementSibling !== p2) return;
+			const wrap = document.createElement("div");
+			wrap.className = "home-hero-cta";
+			p1.insertAdjacentElement("beforebegin", wrap);
+			wrap.append(a1, a2);
+			a1.classList.add("home-hero-cta-primary");
+			a2.classList.add("home-hero-cta-secondary");
+			p1.remove();
+			p2.remove();
+		}
+
+		initHomeEditorialCta();
+		document.addEventListener("astro:page-load", initHomeEditorialCta);
 
 		if (editorialRoot) {
 			const stopHeadings = [
