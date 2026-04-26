@@ -1,7 +1,7 @@
 ---
-title: "Luca Sanna — pittura e grafica contemporanea"
+title: "Luca Sanna artista visivo — arte contemporanea e natura"
 date: 2025-11-25T19:49:34+00:00
-description: "Scopri le opere di Luca Sanna, pittore a Sassari: dipinti originali e commissioni su misura (ritratti, paesaggi), con spedizione in Italia."
+description: "Opere di Luca Sanna, artista visivo italiano: pittura contemporanea, natura, segno e paesaggi interiori tra memoria e metamorfosi."
 featuredImage: "/assets/uploads/Uccello-Verde-tra-i-rami-Luca-Sanna-2022-acrilico-su-tela.webp"
 tags: []
 categories: []
@@ -9,15 +9,17 @@ originalUrl: "https://lucasanna.art/"
 ---
 
 # Luca Sanna
-pittura contemporanea a Sassari, Sardegna
+**Artista visivo italiano** — vivo e lavoro a Sassari, in Sardegna, sul confine tra paesaggio visibile e spazio interiore.
 
-**Un percorso visivo tra pittura, grafica e contemporaneo**
+*Dipingo ciò che resiste mentre si trasforma.*
+
+L’attenzione si dispone intorno a **natura** e corpo, **segno** e **memoria**, presenze che si spostano tra figurazione e astrazione, tra ciò che resta e ciò che muta. Pittura, grafica e, quando serve, strumenti digitali non sono un elenco di mestieri, bensì linguaggi con cui attraversare **metamorfosi** e tracce del tempo — paesaggi esteriori e **paesaggi interiori** che si fanno pelle del pensiero.
 
 ## Opere d'Arte in Sardegna
 
-**Opere pittoriche e grafiche di Luca Sanna**: una raccolta di immagini dagli anni ’90 a oggi. Un percorso che attraversa **grafica** e **pittura**, tra sperimentazione e ricerca, passando per tecniche diverse — **olio**, **acquerello**, **acrilico** — fino ad arrivare al linguaggio della **grafica digitale**, con uno sguardo costante al contemporaneo.
+**Opere pittoriche e grafiche** attraverso le quali immaginare resistenze, tensioni, attese: dagli anni ’90 a oggi, un filo che attraversa **pittura** e **grafica** — **olio**, **acquerello**, **acrilico**, oltre al **disegno e alla grafica digitale** quando servono a trattenere una forma, una traccia, un passaggio. Non una vetrina di tecniche, ma un percorso di prove sul corpo visivo, sul colore, sulla materia e sul pensiero.
 
-Esplora le creazioni di **Luca Sanna**, artista che vive e lavora a **Sassari, Sardegna**: una collezione in evoluzione fatta di dipinti, composizioni e studi visivi, dove ogni opera è una tappa di un viaggio tra immaginazione, materia e segno.
+Da **Sassari** si svolge questo lavoro: dipinti, composizioni, studi di segno, figure e animali, luce e macchia, memorie di luogo e stati d’animo. Ogni opera non promette chiusure; offre tappe in un dialogo aperto con chi guarda, tra reale, immaginario e sospensione.
 
 [Scopri la mia biografia](/biografia-luca-sanna/)
 
