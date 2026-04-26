@@ -59,7 +59,7 @@ const recentPosts: CollectionEntry<"posts">[] = (await getCollection("posts"))
 		>
 			{
 				recentWorks.map((work) => (
-					<a href={`/opere/${work.slug}`} class="group block">
+					<a href={`/opere/${work.slug}/`} class="group block">
 						<div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6">
 							{work.data.featuredImage && (
 								<img
@@ -85,7 +85,7 @@ const recentPosts: CollectionEntry<"posts">[] = (await getCollection("posts"))
 		</div>
 		<div class="text-center mt-12">
 			<a
-				href="/opere"
+				href="/opere/"
 				class="inline-block border-b border-white pb-1 text-sm uppercase tracking-[0.2em] hover:text-gray-400 hover:border-gray-400 transition-all"
 			>
 				Vedi tutte le opere
@@ -103,7 +103,7 @@ const recentPosts: CollectionEntry<"posts">[] = (await getCollection("posts"))
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
 			{
 				recentPosts.map((post) => (
-					<a href={`/${post.slug}`} class="block group">
+					<a href={`/${post.slug}/`} class="block group">
 						<div class="aspect-[3/2] overflow-hidden bg-[#1a1a1a] mb-6">
 							{post.data.featuredImage && (
 								<img
