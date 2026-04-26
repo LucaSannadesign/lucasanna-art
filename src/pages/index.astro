@@ -10,7 +10,7 @@ const { Content } = await entry.render();
 
 // Get Recent Works (top 6?)
 const recentWorks: CollectionEntry<"opere">[] = (await getCollection("opere"))
-	.filter((work) => !work.slug.includes("/"))
+	.filter((work) => work.slug.includes("/"))
 	.sort(
 		(a, b) =>
 			new Date(b.data.date || 0).getTime() -
