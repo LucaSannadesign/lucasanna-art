@@ -1,8 +1,9 @@
 ---
 title: "Ginepri a Platamona — vista da Villaggio Selva (Sassari)"
 date: 2025-05-26T12:43:57+00:00
-description: "Acrilico su tela: intrico di aghi e rami a Platamona; luce laterale e verde modellano volume — veduta più aperta dello studio 2024 ravvicinato."
-featuredImage: "/assets/uploads/ginepro-platamona-villaggio-selva-luca-sanna-2021-scaled.webp"
+description: "Acrilico su tela dedicato ai ginepri di Platamona, tra paesaggio sardo, intreccio naturale, memoria del luogo e forza vegetale."
+featuredImage: "/assets/uploads/ginepri-platamona-villaggio-selva-luca-sanna.webp"
+ogImage: "/assets/uploads/ginepri-platamona-villaggio-selva-luca-sanna.webp"
 year: 2021
 technique: "Acrilico su tela"
 tags: []
@@ -13,28 +14,26 @@ seo:
   secondary:
     - "paesaggio verde Sardegna"
     - "rami ginepro pittura"
+  title: "Ginepri a Platamona – Villaggio Selva, Sassari | Luca Sanna"
+  description: "Acrilico su tela dedicato ai ginepri di Platamona, tra paesaggio sardo, intreccio naturale, memoria del luogo e forza vegetale."
 
 ---
 
 **Descrizione:**
 
-“Ginepri a Platamona – Villaggio Selva, Sassari” è un’opera realizzata dall’artista Luca Sanna nel 2021. Questo dipinto, eseguito con tecnica acrilica su tela, rappresenta un affascinante scorcio di natura sarda. La scena raffigura intricati rami di ginepro che si intersecano creando un groviglio complesso e armonioso, immerso in un vibrante sfondo verde.
+In Ginepri a Platamona – Villaggio Selva, Sassari, il paesaggio naturale diventa una trama visiva densa e stratificata. I rami di ginepro si intrecciano come segni, creando una struttura che oscilla tra osservazione dal vero, memoria del luogo e costruzione grafica. Il verde dominante non ha solo una funzione descrittiva: avvolge la scena, la rende compatta, quasi immersiva, mentre i tronchi e le ramificazioni introducono ritmo, attrito e profondità.
 
-L’uso dei colori acrilici permette a Sanna di catturare con vividezza e precisione le diverse tonalità del verde e del marrone, riproducendo fedelmente la freschezza del fogliame e la robustezza dei tronchi. Le pennellate decise e la stratificazione del colore danno profondità e struttura all’immagine, mentre la scelta di una composizione orizzontale amplifica il senso di spaziosità e tranquillità della scena.
+**Tecnica:**
 
-L’attenzione ai dettagli è sorprendente: ogni ramo, ogni foglia è rappresentata con meticolosità, creando un effetto quasi tattile. Le ombre e le luci sono dosate con maestria, conferendo al dipinto un realismo tridimensionale che invita l’osservatore a immergersi nella scena.
+La scelta dell’acrilico consente una pittura diretta, fatta di sovrapposizioni, contrasti e interventi progressivi sulla superficie. Il colore costruisce la vegetazione per accumulo, mentre il segno dei rami agisce come una struttura portante. L’opera non cerca soltanto la resa naturalistica del soggetto, ma lavora sul rapporto tra materia pittorica, intreccio lineare e percezione dello spazio.
 
-La tecnica pittorica di Luca Sanna è degna di nota. La scelta dell’acrilico, con le sue proprietà di rapida essiccazione e la capacità di creare strati ricchi e luminosi, si rivela perfetta per catturare l’essenza della natura. Le pennellate sono energiche e sicure, dimostrando una padronanza del mezzo e una profonda comprensione del soggetto.
+**Composizione:**
 
-La composizione del dipinto è attentamente studiata. L’occhio è guidato attraverso l’intrico dei rami, con pause visive create da spazi di luce che permettono all’osservatore di respirare e assimilare la complessità della scena. Il contrasto tra i toni scuri dei tronchi e il verde luminoso dello sfondo crea un dinamismo visivo che mantiene l’interesse dello spettatore.
-
-Sanna riesce a bilanciare realismo e astrazione, con dettagli che sembrano quasi fotografici e una composizione che suggerisce movimento e vitalità. L’opera riesce a trasmettere sia la forza intrinseca della natura sia la sua delicatezza, offrendo una visione completa e affascinante di un angolo di Sardegna.
+La composizione si fonda sull’intreccio dei rami, che occupano il campo visivo come una rete naturale. Lo sguardo non trova subito un punto unico di fuga, ma viene costretto a muoversi dentro la complessità della scena. Le aperture luminose tra le forme vegetali funzionano come pause visive, mentre il contrasto tra i bruni dei tronchi e i verdi dello sfondo genera un equilibrio tra densità e respiro.
 
 **Aspetti Psicologici:**
 
-L’opera di Sanna non è solo una celebrazione della bellezza naturale, ma anche un invito alla riflessione interiore. I rami intrecciati dei ginepri possono essere visti come una metafora delle connessioni umane e delle complessità della vita. La loro solidità rappresenta la forza e la resilienza, mentre le curve e le torsioni suggeriscono le sfide e le svolte imprevedibili del nostro cammino.
-
-Il verde predominante del dipinto evoca sensazioni di calma e rinascita. Questo colore, associato alla natura e alla crescita, infonde un senso di serenità e speranza. Guardando il dipinto, l’osservatore può sperimentare un momento di pace interiore, un’ancora di tranquillità in mezzo alla frenesia della vita quotidiana.
+Il ginepro può essere letto come immagine di resistenza e radicamento. Le sue torsioni non evocano soltanto la forma della pianta, ma anche l’idea di un’esistenza che si adatta, si piega e continua a crescere. In questo senso il paesaggio diventa una metafora discreta: non una scena idilliaca, ma un organismo complesso, attraversato da tensioni, memoria e vitalità.
 
 **Tecnica:** Acrilico su tela
 
