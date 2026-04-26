@@ -165,6 +165,8 @@ function operaPrimarySubheadingLine(entry: CollectionEntry<"opere">): string {
 
 /** Titolo singola opera: [keyword primaria] – [elemento distintivo] | Luca Sanna (max ~60). */
 function buildOperaPageTitle(entry: CollectionEntry<"opere">): string {
+    const override = entry.data.seo?.title?.trim();
+    if (override) return override;
     const suffix = " | Luca Sanna";
     const sep = " – ";
     const fixed = suffix.length + sep.length;
@@ -214,6 +216,22 @@ function buildOperaMetaDescription(
     entry: CollectionEntry<"opere">,
     categoryKey: string,
 ): string {
+    const descOverride = normalizeDescriptionField(
+        entry.data.seo?.description,
+    );
+    if (descOverride) {
+        let t = descOverride.replace(/\s+/g, " ").trim();
+        if (t.length > META_DESC_MAX) {
+            const cut = t.slice(0, META_DESC_MAX - 1);
+            const lastSpace = cut.lastIndexOf(" ");
+            t =
+                (lastSpace > META_DESC_MAX / 2
+                    ? cut.slice(0, lastSpace)
+                    : cut
+                ).trimEnd() + "…";
+        }
+        return t;
+    }
     const title = entry.data.title.trim();
     const rawPrimary =
         entry.data.seo?.primary?.trim() || techniqueForOperaTitle(entry.data.technique);
@@ -443,9 +461,10 @@ const operaShareUrl = !isCategoryPage
     ? new URL(`/opere/${entry.slug}/`, siteBase).href
     : "";
 const operaShareTitle = !isCategoryPage ? entry.data.title.trim() : "";
+const metaImagePath = entry.data.ogImage || entry.data.featuredImage;
 const operaShareImageUrl =
-    !isCategoryPage && entry.data.featuredImage
-        ? new URL(entry.data.featuredImage, siteBase).href
+    !isCategoryPage && metaImagePath
+        ? new URL(metaImagePath, siteBase).href
         : "";
 const operaCanonicalUrl = !isCategoryPage
     ? new URL(`/opere/${entry.slug}/`, siteBase).href

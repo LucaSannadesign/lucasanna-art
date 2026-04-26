@@ -41,10 +41,13 @@ const opere = defineCollection({
         imageAlt: z.string().optional(),
         imageTitle: z.string().optional(),
         imageCaption: z.string().optional(),
+        ogImage: z.string().optional(),
         seo: z
             .object({
                 primary: z.string(),
                 secondary: z.tuple([z.string(), z.string()]),
+                title: z.string().optional(),
+                description: z.string().optional(),
             })
             .optional(),
     })
