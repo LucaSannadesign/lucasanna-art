@@ -25,3 +25,8 @@ data/reazioni-aggregate.json
 
 # jetbrains setting folder
 .idea/
+.vercel
+.env*.local
+
+# Local Netlify folder
+.netlify
