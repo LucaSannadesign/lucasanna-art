@@ -21,15 +21,9 @@ L’attenzione si dispone intorno a **natura** e corpo, **segno** e **memoria**,
 
 Da **Sassari** si svolge questo lavoro: dipinti, composizioni, studi di segno, figure e animali, luce e macchia, memorie di luogo e stati d’animo. Ogni opera non promette chiusure; offre tappe in un dialogo aperto con chi guarda, tra reale, immaginario e sospensione.
 
-[Scopri la mia biografia](/biografia-luca-sanna/)
+[Guarda le opere](/opere/)
 
-### [Visita la galleria opere di Luca Sanna](/opere/)
-
-[Scopri](https://lucasanna.art/opere/)
-
-### [Biografia dell'Artista](/biografia-luca-sanna/)
-
-[Scopri](https://lucasanna.art/biografia-luca-sanna/)
+[Leggi la biografia](/biografia-luca-sanna/)
 
 ## Scopri le opere di Luca Sanna
 
