@@ -1070,20 +1070,15 @@ if (isCategoryPage) {
                 <form
                     name="richiesta-opera"
                     method="POST"
-                    action="/grazie-richiesta-opera/?ok=1"
-                    data-netlify="true"
-                    netlify-honeypot="bot-field"
+                    action="https://formspree.io/f/maqynojl"
                     class="grid grid-cols-1 gap-4"
                 >
                     <input type="hidden" name="form-name" value="richiesta-opera" />
+                    <input type="hidden" name="_subject" value={`lucasanna.art — Richiesta opera: ${operaRequestTitle}`} />
+                    <input type="hidden" name="_redirect" value={`${siteBase}/grazie-richiesta-opera/?ok=1`} />
                     <input type="hidden" name="opera_url" value={operaCanonicalUrl} />
                     <input type="hidden" name="opera_titolo" value={operaRequestTitle} />
                     <input type="hidden" name="opera_slug" value={operaRequestSlug} />
-                    <p class="hidden">
-                        <label>
-                            Non compilare questo campo: <input name="bot-field" />
-                        </label>
-                    </p>
 
                     <label class="block">
                         <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Nome</span>
