@@ -1075,7 +1075,7 @@ if (isCategoryPage) {
                 >
                     <input type="hidden" name="form-name" value="richiesta-opera" />
                     <input type="hidden" name="_subject" value={`lucasanna.art — Richiesta opera: ${operaRequestTitle}`} />
-                    <input type="hidden" name="_redirect" value={`${siteBase}/grazie-richiesta-opera/?ok=1`} />
+                    <input type="hidden" name="_redirect" value={new URL("/grazie-richiesta-opera/?ok=1", siteBase).href} />
                     <input type="hidden" name="opera_url" value={operaCanonicalUrl} />
                     <input type="hidden" name="opera_titolo" value={operaRequestTitle} />
                     <input type="hidden" name="opera_slug" value={operaRequestSlug} />
