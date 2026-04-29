@@ -19,6 +19,7 @@ const posts = defineCollection({
         featuredImage: z.string().optional(),
         categories: z.array(z.string()).optional(),
         tags: z.array(z.string()).optional(),
+        socialShare: z.boolean().optional(),
         originalUrl: z.string().optional(),
     })
 });

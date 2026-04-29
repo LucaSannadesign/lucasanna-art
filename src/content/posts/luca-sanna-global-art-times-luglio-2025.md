@@ -5,6 +5,7 @@ description: "Pubblicazione su Global Art Times luglio 2025: tre dipinti di Luca
 featuredImage: "/assets/uploads/Screenshot-2025-07-01-alle-11.06.59.webp"
 tags: []
 categories: []
+socialShare: true
 originalUrl: "https://lucasanna.art/luca-sanna-global-art-times-luglio-2025/"
 ---
 
