@@ -5,8 +5,8 @@ const siteUrl = "https://lucasanna.art";
 
 export const GET: APIRoute = async () => {
     const now = new Date();
-    const sixMonthsAgo = new Date(now);
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    const twelveMonthsAgo = new Date(now);
+    twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
 
     const posts = await getCollection("posts");
 
@@ -14,7 +14,7 @@ export const GET: APIRoute = async () => {
         .filter((post) => post.data.socialShare === true)
         .filter((post) => {
             const postDate = new Date(post.data.date);
-            return postDate >= sixMonthsAgo && postDate <= now;
+            return postDate >= twelveMonthsAgo && postDate <= now;
         })
         .sort(
             (a, b) =>
