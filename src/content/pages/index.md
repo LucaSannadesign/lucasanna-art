@@ -9,7 +9,7 @@ originalUrl: "https://lucasanna.art/"
 ---
 
 # Luca Sanna
-**Artista visivo italiano** — vivo e lavoro a Sassari, in Sardegna, sul confine tra paesaggio visibile e spazio interiore.
+Artista visivo in Sardegna — pittura contemporanea, natura e paesaggi interiori
 
 *Dipingo ciò che resiste mentre si trasforma.*
 
