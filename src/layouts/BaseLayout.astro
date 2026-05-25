@@ -85,11 +85,11 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
                     ></script>
                     <script is:inline define:vars={{ gaId }}>
                         window.dataLayer = window.dataLayer || [];
-                        function gtag() {
-                            dataLayer.push(arguments);
-                        }
-                        gtag("js", new Date());
-                        gtag("config", gaId);
+                        window.gtag = function gtag() {
+                            window.dataLayer.push(arguments);
+                        };
+                        window.gtag('js', new Date());
+                        window.gtag('config', gaId);
                     </script>
                 </>
             )
