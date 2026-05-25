@@ -30,6 +30,7 @@ const twitterCard = absoluteImage ? "summary_large_image" : "summary";
 const ENABLE_PERCEPTIVE_TOGGLE = true;
 const ENABLE_EVANESCENTE_UI = true;
 const ENABLE_PERCETTIVE_TRANSITIONS = true;
+const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 
 <!doctype html>
@@ -74,6 +75,25 @@ const ENABLE_PERCETTIVE_TRANSITIONS = true;
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
             rel="stylesheet"
         />
+
+        {
+            gaId && (
+                <>
+                    <script
+                        async
+                        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+                    ></script>
+                    <script is:inline define:vars={{ gaId }}>
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag() {
+                            dataLayer.push(arguments);
+                        }
+                        gtag("js", new Date());
+                        gtag("config", gaId);
+                    </script>
+                </>
+            )
+        }
 
         <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
         ></script>
