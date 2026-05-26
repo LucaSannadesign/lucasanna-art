@@ -1,5 +1,5 @@
 ---
-title: "Castello di Bran — veduta interna"
+title: "Castello di Bran — scorcio"
 description: "Studio a grafite ispirato a una veduta interna del Castello di Bran, in Romania: un frammento architettonico sospeso tra memoria, ombra e percezione."
 slug: "grafica/castello-di-bran-veduta-interna"
 category: "grafica"
@@ -15,11 +15,11 @@ image: "/assets/uploads/castello-di-bran-veduta-interna.webp"
 coverImage: "/assets/uploads/castello-di-bran-veduta-interna.webp"
 alt: "Disegno a grafite del Castello di Bran visto da un terrazzo interno, con torre centrale, architetture gotiche e forti contrasti chiaroscurali."
 
-ogTitle: "Castello di Bran — veduta interna | Luca Sanna"
+ogTitle: "Castello di Bran — scorcio | Luca Sanna"
 ogDescription: "Studio a grafite ispirato a una veduta interna del Castello di Bran: un frammento architettonico sospeso tra memoria, ombra e percezione."
 ogImage: "/assets/uploads/castello-di-bran-veduta-interna.webp"
 
-twitterTitle: "Castello di Bran — veduta interna"
+twitterTitle: "Castello di Bran — scorcio"
 twitterDescription: "Grafite su carta: una veduta interna del Castello di Bran tra memoria architettonica, ombra e percezione."
 twitterImage: "/assets/uploads/castello-di-bran-veduta-interna.webp"
 
