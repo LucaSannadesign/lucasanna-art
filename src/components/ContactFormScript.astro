@@ -1,0 +1,120 @@
+---
+/**
+ * Progressive enhancement per i form che inviano a /api/contatti.
+ *
+ * Senza JavaScript il form funziona comunque: POST nativo, con redirect alla
+ * pagina di ringraziamento in caso di successo o ritorno a /contatti/?errore=...
+ * in caso di problema. Con JavaScript attivo l'invio avviene via fetch e
+ * l'errore viene mostrato in linea, senza perdere i dati gia' compilati.
+ */
+---
+
+<script is:inline>
+    (() => {
+        const MESSAGGI = {
+            campi: "Compila tutti i campi obbligatori.",
+            email: "L'indirizzo email non e' valido.",
+            lunghezza: "Uno dei campi supera la lunghezza massima consentita.",
+            formato: "Richiesta non valida. Ricarica la pagina e riprova.",
+            "rate-limit":
+                "Hai gia' inviato diverse richieste. Riprova tra un'ora.",
+            invio: "Non e' stato possibile inviare il messaggio. Riprova piu' tardi oppure scrivi direttamente via email.",
+            rete: "Connessione non riuscita. Verifica la rete e riprova.",
+        };
+
+        const mostraErrore = (form, codice, testo) => {
+            const box = form.querySelector("[data-contact-error]");
+            if (!box) return;
+            box.textContent = testo || MESSAGGI[codice] || MESSAGGI.invio;
+            box.hidden = false;
+            box.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        };
+
+        const nascondiErrore = (form) => {
+            const box = form.querySelector("[data-contact-error]");
+            if (box) box.hidden = true;
+        };
+
+        const initContactForms = () => {
+            document.querySelectorAll("[data-contact-form]").forEach((form) => {
+                if (!(form instanceof HTMLFormElement)) return;
+                if (form.dataset.contactBound === "true") return;
+                form.dataset.contactBound = "true";
+
+                // Marca temporale usata lato server come controllo antibot.
+                const startedAt = form.querySelector("[data-form-started-at]");
+                if (startedAt instanceof HTMLInputElement) {
+                    startedAt.value = String(Date.now());
+                }
+
+                form.addEventListener("submit", async (event) => {
+                    event.preventDefault();
+                    nascondiErrore(form);
+
+                    const submitButton = form.querySelector(
+                        'button[type="submit"]',
+                    );
+                    const testoOriginale =
+                        submitButton instanceof HTMLButtonElement
+                            ? submitButton.textContent
+                            : null;
+
+                    if (submitButton instanceof HTMLButtonElement) {
+                        submitButton.disabled = true;
+                        submitButton.textContent = "Invio in corso…";
+                    }
+
+                    try {
+                        const response = await fetch(form.action, {
+                            method: "POST",
+                            headers: { accept: "application/json" },
+                            body: new FormData(form),
+                        });
+
+                        let esito = null;
+                        try {
+                            esito = await response.json();
+                        } catch {
+                            esito = null;
+                        }
+
+                        // Il redirect avviene SOLO dopo un invio realmente riuscito.
+                        if (response.ok && esito && esito.ok) {
+                            window.location.assign(
+                                esito.redirect || "/grazie-contatti/?ok=1",
+                            );
+                            return;
+                        }
+
+                        mostraErrore(
+                            form,
+                            (esito && esito.code) || "invio",
+                            esito && esito.message,
+                        );
+                    } catch {
+                        mostraErrore(form, "rete");
+                    }
+
+                    if (submitButton instanceof HTMLButtonElement) {
+                        submitButton.disabled = false;
+                        if (testoOriginale !== null) {
+                            submitButton.textContent = testoOriginale;
+                        }
+                    }
+                });
+            });
+
+            // Fallback senza JavaScript: l'endpoint riporta qui con ?errore=<codice>.
+            const codice = new URLSearchParams(window.location.search).get(
+                "errore",
+            );
+            if (codice) {
+                const form = document.querySelector("[data-contact-form]");
+                if (form instanceof HTMLFormElement) mostraErrore(form, codice);
+            }
+        };
+
+        initContactForms();
+        document.addEventListener("astro:page-load", initContactForms);
+    })();
+</script>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ContactFormScript from "../components/ContactFormScript.astro";
 import { getEntry } from "astro:content";
 
 const entry = await getEntry("pages", "contatti");
@@ -30,16 +31,25 @@ const { Content } = await entry.render();
             <form
                 name="contatti"
                 method="POST"
-                action="/grazie-contatti/?ok=1"
-                data-netlify="true"
-                netlify-honeypot="bot-field"
+                action="/api/contatti"
+                data-contact-form
                 class="max-w-xl mx-auto grid grid-cols-1 gap-5"
             >
                 <input type="hidden" name="form-name" value="contatti" />
-                <p class="hidden">
+                <input type="hidden" name="form-started-at" data-form-started-at value="" />
+                <p class="hidden" aria-hidden="true">
                     <label>
-                        Non compilare questo campo: <input name="bot-field" />
+                        Non compilare questo campo:
+                        <input name="bot-field" tabindex="-1" autocomplete="off" />
                     </label>
+                </p>
+
+                <p
+                    data-contact-error
+                    role="alert"
+                    hidden
+                    class="border border-red-500/40 bg-red-500/5 px-4 py-3 text-sm text-red-300"
+                >
                 </p>
 
                 <label class="block">
@@ -99,23 +109,7 @@ const { Content } = await entry.render();
         </section>
     </div>
 
-    <form
-        name="richiesta-opera"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        hidden
-    >
-        <input type="hidden" name="form-name" value="richiesta-opera" />
-        <input type="text" name="nome" />
-        <input type="email" name="email" />
-        <input type="text" name="tipo-richiesta" />
-        <textarea name="messaggio"></textarea>
-        <input type="text" name="opera_url" />
-        <input type="text" name="opera_titolo" />
-        <input type="text" name="opera_slug" />
-        <input type="text" name="bot-field" />
-    </form>
+    <ContactFormScript />
 
     <script>
         const contactRoot = document.querySelector(".contact-page-content");
