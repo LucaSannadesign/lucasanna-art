@@ -256,17 +256,17 @@ export function getSmtpConfig(): SmtpConfig {
     const host = readEnv("SMTP_HOST").trim();
     const portRaw = readEnv("SMTP_PORT").trim();
     const user = readEnv("SMTP_USER").trim();
-    const password = readEnv("SMTP_PASSWORD");
+    const password = readEnv("SMTP_PASS");
     const from = readEnv("SMTP_FROM").trim();
-    const recipient = readEnv("CONTACT_RECIPIENT").trim();
+    const recipient = readEnv("CONTACT_TO").trim();
 
     const missing = [
         ["SMTP_HOST", host],
         ["SMTP_PORT", portRaw],
         ["SMTP_USER", user],
-        ["SMTP_PASSWORD", password],
+        ["SMTP_PASS", password],
         ["SMTP_FROM", from],
-        ["CONTACT_RECIPIENT", recipient],
+        ["CONTACT_TO", recipient],
     ]
         .filter(([, value]) => !value)
         .map(([key]) => key);
