@@ -36,6 +36,16 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
 <!doctype html>
 <html lang="it" data-modalita-percettiva="silenzio" data-silent="true">
     <head>
+        <!-- Google Tag Manager -->
+        <script is:inline>
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-KZH6496M');
+        </script>
+        <!-- End Google Tag Manager -->
+
         <meta charset="UTF-8" />
         <meta name="description" content={metaDescription} />
         <meta name="viewport" content="width=device-width" />
@@ -101,6 +111,17 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
             async></script>
     </head>
     <body class="bg-[#121212] text-[#e0e0e0] flex flex-col min-h-screen">
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-KZH6496M"
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"
+            ></iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+
         <Header />
         <main class="flex-grow container mx-auto px-4 py-8 mt-24 md:mt-32">
             <slot />
