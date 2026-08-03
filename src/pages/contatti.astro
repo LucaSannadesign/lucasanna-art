@@ -5,202 +5,282 @@ import { getEntry } from "astro:content";
 
 const entry = await getEntry("pages", "contatti");
 if (!entry) throw new Error("Contact page not found");
-const { Content } = await entry.render();
 ---
 
 <BaseLayout
-    title="Contatti | Luca Sanna"
-    description={entry.data.description}
-    context="page"
+  title="Contatti | Luca Sanna"
+  description={entry.data.description}
+  context="page"
 >
-    <div class="max-w-3xl mx-auto px-4 pt-4 pb-12 md:pt-8 md:pb-24">
-        <h1
-            class="text-4xl md:text-6xl font-heading font-normal text-center mb-12 md:mb-14 text-white uppercase tracking-[0.2em]"
-        >
+  <div class="-mt-4 px-4 pb-12 md:-mt-16 md:pb-20">
+    <section class="max-w-5xl mx-auto" aria-labelledby="contatti-title">
+      <header
+        class="grid gap-8 border-b border-white/10 pb-8 md:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] md:items-end md:gap-12 md:pb-10 lg:gap-20"
+      >
+        <div>
+          <p
+            class="mb-4 text-[0.65rem] uppercase tracking-[0.24em] text-gray-600"
+          >
+            Contatto diretto
+          </p>
+          <h1
+            id="contatti-title"
+            class="mb-4 text-5xl font-heading font-normal uppercase tracking-[0.12em] text-white md:text-7xl"
+          >
             Contatti
-        </h1>
-
-        <div class="contact-page-content prose prose-invert mx-auto text-gray-300 font-light leading-relaxed tracking-wide">
-            <Content />
+          </h1>
+          <p
+            class="text-xs uppercase leading-relaxed tracking-[0.16em] text-gray-500"
+          >
+            Opere originali e dipinti su commissione
+          </p>
         </div>
 
-        <section class="mt-12 md:mt-14 border-t border-white/10 pt-8 md:pt-10">
-            <h2 class="text-xs uppercase tracking-[0.2em] text-gray-500 mb-6 text-center">
-                Invia una richiesta
-            </h2>
-            <form
-                name="contatti"
-                method="POST"
-                action="/api/contatti"
-                data-contact-form
-                class="max-w-xl mx-auto grid grid-cols-1 gap-5"
+        <div class="md:pb-1">
+          <h2 class="mb-3 font-heading text-2xl text-white md:text-3xl">
+            Richiedi informazioni
+          </h2>
+          <p class="max-w-2xl text-sm font-light leading-7 text-gray-400">
+            Indicami soggetto, dimensioni, tempi e, se possibile, un budget
+            indicativo. Ti rispondo entro 24–48 ore.
+          </p>
+
+          <nav
+            class="mt-5 flex flex-wrap gap-x-6 gap-y-3"
+            aria-label="Canali di contatto"
+          >
+            <a
+              href="https://wa.me/393403223494"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="contact-action"
             >
-                <input type="hidden" name="form-name" value="contatti" />
-                <input type="hidden" name="form-started-at" data-form-started-at value="" />
-                <p class="hidden" aria-hidden="true">
-                    <label>
-                        Non compilare questo campo:
-                        <input name="bot-field" tabindex="-1" autocomplete="off" />
-                    </label>
-                </p>
+              WhatsApp <span aria-hidden="true">↗</span>
+            </a>
+            <a href="mailto:info@lucasanna.art" class="contact-action">
+              Email <span aria-hidden="true">↗</span>
+            </a>
+            <a href="/opere/" class="contact-action">
+              Vedi le opere <span aria-hidden="true">→</span>
+            </a>
+          </nav>
+        </div>
+      </header>
 
-                <p
-                    data-contact-error
-                    role="alert"
-                    hidden
-                    class="border border-red-500/40 bg-red-500/5 px-4 py-3 text-sm text-red-300"
-                >
-                </p>
+      <div
+        class="mt-8 grid gap-10 md:mt-10 md:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] md:gap-12 lg:gap-20"
+      >
+        <aside class="contact-details md:border-r md:border-white/10 md:pr-10">
+          <p
+            class="mb-6 text-[0.65rem] uppercase tracking-[0.22em] text-gray-600"
+          >
+            Informazioni pratiche
+          </p>
 
-                <label class="block">
-                    <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Nome</span>
-                    <input
-                        type="text"
-                        name="nome"
-                        required
-                        class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-white/40"
-                    />
-                </label>
+          <dl class="space-y-5">
+            <div>
+              <dt class="contact-detail-label">Tempi</dt>
+              <dd class="contact-detail-value">
+                1–3 settimane, in base a formato e complessità
+              </dd>
+            </div>
+            <div>
+              <dt class="contact-detail-label">Studio</dt>
+              <dd class="contact-detail-value">Sassari, Sardegna</dd>
+            </div>
+            <div>
+              <dt class="contact-detail-label">Consegna</dt>
+              <dd class="contact-detail-value">
+                Spedizione disponibile in tutta Italia
+              </dd>
+            </div>
+          </dl>
 
-                <label class="block">
-                    <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Email</span>
-                    <input
-                        type="email"
-                        name="email"
-                        required
-                        class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-white/40"
-                    />
-                </label>
+          <div class="mt-8 border-t border-white/10 pt-6">
+            <h3
+              class="mb-3 text-[0.65rem] uppercase tracking-[0.2em] text-gray-500"
+            >
+              Per velocizzare la risposta
+            </h3>
+            <p class="text-sm font-light leading-6 text-gray-400">
+              Aggiungi dimensioni, scadenza e un riferimento visivo. Per
+              allegare una foto, usa WhatsApp o email.
+            </p>
+          </div>
 
-                <label class="block">
-                    <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Tipo richiesta</span>
-                    <select
-                        name="tipo-richiesta"
-                        required
-                        class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-white/40"
-                    >
-                        <option value="">Seleziona</option>
-                        <option value="Acquisto opera">Acquisto opera</option>
-                        <option value="Commissione personalizzata">Commissione personalizzata</option>
-                        <option value="Collaborazione">Collaborazione</option>
-                        <option value="Informazioni generali">Informazioni generali</option>
-                    </select>
-                </label>
+          <p class="mt-7 text-[0.68rem] tracking-wide text-gray-600">
+            <a href="/privacy-policy/" class="contact-legal">Privacy</a>
+            <span aria-hidden="true"> · </span>
+            <a href="/termini-e-condizioni/" class="contact-legal">
+              Termini e condizioni
+            </a>
+          </p>
+        </aside>
 
-                <label class="block">
-                    <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Messaggio</span>
-                    <textarea
-                        name="messaggio"
-                        rows="6"
-                        required
-                        class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-white/40"
-                    ></textarea>
-                </label>
+        <section aria-labelledby="contact-form-title">
+          <div class="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <p
+                class="mb-2 text-[0.65rem] uppercase tracking-[0.22em] text-gray-600"
+              >
+                Modulo
+              </p>
+              <h2
+                id="contact-form-title"
+                class="font-heading text-2xl text-white md:text-3xl"
+              >
+                Invia una richiesta
+              </h2>
+            </div>
+            <span
+              class="hidden text-[0.65rem] uppercase tracking-[0.16em] text-gray-600 sm:block"
+            >
+              Risposta 24–48h
+            </span>
+          </div>
 
-                <div class="pt-2 text-center">
-                    <button
-                        type="submit"
-                        class="inline-block border border-white/25 px-6 py-3 text-xs uppercase tracking-[0.2em] text-gray-200 hover:text-white hover:border-white/50 transition-colors"
-                    >
-                        Invia richiesta
-                    </button>
-                </div>
-            </form>
+          <form
+            name="contatti"
+            method="POST"
+            action="/api/contatti"
+            data-contact-form
+            class="grid grid-cols-1 gap-5 md:grid-cols-2"
+          >
+            <input type="hidden" name="form-name" value="contatti" />
+            <input
+              type="hidden"
+              name="form-started-at"
+              data-form-started-at
+              value=""
+            />
+            <p class="hidden" aria-hidden="true">
+              <label>
+                Non compilare questo campo:
+                <input name="bot-field" tabindex="-1" autocomplete="off" />
+              </label>
+            </p>
+
+            <p
+              data-contact-error
+              role="alert"
+              hidden
+              class="border border-red-500/40 bg-red-500/5 px-4 py-3 text-sm text-red-300 md:col-span-2"
+            >
+            </p>
+
+            <label class="block">
+              <span class="contact-field-label">Nome</span>
+              <input type="text" name="nome" required class="contact-field" />
+            </label>
+
+            <label class="block">
+              <span class="contact-field-label">Email</span>
+              <input type="email" name="email" required class="contact-field" />
+            </label>
+
+            <label class="block md:col-span-2">
+              <span class="contact-field-label">Tipo richiesta</span>
+              <select name="tipo-richiesta" required class="contact-field">
+                <option value="">Seleziona</option>
+                <option value="Acquisto opera">Acquisto opera</option>
+                <option value="Commissione personalizzata">
+                  Commissione personalizzata
+                </option>
+                <option value="Collaborazione">Collaborazione</option>
+                <option value="Informazioni generali">
+                  Informazioni generali
+                </option>
+              </select>
+            </label>
+
+            <label class="block md:col-span-2">
+              <span class="contact-field-label">Messaggio</span>
+              <textarea
+                name="messaggio"
+                rows="6"
+                required
+                class="contact-field resize-y"></textarea>
+            </label>
+
+            <div class="pt-1 md:col-span-2 md:text-right">
+              <button
+                type="submit"
+                class="inline-block border border-white/25 px-6 py-3 text-xs uppercase tracking-[0.2em] text-gray-200 transition-colors hover:border-white/50 hover:text-white"
+              >
+                Invia richiesta
+              </button>
+            </div>
+          </form>
         </section>
-    </div>
+      </div>
+    </section>
+  </div>
 
-    <ContactFormScript />
-
-    <script>
-        const contactRoot = document.querySelector(".contact-page-content");
-
-        if (contactRoot) {
-            const junkPatterns = [
-                "LS CONTACT",
-                "Ninja Forms",
-                "PATCH: mobile double-border",
-                "formDisplay=1",
-                "Avviso: JavaScript è obbligatorio",
-            ];
-
-            contactRoot.querySelectorAll("p, a, script").forEach((node) => {
-                const text = (node.textContent || "").trim();
-                const isJunk = junkPatterns.some((pattern) =>
-                    text.includes(pattern),
-                );
-
-                if (
-                    node.tagName === "SCRIPT" ||
-                    isJunk ||
-                    (node.tagName === "A" && !node.getAttribute("href"))
-                ) {
-                    node.remove();
-                }
-            });
-        }
-    </script>
+  <ContactFormScript />
 </BaseLayout>
 
-<style is:global>
-    /* 
-    Raffina lo stile della pagina contatti rimuovendo i residui di WordPress
-    e uniformando il design al tema minimale del sito.
-  */
+<style>
+  .contact-action {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    padding-bottom: 0.35rem;
+    color: rgba(220, 220, 220, 0.82);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition:
+      border-color 180ms ease,
+      color 180ms ease;
+  }
 
-    .contact-page-content .ls-contact {
-        background: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
+  .contact-action:hover {
+    border-color: rgba(255, 255, 255, 0.7);
+    color: #fff;
+  }
 
-    .contact-page-content .ls-contact:before,
-    .contact-page-content .ls-contact__title,
-    .contact-page-content .ls-contact__badge,
-    .contact-page-content .ls-contact__dot {
-        display: none !important;
-    }
+  .contact-detail-label,
+  .contact-field-label {
+    color: rgba(145, 145, 145, 0.9);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
 
-    .contact-page-content .ls-contact__lead {
-        color: #a8a8a8 !important;
-        font-size: 1.1rem !important;
-        line-height: 1.8 !important;
-        margin-bottom: 3rem !important;
-        text-align: center;
-    }
+  .contact-detail-value {
+    margin-top: 0.4rem;
+    color: rgba(224, 224, 224, 0.86);
+    font-size: 0.875rem;
+    font-weight: 300;
+    line-height: 1.55;
+  }
 
-    .contact-page-content .ls-panel {
-        background: transparent !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        padding: 2rem !important;
-        margin-bottom: 2rem !important;
-    }
+  .contact-field {
+    margin-top: 0.5rem;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: #141414;
+    padding: 0.78rem 1rem;
+    color: #e5e5e5;
+    font-size: 0.875rem;
+    outline: none;
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease;
+  }
 
-    .contact-page-content .ls-panel__title {
-        color: #fff !important;
-        font-size: 0.75rem !important;
-        letter-spacing: 0.2em !important;
-        text-transform: uppercase !important;
-        margin-bottom: 1.5rem !important;
-        opacity: 0.6;
-    }
+  .contact-field:focus {
+    border-color: rgba(255, 255, 255, 0.45);
+    background: #171717;
+  }
 
-    .contact-page-content a {
-        color: #fff !important;
-        text-decoration: none !important;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        padding-bottom: 2px;
-        transition: all 0.3s ease;
-    }
+  .contact-legal {
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color 180ms ease,
+      color 180ms ease;
+  }
 
-    .contact-page-content a:hover {
-        border-bottom-color: #fff;
-        opacity: 0.8;
-    }
-
-    /* Hide the form if it's still present in the markdown but non-functional */
-    .contact-page-content .ls-contact__form, 
-    .contact-page-content .nf-form-wrap {
-        display: none !important;
-    }
+  .contact-legal:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    color: rgba(220, 220, 220, 0.9);
+  }
 </style>
