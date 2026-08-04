@@ -110,7 +110,7 @@ const { works = [] } = Astro.props;
             titleNode.textContent = current.title || "Opera";
             metaNode.textContent = [current.year, current.technique].filter(Boolean).join(" • ");
             descriptionNode.textContent = (current.description || "").trim();
-            linkNode.href = current.href || "/opere";
+            linkNode.href = current.href || "/opere/";
             progressNode.textContent = `${state.index + 1} / ${state.list.length}`;
             noteNode.textContent = curatorNote(current, state.index, state.list.length);
 

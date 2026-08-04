@@ -240,30 +240,6 @@ const homeOgImage = "/images/og/luca-sanna-home.jpg";
 		document.addEventListener("astro:page-load", initHomeEditorialCta);
 
 		if (editorialRoot) {
-			const stopHeadings = [
-				"Scopri le opere di Luca Sanna",
-				"Blog d’Arte Contemporanea e tecniche",
-				"Articoli Recenti",
-			];
-
-			let node = editorialRoot.firstElementChild;
-			while (node) {
-				const next = node.nextElementSibling;
-				const text = (node.textContent || "").trim();
-
-				if (node.tagName === "H2" && stopHeadings.includes(text)) {
-					let removeNode = node;
-					while (removeNode) {
-						const nextNode = removeNode.nextElementSibling;
-						removeNode.remove();
-						removeNode = nextNode;
-					}
-					break;
-				}
-
-				node = next;
-			}
-
 			editorialRoot.querySelectorAll("p, a").forEach((el) => {
 				if (el.querySelector("img")) el.remove();
 			});
