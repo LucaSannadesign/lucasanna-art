@@ -1,0 +1,228 @@
+---
+interface Props {
+    enabled?: boolean;
+}
+
+const { enabled = true } = Astro.props;
+---
+
+<script is:inline define:vars={{ enabled }}>
+    const initHomeEmergenceExperiment = () => {
+        if (!enabled || window.location.pathname !== "/") return;
+
+        const editorial = document.querySelector(".home-editorial-content");
+        const heroSection = editorial?.closest("section");
+        const sourceImage = heroSection?.querySelector(":scope > img");
+
+        if (!(sourceImage instanceof HTMLImageElement)) return;
+        if (sourceImage.dataset.emergenceBound === "true") return;
+        sourceImage.dataset.emergenceBound = "true";
+        sourceImage.dataset.operaReattiva = "true";
+
+        const stage = document.createElement("div");
+        stage.className = "home-emergence";
+        stage.dataset.emergenceStage = "true";
+
+        const revealImage = sourceImage.cloneNode(true);
+        if (!(revealImage instanceof HTMLImageElement)) return;
+
+        revealImage.removeAttribute("id");
+        revealImage.removeAttribute("data-emergence-bound");
+        revealImage.setAttribute("aria-hidden", "true");
+        revealImage.alt = "";
+        revealImage.className = "home-emergence__image home-emergence__image--reveal";
+        revealImage.dataset.operaReattiva = "true";
+
+        sourceImage.className = "home-emergence__image home-emergence__image--source";
+
+        const texture = document.createElement("div");
+        texture.className = "home-emergence__texture";
+        texture.setAttribute("aria-hidden", "true");
+
+        const hint = document.createElement("span");
+        hint.className = "home-emergence__hint";
+        hint.textContent = "Avvicina lo sguardo";
+        hint.setAttribute("aria-hidden", "true");
+
+        sourceImage.insertAdjacentElement("beforebegin", stage);
+        stage.append(sourceImage, revealImage, texture, hint);
+
+        const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+        if (!finePointer.matches) {
+            stage.dataset.pointerMode = "static";
+            return;
+        }
+
+        stage.dataset.pointerMode = "interactive";
+
+        let frame = 0;
+        let nextX = 50;
+        let nextY = 50;
+
+        const paint = () => {
+            frame = 0;
+            stage.style.setProperty("--gaze-x", `${nextX}%`);
+            stage.style.setProperty("--gaze-y", `${nextY}%`);
+        };
+
+        const schedulePaint = () => {
+            if (frame) return;
+            frame = window.requestAnimationFrame(paint);
+        };
+
+        stage.addEventListener("pointermove", (event) => {
+            const rect = stage.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+
+            nextX = ((event.clientX - rect.left) / rect.width) * 100;
+            nextY = ((event.clientY - rect.top) / rect.height) * 100;
+            schedulePaint();
+        }, { passive: true });
+
+        stage.addEventListener("pointerenter", () => {
+            stage.dataset.active = "true";
+        }, { passive: true });
+
+        stage.addEventListener("pointerleave", () => {
+            stage.dataset.active = "false";
+            nextX = 50;
+            nextY = 48;
+            schedulePaint();
+        }, { passive: true });
+    };
+
+    initHomeEmergenceExperiment();
+    document.addEventListener("astro:page-load", initHomeEmergenceExperiment);
+</script>
+
+<style is:global>
+    .home-emergence {
+        --gaze-x: 50%;
+        --gaze-y: 48%;
+        --gaze-size: clamp(11rem, 25vw, 25rem);
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        width: 100%;
+        max-height: 62vh;
+        margin-bottom: 2.5rem;
+        background: #0d0d0d;
+        box-shadow:
+            0 2.2rem 5rem rgba(0, 0, 0, 0.34),
+            0 0 0 1px rgba(255, 255, 255, 0.025);
+        cursor: crosshair;
+    }
+
+    .home-emergence__image {
+        display: block;
+        width: 100%;
+        height: min(62vh, 760px);
+        object-fit: cover;
+        margin: 0;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+    }
+
+    .home-emergence__image--source {
+        position: relative;
+        z-index: 1;
+        filter: grayscale(0.88) saturate(0.55) contrast(0.94) brightness(0.58);
+    }
+
+    .home-emergence__image--reveal {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        filter: saturate(1.08) contrast(1.05) brightness(1.02);
+        -webkit-mask-image: radial-gradient(
+            circle var(--gaze-size) at var(--gaze-x) var(--gaze-y),
+            #000 0%,
+            #000 34%,
+            rgba(0, 0, 0, 0.92) 49%,
+            rgba(0, 0, 0, 0.48) 68%,
+            transparent 100%
+        );
+        mask-image: radial-gradient(
+            circle var(--gaze-size) at var(--gaze-x) var(--gaze-y),
+            #000 0%,
+            #000 34%,
+            rgba(0, 0, 0, 0.92) 49%,
+            rgba(0, 0, 0, 0.48) 68%,
+            transparent 100%
+        );
+        will-change: mask-position, -webkit-mask-position, filter;
+    }
+
+    .home-emergence__texture {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+        opacity: 0.16;
+        mix-blend-mode: soft-light;
+        background:
+            radial-gradient(circle at 18% 24%, rgba(255,255,255,0.18) 0 0.7px, transparent 0.9px),
+            radial-gradient(circle at 72% 63%, rgba(255,255,255,0.13) 0 0.6px, transparent 0.85px),
+            radial-gradient(circle at 44% 82%, rgba(0,0,0,0.38) 0 0.8px, transparent 1px);
+        background-size: 7px 7px, 9px 9px, 11px 11px;
+    }
+
+    .home-emergence__hint {
+        position: absolute;
+        right: 1rem;
+        bottom: 0.85rem;
+        z-index: 4;
+        color: rgba(255, 255, 255, 0.58);
+        font-size: 0.58rem;
+        font-weight: 400;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        pointer-events: none;
+        opacity: 0.78;
+    }
+
+    .home-emergence[data-active="true"] {
+        --gaze-size: clamp(13rem, 28vw, 29rem);
+    }
+
+    html[data-modalita-percettiva="rumore"] .home-emergence__image--source {
+        filter: grayscale(0.92) saturate(0.48) contrast(0.98) brightness(0.51);
+    }
+
+    html[data-modalita-percettiva="rumore"] .home-emergence__texture {
+        opacity: 0.22;
+    }
+
+    .home-emergence[data-pointer-mode="static"] {
+        cursor: default;
+        --gaze-size: min(54vw, 24rem);
+        --gaze-x: 58%;
+        --gaze-y: 42%;
+    }
+
+    .home-emergence[data-pointer-mode="static"] .home-emergence__hint {
+        display: none;
+    }
+
+    @media (min-width: 768px) {
+        .home-emergence {
+            margin-bottom: 3rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .home-emergence {
+            cursor: default;
+        }
+
+        .home-emergence__image--source {
+            filter: none !important;
+        }
+
+        .home-emergence__image--reveal,
+        .home-emergence__texture,
+        .home-emergence__hint {
+            display: none !important;
+        }
+    }
+</style>
