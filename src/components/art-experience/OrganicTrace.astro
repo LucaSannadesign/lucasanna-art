@@ -75,10 +75,19 @@ const { enabled = true } = Astro.props;
 
 <script is:inline define:vars={{ enabled }}>
     const initOrganicTrace = () => {
-        if (!enabled) return;
+        if (!enabled || window.location.pathname !== "/") return;
 
         const trace = document.querySelector("[data-organic-trace]");
         if (!(trace instanceof HTMLElement)) return;
+
+        const editorial = document.querySelector(".home-editorial-content");
+        const heroSection = editorial?.closest("section");
+        if (!(heroSection instanceof HTMLElement)) return;
+
+        if (trace.previousElementSibling !== heroSection) {
+            heroSection.insertAdjacentElement("afterend", trace);
+        }
+
         if (trace.dataset.bound === "true") return;
         trace.dataset.bound = "true";
 
