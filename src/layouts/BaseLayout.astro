@@ -5,6 +5,7 @@ import ModalitaPercettivaToggle from "../components/ModalitaPercettivaToggle.ast
 import InterfacciaEvanescente from "../components/InterfacciaEvanescente.astro";
 import TransizionePercettiva from "../components/TransizionePercettiva.astro";
 import HomeEmergenceExperiment from "../components/art-experience/HomeEmergenceExperiment.astro";
+import OrganicTrace from "../components/art-experience/OrganicTrace.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -32,6 +33,7 @@ const ENABLE_PERCEPTIVE_TOGGLE = true;
 const ENABLE_EVANESCENTE_UI = true;
 const ENABLE_PERCETTIVE_TRANSITIONS = true;
 const ENABLE_HOME_EMERGENCE_EXPERIMENT = true;
+const ENABLE_ORGANIC_TRACE_EXPERIMENT = true;
 const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 
@@ -130,6 +132,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
         </main>
 
         <HomeEmergenceExperiment enabled={ENABLE_HOME_EMERGENCE_EXPERIMENT} />
+        <OrganicTrace enabled={ENABLE_ORGANIC_TRACE_EXPERIMENT} />
         <ModalitaPercettivaToggle enabled={ENABLE_PERCEPTIVE_TOGGLE} />
         <InterfacciaEvanescente enabled={ENABLE_EVANESCENTE_UI} idleMs={5200} />
         <TransizionePercettiva enabled={ENABLE_PERCETTIVE_TRANSITIONS} />
