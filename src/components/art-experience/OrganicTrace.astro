@@ -1,0 +1,244 @@
+---
+interface Props {
+    enabled?: boolean;
+}
+
+const { enabled = true } = Astro.props;
+---
+
+<section
+    class="organic-trace"
+    data-organic-trace
+    data-enabled={enabled ? "true" : "false"}
+    aria-hidden="true"
+>
+    <svg
+        class="organic-trace__svg"
+        viewBox="0 0 1200 420"
+        preserveAspectRatio="none"
+        role="presentation"
+    >
+        <defs>
+            <linearGradient id="organic-trace-gradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(225, 228, 218, 0.08)" />
+                <stop offset="42%" stop-color="rgba(183, 194, 168, 0.66)" />
+                <stop offset="100%" stop-color="rgba(215, 218, 207, 0.16)" />
+            </linearGradient>
+            <filter id="organic-trace-distortion" x="-20%" y="-10%" width="140%" height="120%">
+                <feTurbulence
+                    type="fractalNoise"
+                    baseFrequency="0.006 0.022"
+                    numOctaves="2"
+                    seed="17"
+                    result="noise"
+                />
+                <feDisplacementMap
+                    in="SourceGraphic"
+                    in2="noise"
+                    scale="7"
+                    xChannelSelector="R"
+                    yChannelSelector="G"
+                />
+            </filter>
+        </defs>
+
+        <path
+            class="organic-trace__ghost"
+            d="M598 0 C589 45 641 76 614 119 C589 160 490 173 507 226 C521 270 644 275 682 318 C705 344 676 382 718 420"
+        />
+
+        <path
+            class="organic-trace__path"
+            data-organic-trace-path
+            pathLength="1"
+            d="M598 0 C589 45 641 76 614 119 C589 160 490 173 507 226 C521 270 644 275 682 318 C705 344 676 382 718 420"
+        />
+
+        <path
+            class="organic-trace__branch organic-trace__branch--left"
+            data-organic-trace-branch
+            pathLength="1"
+            d="M510 221 C468 234 441 258 403 281 C379 296 349 298 327 318"
+        />
+
+        <path
+            class="organic-trace__branch organic-trace__branch--right"
+            data-organic-trace-branch
+            pathLength="1"
+            d="M680 317 C719 306 756 286 786 267 C811 251 834 248 859 226"
+        />
+
+        <circle class="organic-trace__node organic-trace__node--one" cx="507" cy="226" r="3.2" />
+        <circle class="organic-trace__node organic-trace__node--two" cx="682" cy="318" r="2.4" />
+    </svg>
+</section>
+
+<script is:inline define:vars={{ enabled }}>
+    const initOrganicTrace = () => {
+        if (!enabled) return;
+
+        const trace = document.querySelector("[data-organic-trace]");
+        if (!(trace instanceof HTMLElement)) return;
+        if (trace.dataset.bound === "true") return;
+        trace.dataset.bound = "true";
+
+        const primary = trace.querySelector("[data-organic-trace-path]");
+        const branches = Array.from(trace.querySelectorAll("[data-organic-trace-branch]"));
+        if (!(primary instanceof SVGPathElement)) return;
+
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        let frame = 0;
+
+        const isSilent = () => document.documentElement.getAttribute("data-silent") === "true";
+
+        const setStaticState = () => {
+            primary.style.strokeDashoffset = "0";
+            branches.forEach((branch) => {
+                if (branch instanceof SVGPathElement) branch.style.strokeDashoffset = "0";
+            });
+            trace.style.setProperty("--trace-node-opacity", "0.72");
+        };
+
+        const update = () => {
+            frame = 0;
+
+            if (reducedMotion.matches || isSilent()) {
+                setStaticState();
+                return;
+            }
+
+            const rect = trace.getBoundingClientRect();
+            const viewport = window.innerHeight || document.documentElement.clientHeight;
+            const start = viewport * 0.92;
+            const end = viewport * 0.22;
+            const rawProgress = (start - rect.top) / Math.max(1, start - end);
+            const progress = Math.min(1, Math.max(0, rawProgress));
+            const branchProgress = Math.min(1, Math.max(0, (progress - 0.46) / 0.42));
+
+            primary.style.strokeDashoffset = String(1 - progress);
+            branches.forEach((branch) => {
+                if (branch instanceof SVGPathElement) {
+                    branch.style.strokeDashoffset = String(1 - branchProgress);
+                }
+            });
+
+            trace.style.setProperty(
+                "--trace-node-opacity",
+                String(Math.max(0, Math.min(0.72, (progress - 0.56) * 2.4))),
+            );
+        };
+
+        const scheduleUpdate = () => {
+            if (frame) return;
+            frame = window.requestAnimationFrame(update);
+        };
+
+        window.addEventListener("scroll", scheduleUpdate, { passive: true });
+        window.addEventListener("resize", scheduleUpdate, { passive: true });
+        reducedMotion.addEventListener?.("change", scheduleUpdate);
+
+        const modeObserver = new MutationObserver(scheduleUpdate);
+        modeObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-silent", "data-modalita-percettiva"],
+        });
+
+        scheduleUpdate();
+    };
+
+    initOrganicTrace();
+    document.addEventListener("astro:page-load", initOrganicTrace);
+</script>
+
+<style>
+    .organic-trace {
+        --trace-node-opacity: 0;
+        width: min(100%, 76rem);
+        height: clamp(11rem, 24vw, 22rem);
+        margin: -1rem auto 1.75rem;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .organic-trace__svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+
+    .organic-trace__ghost,
+    .organic-trace__path,
+    .organic-trace__branch {
+        fill: none;
+        vector-effect: non-scaling-stroke;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        filter: url(#organic-trace-distortion);
+    }
+
+    .organic-trace__ghost {
+        stroke: rgba(255, 255, 255, 0.035);
+        stroke-width: 1.1;
+    }
+
+    .organic-trace__path {
+        stroke: url(#organic-trace-gradient);
+        stroke-width: 1.25;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+    }
+
+    .organic-trace__branch {
+        stroke: rgba(174, 188, 157, 0.38);
+        stroke-width: 0.82;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+    }
+
+    .organic-trace__node {
+        fill: rgba(193, 203, 181, var(--trace-node-opacity));
+        transform-box: fill-box;
+        transform-origin: center;
+    }
+
+    html[data-modalita-percettiva="rumore"] .organic-trace__path {
+        stroke-width: 1.42;
+    }
+
+    html[data-modalita-percettiva="rumore"] .organic-trace__branch {
+        stroke: rgba(174, 188, 157, 0.52);
+    }
+
+    html[data-silent="true"] .organic-trace {
+        opacity: 0.58;
+    }
+
+    html[data-silent="true"] .organic-trace__path,
+    html[data-silent="true"] .organic-trace__branch {
+        stroke-dashoffset: 0 !important;
+    }
+
+    @media (max-width: 640px) {
+        .organic-trace {
+            height: 10rem;
+            margin-top: -0.4rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .organic-trace__branch {
+            opacity: 0.52;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .organic-trace {
+            opacity: 0.48;
+        }
+
+        .organic-trace__path,
+        .organic-trace__branch {
+            stroke-dashoffset: 0 !important;
+        }
+    }
+</style>
