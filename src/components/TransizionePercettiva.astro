@@ -9,10 +9,91 @@ const { enabled = true } = Astro.props;
 <script is:inline define:vars={{ enabled }}>
     const initTransizionePercettiva = () => {
         if (!enabled) return;
-        const supported = "startViewTransition" in document;
+
+        const supported = "startViewTransition" in document || "onpagereveal" in window;
         document.documentElement.classList.toggle("has-view-transition", supported);
+
+        // Any artwork link can become the origin of the same named image
+        // found on the destination detail page. Existing inline names are preserved.
+        document.querySelectorAll('a[href^="/opere/"] img').forEach((image) => {
+            if (!(image instanceof HTMLImageElement)) return;
+            if (image.style.viewTransitionName) return;
+
+            const anchor = image.closest('a[href^="/opere/"]');
+            if (!(anchor instanceof HTMLAnchorElement)) return;
+
+            const url = new URL(anchor.href, window.location.origin);
+            if (url.origin !== window.location.origin) return;
+
+            const slug = url.pathname
+                .replace(/^\/opere\//, "")
+                .replace(/\/$/, "")
+                .replaceAll("/", "-");
+
+            // Ignore links to the artwork index itself.
+            if (!slug) return;
+            image.style.viewTransitionName = `opera-${slug}`;
+        });
     };
 
     initTransizionePercettiva();
     document.addEventListener("astro:page-load", initTransizionePercettiva);
 </script>
+
+<style is:global>
+    /*
+     * Cross-document View Transitions: both the gallery and the artwork page
+     * opt in through this shared layout component. Unsupported browsers ignore
+     * the at-rule and keep normal navigation.
+     */
+    @view-transition {
+        navigation: auto;
+    }
+
+    html.has-view-transition::view-transition-group(*) {
+        animation-duration: 760ms;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        animation-fill-mode: both;
+    }
+
+    html.has-view-transition::view-transition-group(root) {
+        animation-duration: 340ms;
+        animation-timing-function: ease-out;
+    }
+
+    html.has-view-transition::view-transition-old(root) {
+        animation: art-root-fade-out 260ms ease-in both;
+    }
+
+    html.has-view-transition::view-transition-new(root) {
+        animation: art-root-fade-in 360ms ease-out both;
+    }
+
+    @keyframes art-root-fade-out {
+        to {
+            opacity: 0.22;
+        }
+    }
+
+    @keyframes art-root-fade-in {
+        from {
+            opacity: 0.18;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* La modalità Silenzio conserva la continuità ma elimina il gesto animato. */
+    html[data-silent="true"]::view-transition-group(*),
+    html[data-silent="true"]::view-transition-old(*),
+    html[data-silent="true"]::view-transition-new(*) {
+        animation-duration: 0.01ms !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        @view-transition {
+            navigation: none;
+        }
+    }
+</style>
