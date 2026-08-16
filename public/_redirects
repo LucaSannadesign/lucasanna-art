@@ -26,6 +26,7 @@
 /opere/animali/page/2/ /opere/animali/ 301
 /opere/animali/page/2 /opere/animali/ 301
 /opere/pittura/cala-mariolu-dipinto-acrilico/ /opere/ 301
+/opere/paesaggio/cala-mariolu-dipinto-acrilico/ /opere/ 301
 /shop /opere/ 301
 /shop/ /opere/ 301
 /shop/page/1/ /opere/ 301
@@ -34,7 +35,30 @@
 /luca-sanna-art-shop/ /opere/ 301
 /opere/animali/uccello-giallo-con-testa-rossa/ /opere/animali/yellow-bird/ 301
 
+# Archivi legacy WordPress — destinazioni equivalenti
+/category/blog/ /blog-arte/ 301
+/category/recensioni-e-mostre/ /blog-arte/ 301
+/category/tecnologia-e-arte/ /blog-arte/ 301
+/category/opere-e-collezioni/ /opere/ 301
+/category/opere-e-collezioni/opere-in-vendita/ /opere/ 301
+/author/l-sanna73/ /blog-arte/ 301
+/opere/animali/tucano/ /opere/animali/ 301
+/opere/paesaggio/ginepri-a- /opere/paesaggio/ 301
+
 # Contenuti rimossi — 410 Gone
 /prodotto/bird-stampa-su-tela/ /410.html 410
 /prodotto/tucano-custodia-per-iphone/ /410.html 410
 /prodotto/dostoevskij-custodia-per-iphone/ /410.html 410
+/prodotto/black-bird-t-shirt-unisex-100-cotone/ /410.html 410
+/prodotto/joker-t-shirt-unisex-in-cotone-pesante/ /410.html 410
+/prodotto/yellow-bird-stampa-su-tela-2/ /410.html 410
+/prodotto/albero-secolare-unisex-t-shirt-100-cotone/ /410.html 410
+/tutorial-dipingere-un-paesaggio-marittimo-cala-mariolu /410.html 410
+/tutorial-dipingere-un-paesaggio-marittimo-cala-mariolu/ /410.html 410
+/feed/ /410.html 410
+/opere/feed/ /410.html 410
+
+# Endpoint e asset del vecchio WordPress — non più presenti nel sito Astro
+/wp-includes/* /410.html 410
+/wp-content/* /410.html 410
+/wp-admin/* /410.html 410
