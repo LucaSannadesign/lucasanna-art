@@ -81,7 +81,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
     year: work.data.year ? String(work.data.year) : "",
     date: work.data.date ? String(work.data.date) : "",
     technique: work.data.technique || "",
-    href: `/opere/${work.slug}`,
+    href: `/opere/${work.slug}/`,
     tema: inferTema(work),
     periodo: inferPeriodo(work),
     emozione: inferEmozione(work),
@@ -193,7 +193,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
 
                     return (
                     <a
-                        href={`/opere/${work.slug}`}
+                        href={`/opere/${work.slug}/`}
                         class="group block opere-card"
                         data-gallery-card
                         data-fx-card
