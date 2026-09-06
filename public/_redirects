@@ -8,6 +8,7 @@
 /blog /blog-arte/ 301
 /blog/ /blog-arte/ 301
 /arte-intelligenza-artificiale /lintelligenza-artificiale-nellarte/ 301
+/arte-intelligenza-artificiale/ /lintelligenza-artificiale-nellarte/ 301
 /opere/grafica/inquietudine- /opere/grafica/inquietudine-della-natura/ 301
 /opere/grafica/inquietudine-/ /opere/grafica/inquietudine-della-natura/ 301
 /opere/grafica/inquietudine-della-natura /opere/grafica/inquietudine-della-natura/ 301
@@ -33,7 +34,8 @@
 /shop/page/1 /opere/ 301
 /luca-sanna-art-shop /opere/ 301
 /luca-sanna-art-shop/ /opere/ 301
-/opere/animali/uccello-giallo-con-testa-rossa/ /opere/animali/yellow-bird/ 301
+/opere/animali/uccello-giallo-con-testa-rossa /opere/animali/uccello-giallo-verde/ 301
+/opere/animali/uccello-giallo-con-testa-rossa/ /opere/animali/uccello-giallo-verde/ 301
 
 # Archivi legacy WordPress — destinazioni equivalenti
 /category/blog/ /blog-arte/ 301
