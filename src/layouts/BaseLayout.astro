@@ -21,10 +21,28 @@ const { title, description, image, ogImageWidth, ogImageHeight, canonicalUrl, og
     Astro.props;
 const metaDescription =
     description || "Luca Sanna - Arte Visiva e Paesaggi Onirici in Sardegna";
+const siteBase = Astro.site ?? new URL("https://lucasanna.art");
 const absoluteImage = image
-    ? new URL(image, Astro.site ?? new URL("https://lucasanna.art")).href
+    ? new URL(image, siteBase).href
     : "";
-const resolvedCanonicalUrl = canonicalUrl || Astro.url.href;
+
+function normalizeCanonicalUrl(value: string | URL): string {
+    const url = new URL(value.toString(), siteBase);
+    url.search = "";
+    url.hash = "";
+
+    const path = url.pathname;
+    const lastSegment = path.split("/").filter(Boolean).at(-1) ?? "";
+    const looksLikeFile = lastSegment.includes(".");
+
+    if (path !== "/" && !looksLikeFile && !path.endsWith("/")) {
+        url.pathname = `${path}/`;
+    }
+
+    return url.href;
+}
+
+const resolvedCanonicalUrl = normalizeCanonicalUrl(canonicalUrl || Astro.url);
 const resolvedOgType = ogType || "website";
 const twitterCard = absoluteImage ? "summary_large_image" : "summary";
 const ENABLE_PERCEPTIVE_TOGGLE = true;
