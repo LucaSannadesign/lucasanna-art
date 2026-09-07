@@ -15,14 +15,27 @@ import {
 
 export const prerender = false;
 
-/** Pagina di ringraziamento per tipo di form. */
-const SUCCESS_REDIRECT: Record<string, string> = {
-    contatti: "/grazie-contatti/?ok=1",
-    "richiesta-opera": "/grazie-richiesta-opera/?ok=1",
+type ContactLocale = "it" | "en";
+
+const SUCCESS_REDIRECT: Record<ContactLocale, Record<string, string>> = {
+    it: {
+        contatti: "/grazie-contatti/?ok=1",
+        "richiesta-opera": "/grazie-richiesta-opera/?ok=1",
+    },
+    en: {
+        contatti: "/en/thank-you/?ok=1",
+        "richiesta-opera": "/grazie-richiesta-opera/?ok=1",
+    },
 };
 
-/** Pagina su cui riportare l'utente in caso di errore (fallback senza JavaScript). */
-const FALLBACK_ERROR_PAGE = "/contatti/";
+const FALLBACK_ERROR_PAGE: Record<ContactLocale, string> = {
+    it: "/contatti/",
+    en: "/en/contact/",
+};
+
+function resolveLocale(value: unknown): ContactLocale {
+    return value === "en" ? "en" : "it";
+}
 
 function clientIp(request: Request): string {
     const forwarded = request.headers.get("x-forwarded-for");
@@ -30,13 +43,10 @@ function clientIp(request: Request): string {
     return request.headers.get("x-nf-client-connection-ip") ?? "sconosciuto";
 }
 
-/** true quando la richiesta arriva da fetch() e attende una risposta JSON. */
 function wantsJson(request: Request): boolean {
     const accept = request.headers.get("accept") ?? "";
     if (accept.includes("application/json")) return true;
-    return (request.headers.get("content-type") ?? "").includes(
-        "application/json",
-    );
+    return (request.headers.get("content-type") ?? "").includes("application/json");
 }
 
 async function readBody(request: Request): Promise<Record<string, unknown>> {
@@ -60,8 +70,8 @@ async function readBody(request: Request): Promise<Record<string, unknown>> {
 
 export const POST: APIRoute = async ({ request }) => {
     const json = wantsJson(request);
+    let requestLocale: ContactLocale = "it";
 
-    /** Errore: nessun redirect alla pagina di ringraziamento. */
     const fail = (status: number, code: string, message: string): Response => {
         if (json) {
             return new Response(JSON.stringify({ ok: false, code, message }), {
@@ -70,7 +80,7 @@ export const POST: APIRoute = async ({ request }) => {
             });
         }
 
-        const target = `${FALLBACK_ERROR_PAGE}?errore=${encodeURIComponent(code)}`;
+        const target = `${FALLBACK_ERROR_PAGE[requestLocale]}?errore=${encodeURIComponent(code)}`;
         return new Response(null, { status: 303, headers: { location: target } });
     };
 
@@ -78,13 +88,12 @@ export const POST: APIRoute = async ({ request }) => {
 
     try {
         const data = await readBody(request);
+        requestLocale = resolveLocale(data.locale);
         enforceBotChecks(data["bot-field"], data["form-started-at"]);
         enforceRateLimit(clientIp(request));
         payload = parseContactPayload(data);
     } catch (error) {
         if (error instanceof ValidationError) {
-            // Lo spam riceve una risposta "riuscita" per non dare indizi ai bot,
-            // ma nessuna email viene inviata.
             if (error.code === "spam") {
                 return json
                     ? new Response(JSON.stringify({ ok: true }), {
@@ -95,7 +104,7 @@ export const POST: APIRoute = async ({ request }) => {
                       })
                     : new Response(null, {
                           status: 303,
-                          headers: { location: SUCCESS_REDIRECT.contatti! },
+                          headers: { location: SUCCESS_REDIRECT[requestLocale].contatti! },
                       });
             }
             const status = error.code === "rate-limit" ? 429 : 400;
@@ -109,7 +118,6 @@ export const POST: APIRoute = async ({ request }) => {
     try {
         await sendContactEmail(payload);
     } catch (error) {
-        // Errore di configurazione o di consegna SMTP: mai una falsa conferma.
         console.error("[contatti] invio SMTP fallito:", error);
         return fail(
             502,
@@ -120,7 +128,10 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (json) {
         return new Response(
-            JSON.stringify({ ok: true, redirect: SUCCESS_REDIRECT[payload.kind] }),
+            JSON.stringify({
+                ok: true,
+                redirect: SUCCESS_REDIRECT[requestLocale][payload.kind],
+            }),
             {
                 status: 200,
                 headers: { "content-type": "application/json; charset=utf-8" },
@@ -130,10 +141,16 @@ export const POST: APIRoute = async ({ request }) => {
 
     return new Response(null, {
         status: 303,
-        headers: { location: SUCCESS_REDIRECT[payload.kind]! },
+        headers: {
+            location: SUCCESS_REDIRECT[requestLocale][payload.kind]!,
+        },
     });
 };
 
-/** Il form accetta solo POST: una GET diretta torna alla pagina contatti. */
-export const GET: APIRoute = () =>
-    new Response(null, { status: 303, headers: { location: FALLBACK_ERROR_PAGE } });
+export const GET: APIRoute = ({ request }) => {
+    const locale = new URL(request.url).searchParams.get("locale") === "en" ? "en" : "it";
+    return new Response(null, {
+        status: 303,
+        headers: { location: FALLBACK_ERROR_PAGE[locale] },
+    });
+};
