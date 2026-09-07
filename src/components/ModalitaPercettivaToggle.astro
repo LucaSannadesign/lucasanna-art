@@ -1,9 +1,23 @@
 ---
 interface Props {
     enabled?: boolean;
+    locale?: "it" | "en";
 }
 
-const { enabled = true } = Astro.props;
+const { enabled = true, locale = "it" } = Astro.props;
+const copy = locale === "en"
+    ? {
+          ariaLabel: "Reduce animations and visual transitions",
+          label: "Reduce motion",
+          silent: "Quiet",
+          noise: "Active",
+      }
+    : {
+          ariaLabel: "Riduci animazioni e transizioni visive",
+          label: "Riduci animazioni",
+          silent: "Silenzio",
+          noise: "Rumore",
+      };
 ---
 
 <button
@@ -11,11 +25,13 @@ const { enabled = true } = Astro.props;
     class="modalita-toggle"
     data-modalita-toggle
     data-enabled={enabled ? "true" : "false"}
-    aria-label="Riduci animazioni e transizioni visive"
-    title="Riduci animazioni e transizioni visive"
+    data-silent-label={copy.silent}
+    data-noise-label={copy.noise}
+    aria-label={copy.ariaLabel}
+    title={copy.ariaLabel}
 >
-    <span class="modalita-toggle__label">Riduci animazioni</span>
-    <span class="modalita-toggle__value" data-modalita-value>Silenzio</span>
+    <span class="modalita-toggle__label">{copy.label}</span>
+    <span class="modalita-toggle__value" data-modalita-value>{copy.silent}</span>
 </button>
 
 <script is:inline>
@@ -29,6 +45,8 @@ const { enabled = true } = Astro.props;
 
         const valueNode = toggle.querySelector("[data-modalita-value]");
         const validModes = new Set(["silenzio", "rumore"]);
+        const silentLabel = toggle.dataset.silentLabel || "Silenzio";
+        const noiseLabel = toggle.dataset.noiseLabel || "Rumore";
 
         const applyMode = (mode) => {
             const normalized = validModes.has(mode) ? mode : "silenzio";
@@ -37,7 +55,7 @@ const { enabled = true } = Astro.props;
                 "data-silent",
                 normalized === "silenzio" ? "true" : "false",
             );
-            if (valueNode) valueNode.textContent = normalized === "silenzio" ? "Silenzio" : "Rumore";
+            if (valueNode) valueNode.textContent = normalized === "silenzio" ? silentLabel : noiseLabel;
             localStorage.setItem(MODALITA_KEY, normalized);
         };
 
