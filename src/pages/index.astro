@@ -42,16 +42,23 @@ const heroImage = entry.data.featuredImage;
 	<section class="max-w-5xl mx-auto mb-14 md:mb-20 pt-3 md:pt-0 md:-mt-6 text-center">
 		{
 			heroImage && (
-				<img
-					src={netlifyImageUrl(heroImage, 1200, 80)}
-					srcset={netlifyImageSrcSet(heroImage, [480, 768, 1024, 1200], 80)}
-					sizes="(max-width: 768px) calc(100vw - 2rem), (max-width: 1100px) calc(100vw - 4rem), 960px"
-					alt="Luca Sanna"
-					fetchpriority="high"
-					loading="eager"
-					decoding="async"
-					class="w-full max-h-[62vh] object-cover mb-10 md:mb-12 transition-all duration-1000 ease-in-out shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:grayscale [@media(hover:hover)_and_(pointer:fine)]:hover:grayscale-0"
-				/>
+				<picture class="block w-full mb-10 md:mb-12">
+					<source
+						type="image/avif"
+						srcset={netlifyImageSrcSet(heroImage, [480, 768, 1024, 1200], 68, "avif")}
+						sizes="(max-width: 768px) calc(100vw - 2rem), (max-width: 1100px) calc(100vw - 4rem), 960px"
+					/>
+					<img
+						src={netlifyImageUrl(heroImage, 1200, 78)}
+						srcset={netlifyImageSrcSet(heroImage, [480, 768, 1024, 1200], 78)}
+						sizes="(max-width: 768px) calc(100vw - 2rem), (max-width: 1100px) calc(100vw - 4rem), 960px"
+						alt="Luca Sanna"
+						fetchpriority="high"
+						loading="eager"
+						decoding="async"
+						class="w-full h-[46vh] min-h-[300px] max-h-[520px] md:h-[62vh] md:max-h-[720px] object-cover transition-[filter] duration-1000 ease-in-out shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:grayscale [@media(hover:hover)_and_(pointer:fine)]:hover:grayscale-0"
+					/>
+				</picture>
 			)
 		}
 		<div
@@ -114,9 +121,13 @@ const heroImage = entry.data.featuredImage;
 			color: #d1d5db;
 			border-color: rgba(255, 255, 255, 0.28);
 		}
+		.home-below-fold {
+			content-visibility: auto;
+			contain-intrinsic-size: auto 1100px;
+		}
 	</style>
 
-	<section class="mb-16 md:mb-24">
+	<section class="home-below-fold mb-16 md:mb-24">
 		<h2
 			class="text-3xl md:text-4xl font-heading font-normal text-center mb-10 md:mb-12 uppercase tracking-[0.2em] text-white"
 		>
@@ -168,7 +179,7 @@ const heroImage = entry.data.featuredImage;
 		</div>
 	</section>
 
-	<section class="mb-14 md:mb-20">
+	<section class="home-below-fold mb-14 md:mb-20">
 		<h2
 			class="text-3xl md:text-4xl font-heading font-normal text-center mb-10 md:mb-12 uppercase tracking-[0.2em] text-white"
 		>
