@@ -1,4 +1,5 @@
 import { getCollection } from "astro:content";
+import { featuredWorksEn } from "../i18n/featuredWorks.en";
 
 export const prerender = true;
 
@@ -13,6 +14,7 @@ const STATIC_PATHS = [
   "/en/works/",
   "/en/art-blog/",
   "/en/contact/",
+  ...featuredWorksEn.map((work) => `/en/works/${work.enSlug}/`),
 ];
 const EXCLUDED_PAGE_SLUGS = new Set(["index"]);
 const EXCLUDED_POST_SLUGS = new Set(["blog-arte", "luca-sanna-art-shop"]);
