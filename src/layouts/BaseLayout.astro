@@ -4,6 +4,7 @@ import Footer from "../components/Footer.astro";
 import ModalitaPercettivaToggle from "../components/ModalitaPercettivaToggle.astro";
 import InterfacciaEvanescente from "../components/InterfacciaEvanescente.astro";
 import TransizionePercettiva from "../components/TransizionePercettiva.astro";
+import { alternatePath, localeConfig, type Locale } from "../i18n/site";
 import "../styles/global.css";
 
 interface Props {
@@ -15,16 +16,30 @@ interface Props {
     canonicalUrl?: string;
     ogType?: "website" | "article";
     context?: "home" | "blog" | "page";
+    locale?: Locale;
+    alternateUrl?: string | null;
 }
 
-const { title, description, image, ogImageWidth, ogImageHeight, canonicalUrl, ogType } =
-    Astro.props;
+const {
+    title,
+    description,
+    image,
+    ogImageWidth,
+    ogImageHeight,
+    canonicalUrl,
+    ogType,
+    locale = "it",
+    alternateUrl,
+} = Astro.props;
+
+const localeCopy = localeConfig[locale];
 const metaDescription =
-    description || "Luca Sanna - Arte Visiva e Paesaggi Onirici in Sardegna";
+    description ||
+    (locale === "en"
+        ? "Luca Sanna — contemporary visual art, nature and inner landscapes."
+        : "Luca Sanna - Arte Visiva e Paesaggi Onirici in Sardegna");
 const siteBase = Astro.site ?? new URL("https://lucasanna.art");
-const absoluteImage = image
-    ? new URL(image, siteBase).href
-    : "";
+const absoluteImage = image ? new URL(image, siteBase).href : "";
 
 function normalizeCanonicalUrl(value: string | URL): string {
     const url = new URL(value.toString(), siteBase);
@@ -43,6 +58,21 @@ function normalizeCanonicalUrl(value: string | URL): string {
 }
 
 const resolvedCanonicalUrl = normalizeCanonicalUrl(canonicalUrl || Astro.url);
+const autoAlternatePath = alternatePath(Astro.url.pathname, locale);
+const resolvedAlternateUrl =
+    alternateUrl === null
+        ? null
+        : alternateUrl
+          ? normalizeCanonicalUrl(alternateUrl)
+          : autoAlternatePath
+            ? normalizeCanonicalUrl(autoAlternatePath)
+            : null;
+const alternateLocale: Locale = locale === "it" ? "en" : "it";
+const xDefaultUrl = resolvedAlternateUrl
+    ? locale === "it"
+        ? resolvedCanonicalUrl
+        : resolvedAlternateUrl
+    : null;
 const resolvedOgType = ogType || "website";
 const twitterCard = absoluteImage ? "summary_large_image" : "summary";
 const ENABLE_PERCEPTIVE_TOGGLE = true;
@@ -52,7 +82,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 
 <!doctype html>
-<html lang="it" data-modalita-percettiva="silenzio" data-silent="true">
+<html lang={localeCopy.htmlLang} data-modalita-percettiva="silenzio" data-silent="true">
     <head>
         <!-- Google Tag Manager -->
         <script is:inline>
@@ -69,12 +99,29 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="canonical" href={resolvedCanonicalUrl} />
+        <link rel="alternate" hreflang={locale} href={resolvedCanonicalUrl} />
+        {
+            resolvedAlternateUrl && (
+                <link rel="alternate" hreflang={alternateLocale} href={resolvedAlternateUrl} />
+            )
+        }
+        {
+            xDefaultUrl && (
+                <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
+            )
+        }
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
         <meta property="og:title" content={title} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:url" content={resolvedCanonicalUrl} />
         <meta property="og:type" content={resolvedOgType} />
+        <meta property="og:locale" content={localeCopy.ogLocale} />
+        {
+            resolvedAlternateUrl && (
+                <meta property="og:locale:alternate" content={localeCopy.alternateOgLocale} />
+            )
+        }
         {
             absoluteImage && (
                 <>
@@ -140,7 +187,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
         </noscript>
         <!-- End Google Tag Manager (noscript) -->
 
-        <Header />
+        <Header locale={locale} />
         <main class="flex-grow container mx-auto px-4 py-8 mt-24 md:mt-32">
             <slot />
         </main>
@@ -149,6 +196,6 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
         <InterfacciaEvanescente enabled={ENABLE_EVANESCENTE_UI} idleMs={5200} />
         <TransizionePercettiva enabled={ENABLE_PERCETTIVE_TRANSITIONS} />
 
-        <Footer />
+        <Footer locale={locale} />
     </body>
 </html>

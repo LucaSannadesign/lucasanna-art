@@ -1,4 +1,12 @@
 ---
+import { localeConfig, type Locale } from "../i18n/site";
+
+interface Props {
+    locale?: Locale;
+}
+
+const { locale = "it" } = Astro.props;
+const copy = localeConfig[locale];
 const year = new Date().getFullYear();
 ---
 
@@ -8,7 +16,7 @@ const year = new Date().getFullYear();
     <div
         class="container mx-auto px-4 flex flex-col items-center justify-center space-y-6"
     >
-        <p>&copy; {year} Luca Sanna. Tutti i diritti riservati.</p>
+        <p>&copy; {year} Luca Sanna. {copy.rights}</p>
 
         <div class="flex space-x-8 text-gray-400">
             <a
@@ -67,9 +75,12 @@ const year = new Date().getFullYear();
 
         <div class="mt-4 opacity-50 hover:opacity-100 transition-opacity">
             <a
-                href="/politica-dei-resi"
-                class="hover:text-white transition-colors">Politica dei Resi</a
+                href="/politica-dei-resi/"
+                lang={locale === "en" ? "it" : undefined}
+                class="hover:text-white transition-colors"
             >
+                {copy.returns}
+            </a>
         </div>
     </div>
 </footer>

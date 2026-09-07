@@ -4,7 +4,16 @@ export const prerender = true;
 
 const SITE_URL = "https://lucasanna.art";
 
-const STATIC_PATHS = ["/", "/blog-arte/", "/opere/"];
+const STATIC_PATHS = [
+  "/",
+  "/blog-arte/",
+  "/opere/",
+  "/en/",
+  "/en/biography/",
+  "/en/works/",
+  "/en/art-blog/",
+  "/en/contact/",
+];
 const EXCLUDED_PAGE_SLUGS = new Set(["index"]);
 const EXCLUDED_POST_SLUGS = new Set(["blog-arte", "luca-sanna-art-shop"]);
 const EXCLUDED_OPERE_SLUGS = new Set(["opere"]);
