@@ -29,6 +29,10 @@ const homeDescription =
 	"Opere di Luca Sanna, artista visivo in Sardegna: pittura contemporanea, natura, memoria, paesaggi interiori e ricerca sul segno.";
 const homeOgImage = "/images/og/luca-sanna-home.jpg";
 const heroImage = entry.data.featuredImage;
+const heroSizes = "(max-width: 768px) calc(100vw - 2rem), (max-width: 1100px) calc(100vw - 4rem), 960px";
+const heroAvifSrcSet = heroImage
+	? netlifyImageSrcSet(heroImage, [480, 768, 1024, 1200], 68, "avif")
+	: "";
 ---
 
 <BaseLayout
@@ -39,19 +43,35 @@ const heroImage = entry.data.featuredImage;
 	ogImageHeight={630}
 	canonicalUrl="https://lucasanna.art/"
 >
+	{
+		heroImage && (
+			<Fragment slot="head">
+				<link
+					rel="preload"
+					as="image"
+					href={netlifyImageUrl(heroImage, 768, 68, "avif")}
+					imagesrcset={heroAvifSrcSet}
+					imagesizes={heroSizes}
+					type="image/avif"
+					fetchpriority="high"
+				/>
+			</Fragment>
+		)
+	}
+
 	<section class="max-w-5xl mx-auto mb-14 md:mb-20 pt-3 md:pt-0 md:-mt-6 text-center">
 		{
 			heroImage && (
 				<picture class="block w-full mb-10 md:mb-12">
 					<source
 						type="image/avif"
-						srcset={netlifyImageSrcSet(heroImage, [480, 768, 1024, 1200], 68, "avif")}
-						sizes="(max-width: 768px) calc(100vw - 2rem), (max-width: 1100px) calc(100vw - 4rem), 960px"
+						srcset={heroAvifSrcSet}
+						sizes={heroSizes}
 					/>
 					<img
 						src={netlifyImageUrl(heroImage, 1200, 78)}
 						srcset={netlifyImageSrcSet(heroImage, [480, 768, 1024, 1200], 78)}
-						sizes="(max-width: 768px) calc(100vw - 2rem), (max-width: 1100px) calc(100vw - 4rem), 960px"
+						sizes={heroSizes}
 						alt="Luca Sanna"
 						fetchpriority="high"
 						loading="eager"
