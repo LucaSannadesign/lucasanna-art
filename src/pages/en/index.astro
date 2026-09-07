@@ -1,0 +1,179 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+const recentWorks: CollectionEntry<"opere">[] = (await getCollection("opere"))
+    .filter((work) => work.slug.includes("/"))
+    .sort(
+        (a, b) =>
+            new Date(b.data.date || 0).getTime() -
+            new Date(a.data.date || 0).getTime(),
+    )
+    .slice(0, 6);
+
+const translateTechnique = (value?: string) => {
+    if (!value) return "";
+    return value
+        .replace(/acrilico su tela/gi, "acrylic on canvas")
+        .replace(/olio su tela/gi, "oil on canvas")
+        .replace(/acquerello su carta/gi, "watercolour on paper")
+        .replace(/acquerello/gi, "watercolour")
+        .replace(/grafite su carta/gi, "graphite on paper")
+        .replace(/matita su carta/gi, "pencil on paper")
+        .replace(/tecnica mista/gi, "mixed media")
+        .replace(/acrilico/gi, "acrylic")
+        .replace(/olio/gi, "oil")
+        .replace(/matita/gi, "pencil");
+};
+
+const homeTitle = "Luca Sanna — Contemporary Visual Artist";
+const homeDescription =
+    "Luca Sanna is an Italian visual artist based in Sardinia. Painting, drawing and digital practice explore nature, memory, metamorphosis and inner landscapes.";
+const homeOgImage = "/images/og/luca-sanna-home.jpg";
+---
+
+<BaseLayout
+    title={homeTitle}
+    description={homeDescription}
+    image={homeOgImage}
+    ogImageWidth={1200}
+    ogImageHeight={630}
+    canonicalUrl="https://lucasanna.art/en/"
+    locale="en"
+>
+    <section class="max-w-5xl mx-auto mb-14 md:mb-20 pt-3 md:pt-0 md:-mt-6 text-center">
+        <img
+            src="/assets/uploads/Uccello-Verde-tra-i-rami-Luca-Sanna-2022-acrilico-su-tela.webp"
+            alt="Artwork by Luca Sanna"
+            class="w-full max-h-[62vh] object-cover mb-10 md:mb-12 transition-all duration-1000 ease-in-out shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:grayscale [@media(hover:hover)_and_(pointer:fine)]:hover:grayscale-0"
+        />
+
+        <div class="prose prose-invert lg:prose-xl mx-auto font-light text-gray-300 leading-relaxed">
+            <h1>Luca Sanna</h1>
+            <p>Italian visual artist based in Sardinia — contemporary painting, nature and inner landscapes.</p>
+            <p><em>I paint what endures while it transforms.</em></p>
+
+            <p>
+                My practice moves between <strong>nature and the body</strong>, <strong>mark and memory</strong>,
+                shifting between figuration and abstraction, between what remains and what changes. Painting,
+                drawing and, when needed, digital tools are not separate disciplines but languages through which
+                I explore <strong>metamorphosis</strong>, traces of time and the point where outer and inner landscapes meet.
+            </p>
+
+            <h2>Painting as a field of transformation</h2>
+            <p>
+                From the 1990s to the present, my work has developed through oil, acrylic, watercolour, drawing
+                and digital image-making. The medium changes according to what the work requires: colour, matter,
+                light, tension, silence or the persistence of a line.
+            </p>
+            <p>
+                Sardinia is a cultural and visual matrix within this practice rather than its boundary. Sea, rock,
+                roots, vegetation and changing light become material for a wider reflection on memory, identity,
+                transformation and the relationship between human presence and the natural world.
+            </p>
+
+            <div class="home-hero-cta">
+                <a href="/en/works/" class="home-hero-cta-primary">View works</a>
+                <a href="/en/biography/" class="home-hero-cta-secondary">Read the biography</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-16 md:mb-24">
+        <h2 class="text-3xl md:text-4xl font-heading font-normal text-center mb-10 md:mb-12 uppercase tracking-[0.2em] text-white">
+            Recent works
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
+            {
+                recentWorks.map((work) => (
+                    <a href={`/opere/${work.slug}/`} lang="it" class="group block">
+                        <div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6">
+                            {work.data.featuredImage && (
+                                <img
+                                    src={work.data.featuredImage}
+                                    alt={work.data.imageAlt || work.data.title}
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000 ease-out"
+                                />
+                            )}
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-xl font-heading text-white mb-2 group-hover:text-gray-300 transition-colors">
+                                {work.data.title}
+                            </h3>
+                            {work.data.technique && (
+                                <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">
+                                    {translateTechnique(work.data.technique)}
+                                </p>
+                            )}
+                        </div>
+                    </a>
+                ))
+            }
+        </div>
+        <div class="text-center mt-12">
+            <a
+                href="/en/works/"
+                class="inline-block border-b border-white pb-1 text-sm uppercase tracking-[0.2em] hover:text-gray-400 hover:border-gray-400 transition-all"
+            >
+                View all works
+            </a>
+        </div>
+    </section>
+
+    <section class="max-w-3xl mx-auto mb-14 md:mb-20 text-center border-t border-white/10 pt-12">
+        <p class="text-[0.65rem] uppercase tracking-[0.22em] text-gray-600 mb-4">Practice & writing</p>
+        <h2 class="text-3xl md:text-4xl font-heading text-white mb-5">Notes on art, process and visual culture</h2>
+        <p class="text-sm md:text-base font-light leading-7 text-gray-400 mb-8">
+            Essays and studio notes extend the work beyond the image, tracing references, techniques and questions that shape the practice.
+        </p>
+        <a
+            href="/en/art-blog/"
+            class="inline-block border-b border-white pb-1 text-sm uppercase tracking-[0.2em] hover:text-gray-400 hover:border-gray-400 transition-all"
+        >
+            Explore the art blog
+        </a>
+    </section>
+</BaseLayout>
+
+<style is:global>
+    .home-hero-cta {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    @media (min-width: 640px) {
+        .home-hero-cta {
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+    }
+    .home-hero-cta-primary {
+        display: inline-block;
+        margin: 0;
+        padding: 0.5rem 1.25rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #e8e8e8;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 0.125rem;
+    }
+    .home-hero-cta-secondary {
+        display: inline-block;
+        margin: 0;
+        font-size: 0.875rem;
+        font-weight: 300;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        color: #9ca3af;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        padding-bottom: 0.15rem;
+    }
+</style>
