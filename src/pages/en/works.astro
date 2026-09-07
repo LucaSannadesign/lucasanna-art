@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
+import { featuredWorksEnByItSlug } from "../../i18n/featuredWorks.en";
 
 const works: CollectionEntry<"opere">[] = (await getCollection("opere"))
     .filter((work) => work.slug.includes("/"))
@@ -29,6 +30,8 @@ const categories = Array.from(new Set(works.map(getCategory))).filter(Boolean);
 const translateTechnique = (value?: string) => {
     if (!value) return "";
     return value
+        .replace(/disegno digitale \(procreate\)/gi, "digital drawing (Procreate)")
+        .replace(/carboncino su carta/gi, "charcoal on paper")
         .replace(/acrilico su tela/gi, "acrylic on canvas")
         .replace(/olio su tela/gi, "oil on canvas")
         .replace(/acquerello su carta/gi, "watercolour on paper")
@@ -38,7 +41,8 @@ const translateTechnique = (value?: string) => {
         .replace(/acquerello/gi, "watercolour")
         .replace(/acrilico/gi, "acrylic")
         .replace(/olio/gi, "oil")
-        .replace(/matita/gi, "pencil");
+        .replace(/matita/gi, "pencil")
+        .replace(/carboncino/gi, "charcoal");
 };
 ---
 
@@ -91,19 +95,26 @@ const translateTechnique = (value?: string) => {
             {
                 works.map((work) => {
                     const category = getCategory(work);
+                    const translated = featuredWorksEnByItSlug.get(work.slug);
+                    const href = translated
+                        ? `/en/works/${translated.enSlug}/`
+                        : `/opere/${work.slug}/`;
+
                     return (
                         <a
-                            href={`/opere/${work.slug}/`}
-                            lang="it"
+                            href={href}
+                            lang={translated ? undefined : "it"}
                             class="group block work-card"
                             data-category={category}
-                            aria-label={`${work.data.title} — artwork page in Italian`}
+                            aria-label={translated
+                                ? `${work.data.title} — English artwork page`
+                                : `${work.data.title} — artwork page in Italian`}
                         >
                             <div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative">
                                 {work.data.featuredImage ? (
                                     <img
                                         src={work.data.featuredImage}
-                                        alt={work.data.imageAlt || work.data.title}
+                                        alt={translated?.imageAlt || work.data.imageAlt || work.data.title}
                                         class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.025]"
                                     />
                                 ) : (
@@ -111,9 +122,12 @@ const translateTechnique = (value?: string) => {
                                 )}
                             </div>
                             <div class="text-center">
-                                <h2 class="text-xl font-heading text-white mb-2 group-hover:text-gray-300 transition-colors">{work.data.title}</h2>
+                                <h2 class="text-xl font-heading text-white mb-2 group-hover:text-gray-300 transition-colors" lang="it">{work.data.title}</h2>
+                                {translated && (
+                                    <p class="mb-2 text-sm font-heading italic text-gray-400">{translated.englishTitle}</p>
+                                )}
                                 {work.data.technique && (
-                                    <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">{translateTechnique(work.data.technique)}</p>
+                                    <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">{translated?.technique || translateTechnique(work.data.technique)}</p>
                                 )}
                                 {work.data.year && <p class="text-[0.68rem] text-gray-600 tracking-widest">{work.data.year}</p>}
                             </div>
