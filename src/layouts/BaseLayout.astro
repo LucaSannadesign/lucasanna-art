@@ -79,24 +79,17 @@ const ENABLE_PERCEPTIVE_TOGGLE = true;
 const ENABLE_EVANESCENTE_UI = true;
 const ENABLE_PERCETTIVE_TRANSITIONS = true;
 const gaId = import.meta.env.PUBLIC_GA_ID;
+const gtmId = "GTM-KZH6496M";
+const ahrefsKey = "BchEV88K204OhTw6peE9Ww";
+const googleFontsHref = "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap";
 ---
 
 <!doctype html>
 <html lang={localeCopy.htmlLang} data-modalita-percettiva="silenzio" data-silent="true">
     <head>
-        <!-- Google Tag Manager -->
-        <script is:inline>
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-KZH6496M');
-        </script>
-        <!-- End Google Tag Manager -->
-
         <meta charset="UTF-8" />
         <meta name="description" content={metaDescription} />
-        <meta name="viewport" content="width=device-width" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="canonical" href={resolvedCanonicalUrl} />
         <link rel="alternate" hreflang={locale} href={resolvedCanonicalUrl} />
@@ -143,49 +136,27 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
             document.documentElement.classList.add("js");
         </script>
 
-        <!-- Google Fonts -->
+        <!-- Fonts are non-render-blocking: fallback fonts paint immediately, web fonts swap in when ready. -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+            href={googleFontsHref}
             rel="stylesheet"
+            media="print"
+            onload="this.media='all'"
         />
-
-        {
-            gaId && (
-                <>
-                    <script
-                        async
-                        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-                    ></script>
-                    <script is:inline define:vars={{ gaId }}>
-                        window.dataLayer = window.dataLayer || [];
-                        window.gtag = function gtag() {
-                            window.dataLayer.push(arguments);
-                        };
-                        window.gtag('js', new Date());
-                        window.gtag('config', gaId);
-                    </script>
-                </>
-            )
-        }
-
-        <script
-            src="https://analytics.ahrefs.com/analytics.js"
-            data-key="BchEV88K204OhTw6peE9Ww"
-            async></script>
+        <noscript><link href={googleFontsHref} rel="stylesheet" /></noscript>
     </head>
     <body class="bg-[#121212] text-[#e0e0e0] flex flex-col min-h-screen">
-        <!-- Google Tag Manager (noscript) -->
+        <!-- GTM noscript fallback; JavaScript analytics are deferred below. -->
         <noscript>
             <iframe
-                src="https://www.googletagmanager.com/ns.html?id=GTM-KZH6496M"
+                src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
                 height="0"
                 width="0"
                 style="display:none;visibility:hidden"
             ></iframe>
         </noscript>
-        <!-- End Google Tag Manager (noscript) -->
 
         <Header locale={locale} />
         <main class="flex-grow container mx-auto px-4 py-8 mt-24 md:mt-32">
@@ -197,5 +168,64 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
         <TransizionePercettiva enabled={ENABLE_PERCETTIVE_TRANSITIONS} />
 
         <Footer locale={locale} />
+
+        <script is:inline define:vars={{ gaId, gtmId, ahrefsKey }}>
+            (() => {
+                let loaded = false;
+
+                const loadDeferredAnalytics = () => {
+                    if (loaded) return;
+                    loaded = true;
+
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
+
+                    const gtm = document.createElement("script");
+                    gtm.async = true;
+                    gtm.src = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`;
+                    document.head.appendChild(gtm);
+
+                    if (gaId) {
+                        window.gtag = window.gtag || function gtag() {
+                            window.dataLayer.push(arguments);
+                        };
+                        window.gtag("js", new Date());
+                        window.gtag("config", gaId);
+
+                        const ga = document.createElement("script");
+                        ga.async = true;
+                        ga.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+                        document.head.appendChild(ga);
+                    }
+
+                    const ahrefs = document.createElement("script");
+                    ahrefs.async = true;
+                    ahrefs.src = "https://analytics.ahrefs.com/analytics.js";
+                    ahrefs.dataset.key = ahrefsKey;
+                    document.head.appendChild(ahrefs);
+                };
+
+                const scheduleDeferredAnalytics = () => {
+                    if ("requestIdleCallback" in window) {
+                        window.requestIdleCallback(loadDeferredAnalytics, { timeout: 5000 });
+                    } else {
+                        window.setTimeout(loadDeferredAnalytics, 3500);
+                    }
+                };
+
+                if (document.readyState === "complete") {
+                    scheduleDeferredAnalytics();
+                } else {
+                    window.addEventListener("load", scheduleDeferredAnalytics, { once: true });
+                }
+
+                ["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
+                    window.addEventListener(eventName, loadDeferredAnalytics, {
+                        once: true,
+                        passive: true,
+                    });
+                });
+            })();
+        </script>
     </body>
 </html>
