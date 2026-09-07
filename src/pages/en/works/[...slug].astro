@@ -1,0 +1,138 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import {
+    featuredWorksEn,
+    type FeaturedWorkEn,
+} from "../../../i18n/featuredWorks.en";
+
+export function getStaticPaths() {
+    return featuredWorksEn.map((work) => ({
+        params: { slug: work.enSlug },
+        props: { work },
+    }));
+}
+
+type Props = { work: FeaturedWorkEn };
+const { work } = Astro.props;
+
+const siteBase = Astro.site ?? new URL("https://lucasanna.art");
+const canonicalUrl = new URL(`/en/works/${work.enSlug}/`, siteBase).href;
+const italianUrl = new URL(`/opere/${work.itSlug}/`, siteBase).href;
+const relatedWorks = featuredWorksEn
+    .filter((candidate) => candidate.enSlug !== work.enSlug)
+    .slice(0, 3);
+---
+
+<BaseLayout
+    title={work.metaTitle}
+    description={work.metaDescription}
+    image={work.image}
+    canonicalUrl={canonicalUrl}
+    alternateUrl={italianUrl}
+    ogType="article"
+    context="page"
+    locale="en"
+>
+    <article class="-mt-4 px-4 pb-12 md:-mt-16 md:pb-20">
+        <header class="mx-auto max-w-5xl border-b border-white/10 pb-9 text-center md:pb-12">
+            <p class="mb-4 text-[0.65rem] uppercase tracking-[0.24em] text-gray-600">{work.category}</p>
+            <h1 class="font-heading text-4xl font-normal leading-tight text-white md:text-6xl">
+                <span lang="it">{work.title}</span>
+            </h1>
+            <p class="mx-auto mt-4 max-w-3xl font-heading text-xl italic leading-relaxed text-gray-400 md:text-2xl">
+                {work.englishTitle}
+            </p>
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[0.68rem] uppercase tracking-[0.18em] text-gray-500">
+                <span>{work.year}</span>
+                <span aria-hidden="true">·</span>
+                <span>{work.technique}</span>
+            </div>
+        </header>
+
+        <figure class="mx-auto mt-10 max-w-6xl md:mt-14">
+            <img
+                src={work.image}
+                alt={work.imageAlt}
+                class="mx-auto max-h-[85vh] w-full object-contain shadow-2xl"
+                loading="eager"
+            />
+        </figure>
+
+        <div class="mx-auto mt-12 max-w-3xl md:mt-16">
+            <p class="font-heading text-2xl leading-relaxed text-gray-200 md:text-3xl">
+                {work.intro}
+            </p>
+
+            <div class="mt-10 space-y-11">
+                {work.sections.map((section) => (
+                    <section>
+                        {section.heading && (
+                            <h2 class="mb-4 font-heading text-2xl font-normal text-white md:text-3xl">
+                                {section.heading}
+                            </h2>
+                        )}
+                        <div class="space-y-5 text-base font-light leading-8 text-gray-400 md:text-[1.05rem]">
+                            {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+                        </div>
+                    </section>
+                ))}
+            </div>
+
+            {work.youtubeEmbedUrl && (
+                <section class="mt-12 border-t border-white/10 pt-10" aria-labelledby="process-video-title">
+                    <h2 id="process-video-title" class="mb-5 font-heading text-2xl text-white md:text-3xl">Process video</h2>
+                    <div class="aspect-video overflow-hidden bg-black">
+                        <iframe
+                            src={work.youtubeEmbedUrl}
+                            title={`${work.englishTitle} — process video`}
+                            class="h-full w-full"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                </section>
+            )}
+        </div>
+
+        <section class="mx-auto mt-14 max-w-3xl border-y border-white/10 py-9 text-center md:mt-18" aria-labelledby="work-enquiry-title">
+            <p class="mb-3 text-[0.65rem] uppercase tracking-[0.22em] text-gray-600">Original work</p>
+            <h2 id="work-enquiry-title" class="font-heading text-2xl text-white md:text-3xl">Enquire about this work</h2>
+            <p class="mx-auto mt-3 max-w-xl text-sm font-light leading-7 text-gray-400">
+                For availability, price or further information, contact Luca Sanna and mention the work title.
+            </p>
+            <a
+                href="/en/contact/"
+                class="mt-6 inline-block border border-white/25 px-6 py-3 text-xs uppercase tracking-[0.2em] text-gray-200 transition-colors hover:border-white/50 hover:text-white"
+            >
+                Contact
+            </a>
+        </section>
+
+        <nav class="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs uppercase tracking-[0.17em] text-gray-500" aria-label="Artwork navigation">
+            <a href="/en/works/" class="transition-colors hover:text-white">All works</a>
+            <span aria-hidden="true">·</span>
+            <a href={italianUrl} lang="it" class="transition-colors hover:text-white">Italian artwork page</a>
+        </nav>
+
+        <section class="mx-auto mt-16 max-w-6xl border-t border-white/10 pt-10" aria-labelledby="related-works-title">
+            <h2 id="related-works-title" class="mb-8 text-center font-heading text-3xl text-white md:text-4xl">More selected works</h2>
+            <div class="grid grid-cols-1 gap-8 sm:grid-cols-3">
+                {relatedWorks.map((related) => (
+                    <a href={`/en/works/${related.enSlug}/`} class="group block">
+                        <div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a]">
+                            <img
+                                src={related.image}
+                                alt={related.imageAlt}
+                                loading="lazy"
+                                class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.025]"
+                            />
+                        </div>
+                        <h3 class="mt-4 text-center font-heading text-xl text-white" lang="it">{related.title}</h3>
+                        <p class="mt-1 text-center text-xs text-gray-500">{related.englishTitle}</p>
+                    </a>
+                ))}
+            </div>
+        </section>
+    </article>
+</BaseLayout>

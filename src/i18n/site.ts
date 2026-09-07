@@ -1,3 +1,5 @@
+import { featuredWorksEn } from "./featuredWorks.en";
+
 export type Locale = "it" | "en";
 
 export const localeConfig = {
@@ -44,6 +46,11 @@ export const localizedRoutes = {
     contactThanks: { it: "/grazie-contatti/", en: "/en/thank-you/" },
 } as const;
 
+const localizedArtworkRoutes = featuredWorksEn.map((work) => ({
+    it: `/opere/${work.itSlug}/`,
+    en: `/en/works/${work.enSlug}/`,
+}));
+
 export type LocalizedRouteKey = keyof typeof localizedRoutes;
 
 export function localizedPath(key: LocalizedRouteKey, locale: Locale): string {
@@ -60,6 +67,12 @@ export function alternatePath(pathname: string, locale: Locale): string | null {
     const alternateLocale: Locale = locale === "it" ? "en" : "it";
 
     for (const route of Object.values(localizedRoutes)) {
+        if (normalizePath(route[locale]) === currentPath) {
+            return route[alternateLocale];
+        }
+    }
+
+    for (const route of localizedArtworkRoutes) {
         if (normalizePath(route[locale]) === currentPath) {
             return route[alternateLocale];
         }
