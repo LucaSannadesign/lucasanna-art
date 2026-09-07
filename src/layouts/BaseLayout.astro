@@ -136,7 +136,6 @@ const googleFontsHref = "https://fonts.googleapis.com/css2?family=Inter:wght@300
             document.documentElement.classList.add("js");
         </script>
 
-        <!-- Fonts are non-render-blocking: fallback fonts paint immediately, web fonts swap in when ready. -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -148,7 +147,6 @@ const googleFontsHref = "https://fonts.googleapis.com/css2?family=Inter:wght@300
         <noscript><link href={googleFontsHref} rel="stylesheet" /></noscript>
     </head>
     <body class="bg-[#121212] text-[#e0e0e0] flex flex-col min-h-screen">
-        <!-- GTM noscript fallback; JavaScript analytics are deferred below. -->
         <noscript>
             <iframe
                 src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
@@ -171,11 +169,12 @@ const googleFontsHref = "https://fonts.googleapis.com/css2?family=Inter:wght@300
 
         <script is:inline define:vars={{ gaId, gtmId, ahrefsKey }}>
             (() => {
-                let loaded = false;
+                let coreLoaded = false;
+                let ahrefsLoaded = false;
 
-                const loadDeferredAnalytics = () => {
-                    if (loaded) return;
-                    loaded = true;
+                const loadCoreAnalytics = () => {
+                    if (coreLoaded) return;
+                    coreLoaded = true;
 
                     window.dataLayer = window.dataLayer || [];
                     window.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
@@ -197,7 +196,11 @@ const googleFontsHref = "https://fonts.googleapis.com/css2?family=Inter:wght@300
                         ga.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
                         document.head.appendChild(ga);
                     }
+                };
 
+                const loadAhrefs = () => {
+                    if (ahrefsLoaded) return;
+                    ahrefsLoaded = true;
                     const ahrefs = document.createElement("script");
                     ahrefs.async = true;
                     ahrefs.src = "https://analytics.ahrefs.com/analytics.js";
@@ -205,22 +208,24 @@ const googleFontsHref = "https://fonts.googleapis.com/css2?family=Inter:wght@300
                     document.head.appendChild(ahrefs);
                 };
 
-                const scheduleDeferredAnalytics = () => {
-                    if ("requestIdleCallback" in window) {
-                        window.requestIdleCallback(loadDeferredAnalytics, { timeout: 5000 });
-                    } else {
-                        window.setTimeout(loadDeferredAnalytics, 3500);
-                    }
+                const loadOnEngagement = () => {
+                    loadCoreAnalytics();
+                    window.setTimeout(loadAhrefs, 2500);
+                };
+
+                const scheduleAfterLoad = () => {
+                    window.setTimeout(loadCoreAnalytics, 12000);
+                    window.setTimeout(loadAhrefs, 16000);
                 };
 
                 if (document.readyState === "complete") {
-                    scheduleDeferredAnalytics();
+                    scheduleAfterLoad();
                 } else {
-                    window.addEventListener("load", scheduleDeferredAnalytics, { once: true });
+                    window.addEventListener("load", scheduleAfterLoad, { once: true });
                 }
 
                 ["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
-                    window.addEventListener(eventName, loadDeferredAnalytics, {
+                    window.addEventListener(eventName, loadOnEngagement, {
                         once: true,
                         passive: true,
                     });
