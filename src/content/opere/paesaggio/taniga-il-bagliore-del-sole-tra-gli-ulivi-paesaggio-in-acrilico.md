@@ -3,6 +3,7 @@ title: "Taniga: ulivi e luce in campagna (acrilico su tela)"
 date: 2024-07-26T15:22:03+00:00
 description: "Campagna in tela: ulivi a Taniga, bagliore tra i tronchi, prato e fiori rossi; ombre leggere definiscono spazio — luce diversa dalla pineta marittima."
 featuredImage: "/assets/uploads/Paesaggio-Taniga.-.jpg"
+ambientColor: "#151a14"
 year: 2017
 technique: "Acrilico su tela"
 tags: []

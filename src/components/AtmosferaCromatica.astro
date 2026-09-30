@@ -1,0 +1,137 @@
+---
+/**
+ * Atmosfera cromatica: lo spazio intorno alle opere si sposta lentamente verso
+ * l'`ambientColor` dell'opera percettivamente dominante. L'opera resta immobile.
+ *
+ * Markup atteso nella pagina:
+ * - contenitore griglia: [data-atmosfera-zone]
+ * - card:                [data-atmosfera-item] (+ data-ambient="#rrggbb" opzionale)
+ *
+ * Intensità, durata e permanenza minima: token --atmo-* (Silenzio / Rumore) in global.css.
+ * Disattivata con prefers-reduced-motion: reduce, prefers-contrast: more, forced-colors: active.
+ */
+---
+
+<div class="atmosfera" data-atmosfera aria-hidden="true"></div>
+
+<script is:inline>
+    (() => {
+        const layer = document.querySelector("[data-atmosfera]");
+        if (!(layer instanceof HTMLElement) || layer.dataset.bound === "true") return;
+        if (!("IntersectionObserver" in window)) return;
+        layer.dataset.bound = "true";
+
+        const disabled = window.matchMedia(
+            "(prefers-reduced-motion: reduce), (prefers-contrast: more), (forced-colors: active)",
+        );
+        const zones = Array.from(document.querySelectorAll("[data-atmosfera-zone]"));
+        const items = Array.from(document.querySelectorAll("[data-atmosfera-item]"));
+        if (!zones.length || !items.length) return;
+
+        const HYSTERESIS = 1.25; // la nuova candidata deve superare l'attuale del 25%
+        const areas = new Map(); // card -> area visibile nella fascia centrale
+        const visibleZones = new Set();
+        let currentCard = null;
+        let currentColor = "";
+        let pendingCard = undefined;
+        let pendingTimer = 0;
+
+        const dwellMs = () =>
+            parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--atmo-dwell")) || 900;
+
+        const applyColor = (color) => {
+            if (color === currentColor) return;
+            currentColor = color;
+            if (color) layer.style.setProperty("--atmo-target", color);
+            else layer.style.removeProperty("--atmo-target");
+        };
+
+        const commit = (card) => {
+            currentCard = card;
+            applyColor(card ? card.dataset.ambient || "" : "");
+        };
+
+        const schedule = (card, delay) => {
+            if (card === pendingCard) return;
+            window.clearTimeout(pendingTimer);
+            pendingCard = card;
+            pendingTimer = window.setTimeout(() => {
+                pendingCard = undefined;
+                if (card === pickDominant()) commit(card);
+            }, delay);
+        };
+
+        // Card con la maggiore area dentro la fascia centrale; null = nessuna / fuori zona.
+        const pickDominant = () => {
+            if (!visibleZones.size) return null;
+            let best = null;
+            let bestArea = 0;
+            areas.forEach((area, card) => {
+                if (area > bestArea) {
+                    best = card;
+                    bestArea = area;
+                }
+            });
+            if (best && currentCard && best !== currentCard) {
+                const currentArea = areas.get(currentCard) || 0;
+                if (currentArea > 0 && bestArea < currentArea * HYSTERESIS) return currentCard;
+            }
+            return best;
+        };
+
+        const evaluate = () => {
+            if (disabled.matches) return;
+            const dominant = pickDominant();
+            if (dominant === currentCard) {
+                window.clearTimeout(pendingTimer);
+                pendingCard = undefined;
+                return;
+            }
+            // Fascia vuota o uscita dalla zona opere: ritorno al base con attesa più lunga.
+            schedule(dominant, dominant ? dwellMs() : dwellMs() * 2);
+        };
+
+        const bandObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const r = entry.intersectionRect;
+                    if (entry.isIntersecting && r.width * r.height > 0) {
+                        areas.set(entry.target, r.width * r.height);
+                    } else {
+                        areas.delete(entry.target);
+                    }
+                });
+                evaluate();
+            },
+            { rootMargin: "-38% 0px -38% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] },
+        );
+
+        const zoneObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) visibleZones.add(entry.target);
+                else visibleZones.delete(entry.target);
+            });
+            evaluate();
+        });
+
+        items.forEach((item) => bandObserver.observe(item));
+        zones.forEach((zone) => zoneObserver.observe(zone));
+
+        // Navigazione da tastiera: la card a fuoco diventa candidata.
+        items.forEach((item) =>
+            item.addEventListener("focusin", () => {
+                if (disabled.matches || !item.matches(":focus-visible")) return;
+                window.clearTimeout(pendingTimer);
+                pendingCard = undefined;
+                commit(item);
+            }),
+        );
+
+        disabled.addEventListener?.("change", () => {
+            window.clearTimeout(pendingTimer);
+            pendingCard = undefined;
+            if (disabled.matches) commit(null);
+            else evaluate();
+        });
+    })();
+</script>

@@ -18,6 +18,8 @@ interface Props {
     context?: "home" | "blog" | "page";
     locale?: Locale;
     alternateUrl?: string | null;
+    /** Abilita le View Transition cross-document (progressive enhancement) su questa pagina. */
+    viewTransitions?: boolean;
 }
 
 const {
@@ -30,6 +32,7 @@ const {
     ogType,
     locale = "it",
     alternateUrl,
+    viewTransitions = false,
 } = Astro.props;
 
 const localeCopy = localeConfig[locale];
@@ -134,7 +137,27 @@ const googleFontsHref = "https://fonts.googleapis.com/css2?family=Inter:wght@300
         {absoluteImage && <meta name="twitter:image" content={absoluteImage} />}
         <script is:inline>
             document.documentElement.classList.add("js");
+            // Applica subito la modalità percettiva salvata: reveal e View Transition
+            // leggono i token Silenzio/Rumore prima del primo render.
+            try {
+                const modalita = localStorage.getItem("modalita-percettiva");
+                if (modalita === "silenzio" || modalita === "rumore") {
+                    document.documentElement.setAttribute("data-modalita-percettiva", modalita);
+                    document.documentElement.setAttribute("data-silent", modalita === "silenzio" ? "true" : "false");
+                }
+            } catch {}
         </script>
+        {
+            viewTransitions && (
+                <style is:inline>
+                    @media (prefers-reduced-motion: no-preference) {
+                        @view-transition {
+                            navigation: auto;
+                        }
+                    }
+                </style>
+            )
+        }
 
         <slot name="head" />
 

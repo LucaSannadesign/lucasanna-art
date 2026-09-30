@@ -6,6 +6,7 @@ import TempoDiSguardo from "../../components/TempoDiSguardo.astro";
 import RevealNarrativo from "../../components/RevealNarrativo.astro";
 import TestoMutabile from "../../components/TestoMutabile.astro";
 import MemoriaVisiva from "../../components/MemoriaVisiva.astro";
+import AtmosferaCromatica from "../../components/AtmosferaCromatica.astro";
 import PercorsoTrigger from "../../components/PercorsoTrigger.astro";
 import PercorsoOverlay from "../../components/PercorsoOverlay.astro";
 import ContactFormScript from "../../components/ContactFormScript.astro";
@@ -581,7 +582,11 @@ if (isCategoryPage) {
     canonicalUrl={operaCanonicalUrl}
     ogType={!isCategoryPage ? "article" : "website"}
     context="blog"
+    viewTransitions
 >
+    {!isCategoryPage && entry.data.featuredImage && (
+        <link slot="head" rel="expect" href="#opera-hero" blocking="render" />
+    )}
     {isCategoryPage ? (
         <!-- Category Gallery View -->
         <div class="py-12 md:py-20 px-4">
@@ -623,6 +628,7 @@ if (isCategoryPage) {
             <div
                 id="opere-grid"
                 class="opere-gallery grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-24 max-w-7xl mx-auto"
+                data-atmosfera-zone
             >
                 {
                     categoryWorks.map((work, index) => {
@@ -639,12 +645,14 @@ if (isCategoryPage) {
                             data-fx-card
                             data-reveal-item
                             data-reveal-order={String(index)}
+                            data-atmosfera-item
+                            data-ambient={work.data.ambientColor}
                             data-memoria-slug={work.slug}
                             data-categoria={category}
                             data-tipo={category}
                             data-tema={tags}
                         >
-                            <div class="opere-media aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative">
+                            <div class="opere-media aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative" data-reveal-media>
                                 {work.data.featuredImage ? (
                                     <img
                                         src={work.data.featuredImage}
@@ -652,7 +660,7 @@ if (isCategoryPage) {
                                         data-opera-reattiva
                                         data-gaze-media
                                         data-parallax-strength="3"
-                                        style={`view-transition-name: opera-${work.slug.replaceAll("/", "-")};`}
+                                        data-vt-media
                                         class="w-full h-full object-cover"
                                     />
                                 ) : (
@@ -710,6 +718,7 @@ if (isCategoryPage) {
             <PercorsoOverlay works={percorsoWorks} />
         </div>
 
+        <AtmosferaCromatica />
         <RevealNarrativo enabled={INTERACTIONS.reveal} selector="[data-reveal-item]" />
         <OperaReattiva enabled={INTERACTIONS.reactiveMotion} selector="[data-opera-reattiva]" />
         <MemoriaVisiva enabled={INTERACTIONS.memoriaVisiva} selector="[data-memoria-slug]" />
@@ -755,8 +764,6 @@ if (isCategoryPage) {
         <div
             class="mb-16 relative"
             data-tempo-sguardo
-            data-reveal-item
-            data-reveal-order="3"
             data-memoria-slug={entry.slug}
         >
             {
@@ -765,8 +772,9 @@ if (isCategoryPage) {
                         src={entry.data.featuredImage}
                         alt={operaImageAlt}
                         title={entry.data.imageTitle || undefined}
+                        id="opera-hero"
                         data-opera-reattiva
-                        style={`view-transition-name: opera-${entry.slug.replaceAll("/", "-")};`}
+                        data-vt-hero
                         class="w-full h-auto max-h-[85vh] object-contain mx-auto shadow-2xl"
                     />
                 )
@@ -1008,6 +1016,7 @@ if (isCategoryPage) {
                                     <img
                                         src={work.data.featuredImage}
                                         alt={work.data.imageAlt || work.data.title}
+                                        data-vt-media
                                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                                     />
                                 ) : (

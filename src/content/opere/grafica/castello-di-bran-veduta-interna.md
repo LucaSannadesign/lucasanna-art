@@ -11,6 +11,7 @@ date: "2026-05-25"
 status: "ready"
 
 featuredImage: "/assets/uploads/castello-di-bran-veduta-interna.webp"
+ambientColor: "#1a1917"
 image: "/assets/uploads/castello-di-bran-veduta-interna.webp"
 coverImage: "/assets/uploads/castello-di-bran-veduta-interna.webp"
 alt: "Disegno a grafite del Castello di Bran visto da un terrazzo interno, con torre centrale, architetture gotiche e forti contrasti chiaroscurali."

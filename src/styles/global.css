@@ -15,6 +15,41 @@
     --perc-transition: 1200ms;
     --perc-ui-opacity: 0.9;
     --opere-fx-factor: 1;
+
+    /* Interaction design — reveal "messa a fuoco" + View Transition.
+       Valori base = Rumore (versione completa); Silenzio li attenua sotto. */
+    --reveal-blur: 6px;
+    --reveal-text-blur: 2px;
+    --reveal-scale: 1.025;
+    --reveal-fade-duration: 1100ms;
+    --reveal-media-duration: 1600ms;
+    --reveal-stagger: 120ms;
+    --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --vt-duration: 720ms;
+    --vt-root-duration: 460ms;
+    --vt-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* Atmosfera cromatica (Rumore): quota di ambientColor mescolata allo sfondo base. */
+    --atmo-base: #121212;
+    --atmo-intensity: 70%;
+    --atmo-duration: 3000ms;
+    --atmo-dwell: 700ms;
+    --atmo-ease: cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+html[data-silent="true"] {
+    --reveal-blur: 2.5px;
+    --reveal-text-blur: 1px;
+    --reveal-scale: 1.01;
+    --reveal-fade-duration: 800ms;
+    --reveal-media-duration: 1000ms;
+    --reveal-stagger: 80ms;
+    --vt-duration: 520ms;
+    --vt-root-duration: 340ms;
+
+    --atmo-intensity: 32%;
+    --atmo-duration: 4500ms;
+    --atmo-dwell: 1100ms;
 }
 
 html[data-modalita-percettiva="rumore"] {
@@ -71,15 +106,18 @@ body {
     line-height: 1.7;
 }
 
-.js [data-reveal-item] {
-    opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 900ms ease, transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+/* Reveal "messa a fuoco" (RevealNarrativo): nascosto solo con JS attivo e
+   senza riduzione del movimento. L'animazione è gestita via Web Animations API. */
+@media (prefers-reduced-motion: no-preference) {
+    html.js [data-reveal-item]:not(.is-revealed) {
+        opacity: 0;
+    }
 }
 
-.js [data-reveal-item].is-revealed {
-    opacity: 1;
-    transform: translateY(0);
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
 }
 
 [data-opera-reattiva] {
@@ -236,22 +274,10 @@ html[data-silent="true"] #opere-filter-select {
     flex-direction: column;
 }
 
-/* Entrance Animation State */
-[data-gallery-card] {
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-/* Animation trigger class */
-[data-gallery-card].is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Smooth entrance transition */
+/* Ingresso card: gestito da RevealNarrativo ([data-reveal-item]).
+   Qui resta solo la transizione del leggero spostamento in focus (is-grid-break). */
 .js [data-gallery-card] {
-    transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), 
-                transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .opere-gallery [data-gallery-card].was-seen [data-opera-reattiva] {
@@ -491,10 +517,42 @@ body.ui-evanescente :focus-within {
     opacity: 1;
 }
 
-.has-view-transition::view-transition-old(root),
-.has-view-transition::view-transition-new(root) {
-    animation-duration: 420ms;
-    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+/* View Transition cross-document (opt-in per pagina in BaseLayout).
+   La miniatura cliccata e l'immagine principale condividono `opera-attiva`. */
+[data-vt-hero] {
+    view-transition-name: opera-attiva;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: var(--vt-root-duration);
+    animation-timing-function: var(--vt-ease);
+}
+
+::view-transition-group(opera-attiva) {
+    animation-duration: var(--vt-duration);
+    animation-timing-function: var(--vt-ease);
+}
+
+/* Miniatura 4:5 in cover → opera intera: niente deformazioni durante l'espansione. */
+::view-transition-old(opera-attiva),
+::view-transition-new(opera-attiva) {
+    height: 100%;
+    object-fit: cover;
+    animation-duration: var(--vt-duration);
+    animation-timing-function: var(--vt-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-vt-hero] {
+        view-transition-name: none;
+    }
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
 }
 
 /* ============================================
@@ -974,4 +1032,41 @@ section:not(:has(.opere-gallery)) .group > div[class*="aspect-"] img {
 }
 ::-webkit-scrollbar-thumb:hover {
     background: #444;
+}
+
+/* ============================================
+   ATMOSFERA CROMATICA (AtmosferaCromatica.astro)
+   Livello fisso dietro al contenuto: l'opera resta immobile, cambia lo spazio.
+   ============================================ */
+
+body:has(> main .atmosfera) {
+    isolation: isolate;
+}
+
+.atmosfera {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: color-mix(
+        in oklab,
+        var(--atmo-target, var(--atmo-base)) var(--atmo-intensity),
+        var(--atmo-base)
+    );
+    transition: background-color var(--atmo-duration) var(--atmo-ease);
+    /* Maschera molto ampia: sfuma solo verso gli angoli, nessun alone localizzato. */
+    -webkit-mask-image: radial-gradient(ellipse 150% 120% at 50% 45%, #000 55%, transparent 100%);
+    mask-image: radial-gradient(ellipse 150% 120% at 50% 45%, #000 55%, transparent 100%);
+}
+
+/* Silenzio azzera le transizioni globali: l'atmosfera resta lenta per definizione. */
+html[data-silent="true"] .atmosfera {
+    transition-duration: var(--atmo-duration) !important;
+    transition-timing-function: var(--atmo-ease) !important;
+}
+
+@media (prefers-reduced-motion: reduce), (prefers-contrast: more), (forced-colors: active) {
+    .atmosfera {
+        display: none;
+    }
 }

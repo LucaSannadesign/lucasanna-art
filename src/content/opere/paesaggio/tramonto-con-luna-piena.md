@@ -3,6 +3,7 @@ title: "Costa sarda: tramonto e luna piena (acrilico su tela)"
 date: 2025-05-26T10:56:54+00:00
 description: "Sulla tela: orizzonte marino al crepuscolo con luna piena; cielo caldo e mare che dialogano senza eccessi descrittivi, ancoraggio sull'orizzonte."
 featuredImage: "/assets/uploads/Tramonto-con-luna-piena-acrilico-su-tela-2023.webp"
+ambientColor: "#10191b"
 year: 2023
 technique: "Acrilico su tela"
 tags: []

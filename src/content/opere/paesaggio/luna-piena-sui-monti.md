@@ -3,6 +3,7 @@ title: "Luna piena sopra la catena montuosa (acquerello)"
 date: 2024-07-28T14:54:47+00:00
 description: "In acquerello notturno: disco lunare sopra creste e vallata in sfumature morbide; ampiezza orizzontale e resa liquida sul paesaggio montano."
 featuredImage: "/assets/uploads/Luna-piena-sui-monti-e1722180793733.jpg"
+ambientColor: "#111820"
 year: 2020
 technique: "Acquerello su carta"
 tags: []

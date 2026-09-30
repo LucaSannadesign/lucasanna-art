@@ -7,6 +7,7 @@ import OperaReattiva from "../../components/OperaReattiva.astro";
 import RevealNarrativo from "../../components/RevealNarrativo.astro";
 import TestoMutabile from "../../components/TestoMutabile.astro";
 import MemoriaVisiva from "../../components/MemoriaVisiva.astro";
+import AtmosferaCromatica from "../../components/AtmosferaCromatica.astro";
 
 const INTERACTIONS = {
     reactiveMotion: true,
@@ -91,6 +92,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
 <BaseLayout
     title="Opere | Luca Sanna"
     description="Galleria delle opere di Luca Sanna"
+    viewTransitions
 >
     <div class="-mt-4 pb-12 md:-mt-16 md:pb-20 px-4">
         <section
@@ -183,6 +185,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
         <div
             id="opere-grid"
             class="opere-gallery grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-24 max-w-7xl mx-auto"
+            data-atmosfera-zone
         >
             {
                 sortedWorks.map((work, index) => {
@@ -199,12 +202,14 @@ const percorsoWorks = sortedWorks.map((work) => ({
                         data-fx-card
                         data-reveal-item
                         data-reveal-order={String(index)}
+                        data-atmosfera-item
+                        data-ambient={work.data.ambientColor}
                         data-memoria-slug={work.slug}
                         data-categoria={category}
                         data-tipo={category}
                         data-tema={tags}
                     >
-                        <div class="opere-media aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative">
+                        <div class="opere-media aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative" data-reveal-media>
                             {work.data.featuredImage ? (
                                 <img
                                     src={work.data.featuredImage}
@@ -212,7 +217,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
                                     data-opera-reattiva
                                     data-gaze-media
                                     data-parallax-strength="3"
-                                    style={`view-transition-name: opera-${work.slug.replaceAll("/", "-")};`}
+                                    data-vt-media
                                     class="w-full h-full object-cover"
                                 />
                             ) : (
@@ -263,6 +268,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
     </div>
 
     <RevealNarrativo enabled={INTERACTIONS.reveal} selector="[data-reveal-item]" />
+    <AtmosferaCromatica />
     <OperaReattiva enabled={INTERACTIONS.reactiveMotion} selector="[data-opera-reattiva]" />
     <MemoriaVisiva enabled={INTERACTIONS.memoriaVisiva} selector="[data-memoria-slug]" />
 
@@ -413,7 +419,6 @@ const percorsoWorks = sortedWorks.map((work) => ({
         document.addEventListener("astro:page-load", initFocusProgressivoFallback);
     </script>
 
-    <script src="../../scripts/masonry-entrance.js"></script>
 
     <style>
         .opere-intro :global(button.opere-filter-btn--editorial) {
