@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getEntry, getCollection, type CollectionEntry } from "astro:content";
 import { netlifyImageSrcSet, netlifyImageUrl } from "../lib/imageCdn";
+import RevealNarrativo from "../components/RevealNarrativo.astro";
 
 const entry = await getEntry("pages", "index");
 if (!entry) throw new Error("Missing index page");
@@ -42,6 +43,7 @@ const heroAvifSrcSet = heroImage
 	ogImageWidth={1200}
 	ogImageHeight={630}
 	canonicalUrl="https://lucasanna.art/"
+	viewTransitions
 >
 	{
 		heroImage && (
@@ -157,11 +159,16 @@ const heroAvifSrcSet = heroImage
 			class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10"
 		>
 			{
-				recentWorks.map((work) => {
+				recentWorks.map((work, index) => {
 					const image = work.data.featuredImage;
 					return (
-						<a href={`/opere/${work.slug}/`} class="group block">
-							<div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6">
+						<a
+							href={`/opere/${work.slug}/`}
+							class="group block"
+							data-reveal-item
+							data-reveal-order={String(index)}
+						>
+							<div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6" data-reveal-media>
 								{image && (
 									<img
 										src={netlifyImageUrl(image, 640, 76)}
@@ -170,6 +177,7 @@ const heroAvifSrcSet = heroImage
 										alt={work.data.imageAlt || work.data.title}
 										loading="lazy"
 										decoding="async"
+										data-vt-media
 										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
 									/>
 								)}
@@ -282,4 +290,6 @@ const heroAvifSrcSet = heroImage
 		initHomeEditorialCta();
 		document.addEventListener("astro:page-load", initHomeEditorialCta);
 	</script>
+
+	<RevealNarrativo selector="[data-reveal-item]" />
 </BaseLayout>

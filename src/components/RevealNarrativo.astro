@@ -7,28 +7,108 @@ interface Props {
 const { selector = "[data-reveal-item]", enabled = true } = Astro.props;
 ---
 
+<!--
+    Reveal "messa a fuoco": opacità + leggero blur + scala minima, senza traslazioni.
+    - Stato nascosto iniziale solo in CSS (html.js + prefers-reduced-motion: no-preference),
+      quindi senza JS o con riduzione del movimento il contenuto è sempre visibile.
+    - Animazioni via Web Animations API: non interferiscono con le transition CSS
+      di hover/parallax né con le regole `!important` della modalità Silenzio.
+    - Intensità e durate dai token CSS --reveal-* (Silenzio / Rumore in global.css).
+-->
 <script is:inline define:vars={{ selector, enabled }}>
     const initRevealNarrativo = () => {
-        if (!enabled || !("IntersectionObserver" in window)) return;
+        const items = Array.from(document.querySelectorAll(selector)).filter(
+            (el) => el instanceof HTMLElement && el.dataset.revealBound !== "true",
+        );
+        if (!items.length) return;
+        items.forEach((el) => (el.dataset.revealBound = "true"));
 
-        const items = Array.from(document.querySelectorAll(selector));
+        const reveal = (el) => el.classList.add("is-revealed");
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+        if (
+            !enabled ||
+            reducedMotion.matches ||
+            !("IntersectionObserver" in window) ||
+            typeof Element.prototype.animate !== "function"
+        ) {
+            items.forEach(reveal);
+            return;
+        }
+
+        const readTokens = () => {
+            const style = getComputedStyle(document.documentElement);
+            const read = (name, fallback) => style.getPropertyValue(name).trim() || fallback;
+            const ms = (name, fallback) => parseFloat(read(name, "")) || fallback;
+            let blur = parseFloat(read("--reveal-blur", "")) || 0;
+            // Su touch il blur resta più contenuto (costo GPU su immagini grandi).
+            if (window.matchMedia("(pointer: coarse)").matches) blur = Math.min(blur, 4);
+            return {
+                blur,
+                textBlur: parseFloat(read("--reveal-text-blur", "")) || 0,
+                scale: parseFloat(read("--reveal-scale", "")) || 1,
+                fade: ms("--reveal-fade-duration", 900),
+                focus: ms("--reveal-media-duration", 1200),
+                stagger: ms("--reveal-stagger", 100),
+                easing: read("--reveal-ease", "cubic-bezier(0.22, 1, 0.36, 1)"),
+            };
+        };
+
+        const animateIn = (el, delay, t) => {
+            const timing = { delay, easing: t.easing, fill: "backwards" };
+            const media = el.matches("[data-reveal-media]") ? el : el.querySelector("[data-reveal-media]");
+
+            el.animate([{ opacity: 0 }, { opacity: 1 }], { ...timing, duration: t.fade });
+
+            if (media) {
+                if (t.blur > 0) {
+                    media.animate(
+                        [{ filter: `blur(${t.blur}px)` }, { filter: "blur(0px)" }],
+                        { ...timing, duration: t.focus },
+                    );
+                }
+                const img = media.querySelector("img");
+                if (img && t.scale !== 1) {
+                    // Proprietà `scale` indipendente: non tocca `transform` (hover/parallax).
+                    img.animate([{ scale: String(t.scale) }, { scale: "1" }], { ...timing, duration: t.focus });
+                }
+            } else if (t.textBlur > 0) {
+                el.animate(
+                    [{ filter: `blur(${t.textBlur}px)` }, { filter: "blur(0px)" }],
+                    { ...timing, duration: t.fade },
+                );
+            }
+
+            // Lo stato finale è quello CSS: con fill "backwards" nessuna animazione resta appesa.
+            reveal(el);
+        };
+
         const observer = new IntersectionObserver(
             (entries) => {
-                entries.forEach((entry) => {
-                    if (!entry.isIntersecting) return;
-                    const el = entry.target;
-                    if (!(el instanceof HTMLElement)) return;
-                    const order = Number(el.dataset.revealOrder || 0);
-                    window.setTimeout(() => {
-                        el.classList.add("is-revealed");
-                    }, Math.min(order * 70, 700));
+                const entering = entries
+                    .filter((entry) => entry.isIntersecting)
+                    .map((entry) => entry.target)
+                    .sort((a, b) => Number(a.dataset.revealOrder || 0) - Number(b.dataset.revealOrder || 0));
+                if (!entering.length) return;
+
+                const tokens = readTokens();
+                // Stagger per gruppo di elementi che entrano insieme, limitato a 4 passi.
+                entering.forEach((el, index) => {
                     observer.unobserve(el);
+                    animateIn(el, Math.min(index, 3) * tokens.stagger, tokens);
                 });
             },
-            { threshold: 0.2 },
+            { threshold: 0.12, rootMargin: "0px 0px -4% 0px" },
         );
 
         items.forEach((item) => observer.observe(item));
+
+        // Se l'utente attiva la riduzione del movimento a pagina aperta: mostra tutto.
+        reducedMotion.addEventListener?.("change", (event) => {
+            if (!event.matches) return;
+            observer.disconnect();
+            items.forEach(reveal);
+        });
     };
 
     initRevealNarrativo();

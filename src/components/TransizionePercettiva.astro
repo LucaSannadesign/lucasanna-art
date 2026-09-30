@@ -6,13 +6,57 @@ interface Props {
 const { enabled = true } = Astro.props;
 ---
 
+<!--
+    View Transition galleria → opera (cross-document, progressive enhancement).
+    - L'opt-in avviene per pagina via `@view-transition` (BaseLayout `viewTransitions`),
+      solo con prefers-reduced-motion: no-preference.
+    - Il nome `opera-attiva` viene dato solo alla miniatura cliccata ([data-vt-media]);
+      l'immagine principale della pagina opera ([data-vt-hero]) lo ha via CSS.
+    - Browser senza supporto: navigazione normale, nessun effetto collaterale.
+-->
 <script is:inline define:vars={{ enabled }}>
-    const initTransizionePercettiva = () => {
-        if (!enabled) return;
+    (() => {
         const supported = "startViewTransition" in document;
-        document.documentElement.classList.toggle("has-view-transition", supported);
-    };
+        document.documentElement.classList.toggle("has-view-transition", enabled && supported);
+        if (!enabled || window.__transizionePercettivaBound) return;
+        window.__transizionePercettivaBound = true;
 
-    initTransizionePercettiva();
-    document.addEventListener("astro:page-load", initTransizionePercettiva);
+        const VT_NAME = "opera-attiva";
+
+        const resetNames = () => {
+            document
+                .querySelectorAll("[data-vt-media], [data-vt-hero]")
+                .forEach((el) => el.style.removeProperty("view-transition-name"));
+        };
+
+        document.addEventListener("click", (event) => {
+            if (
+                event.defaultPrevented ||
+                event.button !== 0 ||
+                event.metaKey ||
+                event.ctrlKey ||
+                event.shiftKey ||
+                event.altKey
+            ) {
+                return;
+            }
+            const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
+            const media = link?.querySelector("[data-vt-media]");
+            if (!(media instanceof HTMLElement) || link.target === "_blank") return;
+
+            // Un solo elemento con il nome condiviso: l'hero corrente (se presente) lo cede.
+            resetNames();
+            document
+                .querySelectorAll("[data-vt-hero]")
+                .forEach((el) => el.style.setProperty("view-transition-name", "none"));
+            media.style.setProperty("view-transition-name", VT_NAME);
+        });
+
+        // Ritorno (anche da bfcache): nessun nome residuo sulle miniature,
+        // il rientro in galleria resta una dissolvenza.
+        window.addEventListener("pagereveal", resetNames);
+        window.addEventListener("pageshow", (event) => {
+            if (event.persisted) resetNames();
+        });
+    })();
 </script>

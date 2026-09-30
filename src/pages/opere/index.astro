@@ -91,6 +91,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
 <BaseLayout
     title="Opere | Luca Sanna"
     description="Galleria delle opere di Luca Sanna"
+    viewTransitions
 >
     <div class="-mt-4 pb-12 md:-mt-16 md:pb-20 px-4">
         <section
@@ -204,7 +205,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
                         data-tipo={category}
                         data-tema={tags}
                     >
-                        <div class="opere-media aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative">
+                        <div class="opere-media aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative" data-reveal-media>
                             {work.data.featuredImage ? (
                                 <img
                                     src={work.data.featuredImage}
@@ -212,7 +213,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
                                     data-opera-reattiva
                                     data-gaze-media
                                     data-parallax-strength="3"
-                                    style={`view-transition-name: opera-${work.slug.replaceAll("/", "-")};`}
+                                    data-vt-media
                                     class="w-full h-full object-cover"
                                 />
                             ) : (
@@ -413,7 +414,6 @@ const percorsoWorks = sortedWorks.map((work) => ({
         document.addEventListener("astro:page-load", initFocusProgressivoFallback);
     </script>
 
-    <script src="../../scripts/masonry-entrance.js"></script>
 
     <style>
         .opere-intro :global(button.opere-filter-btn--editorial) {
