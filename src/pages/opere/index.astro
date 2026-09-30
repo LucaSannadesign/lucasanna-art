@@ -7,6 +7,7 @@ import OperaReattiva from "../../components/OperaReattiva.astro";
 import RevealNarrativo from "../../components/RevealNarrativo.astro";
 import TestoMutabile from "../../components/TestoMutabile.astro";
 import MemoriaVisiva from "../../components/MemoriaVisiva.astro";
+import AtmosferaCromatica from "../../components/AtmosferaCromatica.astro";
 
 const INTERACTIONS = {
     reactiveMotion: true,
@@ -184,6 +185,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
         <div
             id="opere-grid"
             class="opere-gallery grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-24 max-w-7xl mx-auto"
+            data-atmosfera-zone
         >
             {
                 sortedWorks.map((work, index) => {
@@ -200,6 +202,8 @@ const percorsoWorks = sortedWorks.map((work) => ({
                         data-fx-card
                         data-reveal-item
                         data-reveal-order={String(index)}
+                        data-atmosfera-item
+                        data-ambient={work.data.ambientColor}
                         data-memoria-slug={work.slug}
                         data-categoria={category}
                         data-tipo={category}
@@ -264,6 +268,7 @@ const percorsoWorks = sortedWorks.map((work) => ({
     </div>
 
     <RevealNarrativo enabled={INTERACTIONS.reveal} selector="[data-reveal-item]" />
+    <AtmosferaCromatica />
     <OperaReattiva enabled={INTERACTIONS.reactiveMotion} selector="[data-opera-reattiva]" />
     <MemoriaVisiva enabled={INTERACTIONS.memoriaVisiva} selector="[data-memoria-slug]" />
 

@@ -28,6 +28,13 @@
     --vt-duration: 720ms;
     --vt-root-duration: 460ms;
     --vt-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* Atmosfera cromatica (Rumore): quota di ambientColor mescolata allo sfondo base. */
+    --atmo-base: #121212;
+    --atmo-intensity: 70%;
+    --atmo-duration: 3000ms;
+    --atmo-dwell: 700ms;
+    --atmo-ease: cubic-bezier(0.37, 0, 0.63, 1);
 }
 
 html[data-silent="true"] {
@@ -39,6 +46,10 @@ html[data-silent="true"] {
     --reveal-stagger: 80ms;
     --vt-duration: 520ms;
     --vt-root-duration: 340ms;
+
+    --atmo-intensity: 32%;
+    --atmo-duration: 4500ms;
+    --atmo-dwell: 1100ms;
 }
 
 html[data-modalita-percettiva="rumore"] {
@@ -1021,4 +1032,41 @@ section:not(:has(.opere-gallery)) .group > div[class*="aspect-"] img {
 }
 ::-webkit-scrollbar-thumb:hover {
     background: #444;
+}
+
+/* ============================================
+   ATMOSFERA CROMATICA (AtmosferaCromatica.astro)
+   Livello fisso dietro al contenuto: l'opera resta immobile, cambia lo spazio.
+   ============================================ */
+
+body:has(> main .atmosfera) {
+    isolation: isolate;
+}
+
+.atmosfera {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: color-mix(
+        in oklab,
+        var(--atmo-target, var(--atmo-base)) var(--atmo-intensity),
+        var(--atmo-base)
+    );
+    transition: background-color var(--atmo-duration) var(--atmo-ease);
+    /* Maschera molto ampia: sfuma solo verso gli angoli, nessun alone localizzato. */
+    -webkit-mask-image: radial-gradient(ellipse 150% 120% at 50% 45%, #000 55%, transparent 100%);
+    mask-image: radial-gradient(ellipse 150% 120% at 50% 45%, #000 55%, transparent 100%);
+}
+
+/* Silenzio azzera le transizioni globali: l'atmosfera resta lenta per definizione. */
+html[data-silent="true"] .atmosfera {
+    transition-duration: var(--atmo-duration) !important;
+    transition-timing-function: var(--atmo-ease) !important;
+}
+
+@media (prefers-reduced-motion: reduce), (prefers-contrast: more), (forced-colors: active) {
+    .atmosfera {
+        display: none;
+    }
 }

@@ -3,6 +3,7 @@ title: "Tucano"
 date: 2025-05-21T17:12:10+00:00
 description: "Tucano acquerello: l'uccello tropicale prende vita con colori intensi e pennellate espressive, tra esuberanza e leggerezza della tecnica."
 featuredImage: "/assets/uploads/tucano-lucasanna.webp"
+ambientColor: "#1d1614"
 year: 2017
 technique: "Acquerello"
 tags: []

@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getEntry, getCollection, type CollectionEntry } from "astro:content";
 import { netlifyImageSrcSet, netlifyImageUrl } from "../lib/imageCdn";
 import RevealNarrativo from "../components/RevealNarrativo.astro";
+import AtmosferaCromatica from "../components/AtmosferaCromatica.astro";
 
 const entry = await getEntry("pages", "index");
 if (!entry) throw new Error("Missing index page");
@@ -157,6 +158,7 @@ const heroAvifSrcSet = heroImage
 		</h2>
 		<div
 			class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10"
+			data-atmosfera-zone
 		>
 			{
 				recentWorks.map((work, index) => {
@@ -167,6 +169,8 @@ const heroAvifSrcSet = heroImage
 							class="group block"
 							data-reveal-item
 							data-reveal-order={String(index)}
+							data-atmosfera-item
+							data-ambient={work.data.ambientColor}
 						>
 							<div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6" data-reveal-media>
 								{image && (
@@ -292,4 +296,5 @@ const heroAvifSrcSet = heroImage
 	</script>
 
 	<RevealNarrativo selector="[data-reveal-item]" />
+	<AtmosferaCromatica />
 </BaseLayout>

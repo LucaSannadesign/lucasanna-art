@@ -3,6 +3,7 @@ title: "Passaggi — figure e transizione (acquerello, 1992)"
 date: 2024-07-28T14:48:12+00:00
 description: "Figurazione liquida: massa rosso-nera, figura lontana, luna scura; l'acquerello resta sul passaggio di stato, non su narrazione illustrativa."
 featuredImage: "/assets/uploads/Passaggi-lucasanna.webp"
+ambientColor: "#1f1712"
 year: 1992
 technique: "Acquerello su carta"
 tags: []

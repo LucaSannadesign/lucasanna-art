@@ -43,6 +43,11 @@ const opere = defineCollection({
         imageTitle: z.string().optional(),
         imageCaption: z.string().optional(),
         ogImage: z.string().optional(),
+        // Atmosfera cromatica: colore scuro e desaturato dello spazio intorno all'opera.
+        ambientColor: z
+            .string()
+            .regex(/^#[0-9a-fA-F]{6}$/, "ambientColor deve essere un colore esadecimale #rrggbb")
+            .optional(),
         seo: z
             .object({
                 primary: z.string(),
