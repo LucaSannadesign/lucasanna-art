@@ -1191,7 +1191,7 @@ const {
                 marker.id = "wow-qa-preview";
                 marker.style.cssText =
                     "position:fixed;left:12px;bottom:12px;z-index:9999;padding:8px 10px;background:#111;color:#fff;border:1px solid #777;font:12px monospace";
-                marker.textContent = "WOW_QA_PREVIEW: editor + ambient + tilt";
+                marker.textContent = `WOW_QA_PREVIEW: reduce=${reducedMotion.matches}; fxCanvas=${stageFxCanvas instanceof HTMLCanvasElement ? stageFxCanvas.width + "x" + stageFxCanvas.height : "missing"}`;
                 document.body.appendChild(marker);
             };
             window.setTimeout(runWowQaPreview, 120);
