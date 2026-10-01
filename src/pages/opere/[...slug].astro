@@ -7,6 +7,7 @@ import RevealNarrativo from "../../components/RevealNarrativo.astro";
 import TestoMutabile from "../../components/TestoMutabile.astro";
 import MemoriaVisiva from "../../components/MemoriaVisiva.astro";
 import AtmosferaCromatica from "../../components/AtmosferaCromatica.astro";
+import InterpretaOpera from "../../components/InterpretaOpera.astro";
 import PercorsoTrigger from "../../components/PercorsoTrigger.astro";
 import PercorsoOverlay from "../../components/PercorsoOverlay.astro";
 import ContactFormScript from "../../components/ContactFormScript.astro";
@@ -794,6 +795,15 @@ if (isCategoryPage) {
                 L'opera si apre nel tempo del tuo sguardo.
             </p>
         </div>
+
+        {entry.data.interpretationEnabled && entry.data.featuredImage && (
+            <InterpretaOpera
+                title={entry.data.title}
+                image={entry.data.featuredImage}
+                shareUrl={operaShareUrl}
+                slug={entry.slug}
+            />
+        )}
 
         {showOperaFallback && fallbackCopy ? (
             <article

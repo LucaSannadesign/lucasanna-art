@@ -1,0 +1,1139 @@
+---
+interface Props {
+    enabled?: boolean;
+    title: string;
+    image: string;
+    shareUrl: string;
+    slug: string;
+}
+
+const {
+    enabled = true,
+    title,
+    image,
+    shareUrl,
+    slug,
+} = Astro.props;
+---
+
+{enabled && (
+    <section class="interpreta-entry" aria-labelledby="interpreta-entry-title">
+        <p id="interpreta-entry-title" class="interpreta-entry-kicker">Partecipa allo sguardo</p>
+        <button
+            type="button"
+            class="interpreta-entry-button"
+            data-interpreta-open
+            aria-haspopup="dialog"
+            aria-controls="interpreta-opera-modal"
+        >
+            <span>Interpreta quest’opera</span>
+            <span aria-hidden="true">→</span>
+        </button>
+        <p class="interpreta-entry-copy">
+            Scegli un frammento, componi il tuo sguardo e crea un’immagine personale da salvare o condividere.
+        </p>
+    </section>
+
+    <div
+        id="interpreta-opera-modal"
+        class="interpreta-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="interpreta-modal-title"
+        aria-describedby="interpreta-modal-description"
+        data-interpreta-modal
+        hidden
+    >
+        <button
+            type="button"
+            class="interpreta-backdrop"
+            aria-label="Chiudi Interpreta"
+            data-interpreta-close
+        ></button>
+
+        <div class="interpreta-shell">
+            <header class="interpreta-header">
+                <div>
+                    <p class="interpreta-eyebrow">Luca Sanna · esperienza partecipativa</p>
+                    <h2 id="interpreta-modal-title" class="interpreta-title">Il mio sguardo</h2>
+                    <p id="interpreta-modal-description" class="interpreta-subtitle">
+                        L’opera resta originale. Tu scegli soltanto come guardarla.
+                    </p>
+                </div>
+                <button type="button" class="interpreta-close" data-interpreta-close>
+                    Chiudi
+                </button>
+            </header>
+
+            <section class="interpreta-step" data-interpreta-step="intro">
+                <div class="interpreta-intro-grid">
+                    <div class="interpreta-intro-copy">
+                        <p class="interpreta-step-label">01 · Entra nell’opera</p>
+                        <h3>Trova il frammento che ti appartiene.</h3>
+                        <p>
+                            Sposta l’immagine, avvicinati a un dettaglio e scegli il formato. Il sito creerà una composizione firmata da condividere senza modificare l’opera originale.
+                        </p>
+                        <div class="interpreta-intro-actions">
+                            <button type="button" class="interpreta-primary" data-interpreta-start>
+                                Inizia
+                                <span aria-hidden="true">→</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <figure class="interpreta-intro-preview">
+                        <img src={image} alt="" loading="eager" decoding="async" />
+                        <figcaption>
+                            <span>Uno sguardo su</span>
+                            <strong>{title}</strong>
+                            <small>Luca Sanna · lucasanna.art</small>
+                        </figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="interpreta-step" data-interpreta-step="editor" hidden>
+                <div class="interpreta-editor-layout">
+                    <div class="interpreta-canvas-wrap">
+                        <canvas
+                            data-interpreta-canvas
+                            tabindex="0"
+                            aria-label="Editor dell’opera. Trascina per spostare l’immagine; usa le frecce della tastiera per piccoli spostamenti."
+                        ></canvas>
+                        <p class="interpreta-canvas-hint">
+                            Trascina per comporre · frecce per piccoli spostamenti
+                        </p>
+                    </div>
+
+                    <aside class="interpreta-controls" aria-label="Controlli composizione">
+                        <div class="interpreta-control-group">
+                            <p class="interpreta-control-title">Formato</p>
+                            <div class="interpreta-format-grid" role="group" aria-label="Formato immagine">
+                                <button type="button" data-interpreta-format="square">
+                                    <span class="format-icon square"></span>
+                                    <span>1:1</span>
+                                </button>
+                                <button type="button" data-interpreta-format="portrait" aria-pressed="true">
+                                    <span class="format-icon portrait"></span>
+                                    <span>4:5</span>
+                                </button>
+                                <button type="button" data-interpreta-format="story">
+                                    <span class="format-icon story"></span>
+                                    <span>9:16</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <label class="interpreta-control-group">
+                            <span class="interpreta-control-title">Avvicinamento</span>
+                            <div class="interpreta-range-row">
+                                <span aria-hidden="true">−</span>
+                                <input
+                                    type="range"
+                                    min="1"
+                                    max="2.6"
+                                    step="0.01"
+                                    value="1"
+                                    data-interpreta-zoom
+                                />
+                                <span aria-hidden="true">+</span>
+                            </div>
+                        </label>
+
+                        <button type="button" class="interpreta-reset" data-interpreta-reset>
+                            Ripristina inquadratura
+                        </button>
+
+                        <div class="interpreta-editor-actions">
+                            <button type="button" class="interpreta-secondary" data-interpreta-back>
+                                Indietro
+                            </button>
+                            <button type="button" class="interpreta-primary" data-interpreta-create>
+                                Crea la mia interpretazione
+                                <span aria-hidden="true">→</span>
+                            </button>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="interpreta-step" data-interpreta-step="result" hidden>
+                <div class="interpreta-result-layout">
+                    <div class="interpreta-result-card">
+                        <img data-interpreta-result-img alt={`Interpretazione personale di ${title}`} />
+                    </div>
+
+                    <div class="interpreta-result-copy">
+                        <p class="interpreta-step-label">03 · Porta con te lo sguardo</p>
+                        <h3>La tua interpretazione è pronta.</h3>
+                        <p>
+                            Salvala sul dispositivo oppure apri il pannello di condivisione. Nessun account e nessun upload: l’immagine viene generata nel browser.
+                        </p>
+
+                        <div class="interpreta-result-actions">
+                            <button type="button" class="interpreta-primary" data-interpreta-share>
+                                Condividi
+                                <span aria-hidden="true">↗</span>
+                            </button>
+                            <button type="button" class="interpreta-secondary" data-interpreta-download>
+                                Salva immagine
+                            </button>
+                        </div>
+
+                        <button type="button" class="interpreta-again" data-interpreta-edit-again>
+                            Modifica inquadratura
+                        </button>
+
+                        <p class="interpreta-status" data-interpreta-status role="status" aria-live="polite"></p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script is:inline define:vars={{ title, image, shareUrl, slug }}>
+        (() => {
+            const modal = document.querySelector("[data-interpreta-modal]");
+            if (!(modal instanceof HTMLElement) || modal.dataset.bound === "true") return;
+            modal.dataset.bound = "true";
+
+            const openButton = document.querySelector("[data-interpreta-open]");
+            const closeButtons = Array.from(modal.querySelectorAll("[data-interpreta-close]"));
+            const startButton = modal.querySelector("[data-interpreta-start]");
+            const backButton = modal.querySelector("[data-interpreta-back]");
+            const createButton = modal.querySelector("[data-interpreta-create]");
+            const editAgainButton = modal.querySelector("[data-interpreta-edit-again]");
+            const shareButton = modal.querySelector("[data-interpreta-share]");
+            const downloadButton = modal.querySelector("[data-interpreta-download]");
+            const resetButton = modal.querySelector("[data-interpreta-reset]");
+            const zoomInput = modal.querySelector("[data-interpreta-zoom]");
+            const editorCanvas = modal.querySelector("[data-interpreta-canvas]");
+            const resultImg = modal.querySelector("[data-interpreta-result-img]");
+            const status = modal.querySelector("[data-interpreta-status]");
+            const formatButtons = Array.from(modal.querySelectorAll("[data-interpreta-format]"));
+            const steps = Array.from(modal.querySelectorAll("[data-interpreta-step]"));
+
+            if (
+                !(openButton instanceof HTMLButtonElement) ||
+                !(startButton instanceof HTMLButtonElement) ||
+                !(backButton instanceof HTMLButtonElement) ||
+                !(createButton instanceof HTMLButtonElement) ||
+                !(editAgainButton instanceof HTMLButtonElement) ||
+                !(shareButton instanceof HTMLButtonElement) ||
+                !(downloadButton instanceof HTMLButtonElement) ||
+                !(resetButton instanceof HTMLButtonElement) ||
+                !(zoomInput instanceof HTMLInputElement) ||
+                !(editorCanvas instanceof HTMLCanvasElement) ||
+                !(resultImg instanceof HTMLImageElement)
+            ) {
+                return;
+            }
+
+            const formats = {
+                square: { width: 1080, height: 1080, label: "1:1" },
+                portrait: { width: 1080, height: 1350, label: "4:5" },
+                story: { width: 1080, height: 1920, label: "9:16" },
+            };
+
+            let currentFormat = "portrait";
+            let zoom = 1;
+            let panX = 0;
+            let panY = 0;
+            let currentBlob = null;
+            let currentObjectUrl = "";
+            let lastFocused = null;
+            let dragging = false;
+            let pointerId = null;
+            let dragStartX = 0;
+            let dragStartY = 0;
+            let dragStartPanX = 0;
+            let dragStartPanY = 0;
+
+            const artwork = new Image();
+            artwork.decoding = "async";
+            artwork.src = image;
+
+            const pushEvent = (name, extra = {}) => {
+                try {
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({
+                        event: name,
+                        artwork_slug: slug,
+                        artwork_title: title,
+                        ...extra,
+                    });
+                } catch {}
+            };
+
+            const setStatus = (message = "") => {
+                if (status instanceof HTMLElement) status.textContent = message;
+            };
+
+            const setStep = (name) => {
+                steps.forEach((step) => {
+                    if (!(step instanceof HTMLElement)) return;
+                    step.hidden = step.dataset.interpretaStep !== name;
+                });
+                setStatus("");
+                if (name === "editor") {
+                    window.requestAnimationFrame(() => {
+                        resizeEditorCanvas();
+                        drawEditor();
+                        editorCanvas.focus({ preventScroll: true });
+                    });
+                }
+            };
+
+            const getFormat = () => formats[currentFormat] || formats.portrait;
+
+            const clampPan = (canvasWidth, imageAreaHeight, drawWidth, drawHeight) => {
+                const maxX = Math.max(0, (drawWidth - canvasWidth) / 2) / canvasWidth;
+                const maxY = Math.max(0, (drawHeight - imageAreaHeight) / 2) / imageAreaHeight;
+                panX = Math.max(-maxX, Math.min(maxX, panX));
+                panY = Math.max(-maxY, Math.min(maxY, panY));
+            };
+
+            const wrapText = (ctx, text, maxWidth) => {
+                const words = text.split(/\s+/).filter(Boolean);
+                const lines = [];
+                let current = "";
+                words.forEach((word) => {
+                    const next = current ? `${current} ${word}` : word;
+                    if (ctx.measureText(next).width > maxWidth && current) {
+                        lines.push(current);
+                        current = word;
+                    } else {
+                        current = next;
+                    }
+                });
+                if (current) lines.push(current);
+                return lines.slice(0, 2);
+            };
+
+            const drawComposition = (canvas, outputWidth, outputHeight) => {
+                const ctx = canvas.getContext("2d", { alpha: false });
+                if (!ctx || !artwork.complete || !artwork.naturalWidth) return;
+
+                canvas.width = outputWidth;
+                canvas.height = outputHeight;
+
+                const footerHeight = Math.round(outputHeight * 0.17);
+                const imageAreaHeight = outputHeight - footerHeight;
+                const baseScale = Math.max(
+                    outputWidth / artwork.naturalWidth,
+                    imageAreaHeight / artwork.naturalHeight,
+                );
+                const scale = baseScale * zoom;
+                const drawWidth = artwork.naturalWidth * scale;
+                const drawHeight = artwork.naturalHeight * scale;
+
+                clampPan(outputWidth, imageAreaHeight, drawWidth, drawHeight);
+
+                const centerX = outputWidth / 2 + panX * outputWidth;
+                const centerY = imageAreaHeight / 2 + panY * imageAreaHeight;
+
+                ctx.fillStyle = "#121212";
+                ctx.fillRect(0, 0, outputWidth, outputHeight);
+                ctx.drawImage(
+                    artwork,
+                    centerX - drawWidth / 2,
+                    centerY - drawHeight / 2,
+                    drawWidth,
+                    drawHeight,
+                );
+
+                const gradient = ctx.createLinearGradient(
+                    0,
+                    Math.max(0, imageAreaHeight - outputHeight * 0.16),
+                    0,
+                    imageAreaHeight,
+                );
+                gradient.addColorStop(0, "rgba(18,18,18,0)");
+                gradient.addColorStop(1, "rgba(18,18,18,0.38)");
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, imageAreaHeight - outputHeight * 0.16, outputWidth, outputHeight * 0.16);
+
+                ctx.fillStyle = "#121212";
+                ctx.fillRect(0, imageAreaHeight, outputWidth, footerHeight);
+
+                const side = Math.round(outputWidth * 0.065);
+                const titleSize = Math.round(outputWidth * 0.036);
+                const metaSize = Math.round(outputWidth * 0.016);
+                const kickerSize = Math.round(outputWidth * 0.014);
+
+                ctx.fillStyle = "#a8a8a8";
+                ctx.font = `400 ${kickerSize}px Inter, Arial, sans-serif`;
+                ctx.textBaseline = "top";
+                ctx.fillText("UNO SGUARDO SU", side, imageAreaHeight + Math.round(footerHeight * 0.18));
+
+                ctx.fillStyle = "#f0f0f0";
+                ctx.font = `400 ${titleSize}px "Playfair Display", Georgia, serif`;
+                const titleLines = wrapText(ctx, title, outputWidth - side * 2);
+                const titleY = imageAreaHeight + Math.round(footerHeight * 0.37);
+                titleLines.forEach((line, index) => {
+                    ctx.fillText(line, side, titleY + index * Math.round(titleSize * 1.05));
+                });
+
+                ctx.fillStyle = "#8f8f8f";
+                ctx.font = `400 ${metaSize}px Inter, Arial, sans-serif`;
+                ctx.textAlign = "right";
+                ctx.fillText(
+                    "Luca Sanna · lucasanna.art",
+                    outputWidth - side,
+                    imageAreaHeight + Math.round(footerHeight * 0.73),
+                );
+                ctx.textAlign = "left";
+            };
+
+            const resizeEditorCanvas = () => {
+                const format = getFormat();
+                const previewWidth = 720;
+                const previewHeight = Math.round(previewWidth * (format.height / format.width));
+                drawComposition(editorCanvas, previewWidth, previewHeight);
+            };
+
+            const drawEditor = () => {
+                if (!artwork.complete || !artwork.naturalWidth) return;
+                const format = getFormat();
+                const previewWidth = 720;
+                const previewHeight = Math.round(previewWidth * (format.height / format.width));
+                drawComposition(editorCanvas, previewWidth, previewHeight);
+            };
+
+            const ensureArtwork = async () => {
+                if (artwork.complete && artwork.naturalWidth) return true;
+                try {
+                    await artwork.decode();
+                    return true;
+                } catch {
+                    setStatus("Non riesco a caricare l’immagine dell’opera.");
+                    return false;
+                }
+            };
+
+            const resetState = () => {
+                zoom = 1;
+                panX = 0;
+                panY = 0;
+                currentFormat = "portrait";
+                zoomInput.value = "1";
+                formatButtons.forEach((button) => {
+                    if (!(button instanceof HTMLButtonElement)) return;
+                    button.setAttribute(
+                        "aria-pressed",
+                        button.dataset.interpretaFormat === "portrait" ? "true" : "false",
+                    );
+                });
+                drawEditor();
+            };
+
+            const openModal = async () => {
+                lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+                modal.hidden = false;
+                document.documentElement.classList.add("overflow-hidden");
+                await ensureArtwork();
+                setStep("intro");
+                pushEvent("artwork_interpretation_open");
+                const first = modal.querySelector("[data-interpreta-start]");
+                if (first instanceof HTMLButtonElement) first.focus({ preventScroll: true });
+            };
+
+            const closeModal = () => {
+                modal.hidden = true;
+                document.documentElement.classList.remove("overflow-hidden");
+                setStatus("");
+                if (lastFocused instanceof HTMLElement) lastFocused.focus({ preventScroll: true });
+            };
+
+            const createResult = async () => {
+                if (!(await ensureArtwork())) return;
+                try {
+                    if (document.fonts?.ready) await document.fonts.ready;
+                } catch {}
+
+                const format = getFormat();
+                const output = document.createElement("canvas");
+                drawComposition(output, format.width, format.height);
+
+                const blob = await new Promise((resolve) =>
+                    output.toBlob(resolve, "image/jpeg", 0.94),
+                );
+
+                if (!(blob instanceof Blob)) {
+                    setStatus("Non è stato possibile creare l’immagine.");
+                    return;
+                }
+
+                if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+                currentBlob = blob;
+                currentObjectUrl = URL.createObjectURL(blob);
+                resultImg.src = currentObjectUrl;
+                setStep("result");
+                pushEvent("artwork_interpretation_created", { format: currentFormat });
+            };
+
+            const filename = () => {
+                const tail = String(slug).split("/").pop() || "opera";
+                const safe = tail
+                    .replace(/[^a-z0-9-]+/gi, "-")
+                    .replace(/^-+|-+$/g, "")
+                    .toLowerCase();
+                return `luca-sanna-${safe || "opera"}-il-mio-sguardo.jpg`;
+            };
+
+            const downloadCurrent = async () => {
+                if (!(currentBlob instanceof Blob)) await createResult();
+                if (!(currentBlob instanceof Blob)) return;
+                const href = URL.createObjectURL(currentBlob);
+                const link = document.createElement("a");
+                link.href = href;
+                link.download = filename();
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                window.setTimeout(() => URL.revokeObjectURL(href), 1000);
+                setStatus("Immagine salvata sul dispositivo.");
+                pushEvent("artwork_interpretation_download", { format: currentFormat });
+            };
+
+            const shareCurrent = async () => {
+                if (!(currentBlob instanceof Blob)) await createResult();
+                if (!(currentBlob instanceof Blob)) return;
+
+                const file = new File([currentBlob], filename(), { type: "image/jpeg" });
+                const payload = {
+                    files: [file],
+                    title: `Uno sguardo su ${title}`,
+                    text: `La mia interpretazione di “${title}” di Luca Sanna · ${shareUrl}`,
+                };
+
+                try {
+                    const canShareFiles =
+                        typeof navigator.share === "function" &&
+                        (typeof navigator.canShare !== "function" || navigator.canShare({ files: [file] }));
+
+                    if (canShareFiles) {
+                        await navigator.share(payload);
+                        setStatus("Condivisione aperta.");
+                        pushEvent("artwork_interpretation_share", { format: currentFormat, mode: "native" });
+                        return;
+                    }
+
+                    await downloadCurrent();
+                    try {
+                        await navigator.clipboard.writeText(shareUrl);
+                        setStatus("Immagine salvata e link dell’opera copiato.");
+                    } catch {
+                        setStatus("Immagine salvata. Puoi condividerla dal tuo dispositivo.");
+                    }
+                    pushEvent("artwork_interpretation_share", { format: currentFormat, mode: "fallback" });
+                } catch (error) {
+                    if (error instanceof DOMException && error.name === "AbortError") {
+                        setStatus("Condivisione annullata.");
+                        return;
+                    }
+                    setStatus("La condivisione non è disponibile. Prova con “Salva immagine”.");
+                }
+            };
+
+            openButton.addEventListener("click", openModal);
+            closeButtons.forEach((button) => {
+                if (button instanceof HTMLButtonElement) button.addEventListener("click", closeModal);
+            });
+
+            startButton.addEventListener("click", async () => {
+                if (!(await ensureArtwork())) return;
+                setStep("editor");
+                pushEvent("artwork_interpretation_start");
+            });
+
+            backButton.addEventListener("click", () => setStep("intro"));
+            editAgainButton.addEventListener("click", () => setStep("editor"));
+            createButton.addEventListener("click", createResult);
+            downloadButton.addEventListener("click", downloadCurrent);
+            shareButton.addEventListener("click", shareCurrent);
+
+            resetButton.addEventListener("click", () => {
+                resetState();
+                editorCanvas.focus({ preventScroll: true });
+            });
+
+            zoomInput.addEventListener("input", () => {
+                zoom = Number(zoomInput.value) || 1;
+                drawEditor();
+            });
+
+            formatButtons.forEach((button) => {
+                if (!(button instanceof HTMLButtonElement)) return;
+                button.addEventListener("click", () => {
+                    const next = button.dataset.interpretaFormat;
+                    if (!next || !formats[next]) return;
+                    currentFormat = next;
+                    formatButtons.forEach((item) => {
+                        if (item instanceof HTMLButtonElement) {
+                            item.setAttribute("aria-pressed", item === button ? "true" : "false");
+                        }
+                    });
+                    drawEditor();
+                });
+            });
+
+            editorCanvas.addEventListener("pointerdown", (event) => {
+                dragging = true;
+                pointerId = event.pointerId;
+                dragStartX = event.clientX;
+                dragStartY = event.clientY;
+                dragStartPanX = panX;
+                dragStartPanY = panY;
+                editorCanvas.setPointerCapture(event.pointerId);
+            });
+
+            editorCanvas.addEventListener("pointermove", (event) => {
+                if (!dragging || event.pointerId !== pointerId) return;
+                const rect = editorCanvas.getBoundingClientRect();
+                if (!rect.width || !rect.height) return;
+                panX = dragStartPanX + (event.clientX - dragStartX) / rect.width;
+                panY = dragStartPanY + (event.clientY - dragStartY) / rect.height;
+                drawEditor();
+            });
+
+            const endDrag = (event) => {
+                if (event.pointerId !== pointerId) return;
+                dragging = false;
+                pointerId = null;
+                try {
+                    editorCanvas.releasePointerCapture(event.pointerId);
+                } catch {}
+            };
+
+            editorCanvas.addEventListener("pointerup", endDrag);
+            editorCanvas.addEventListener("pointercancel", endDrag);
+
+            editorCanvas.addEventListener("keydown", (event) => {
+                const delta = event.shiftKey ? 0.05 : 0.018;
+                let handled = true;
+                if (event.key === "ArrowLeft") panX -= delta;
+                else if (event.key === "ArrowRight") panX += delta;
+                else if (event.key === "ArrowUp") panY -= delta;
+                else if (event.key === "ArrowDown") panY += delta;
+                else if (event.key === "+" || event.key === "=") {
+                    zoom = Math.min(2.6, zoom + 0.08);
+                    zoomInput.value = String(zoom);
+                } else if (event.key === "-") {
+                    zoom = Math.max(1, zoom - 0.08);
+                    zoomInput.value = String(zoom);
+                } else {
+                    handled = false;
+                }
+                if (handled) {
+                    event.preventDefault();
+                    drawEditor();
+                }
+            });
+
+            modal.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    event.preventDefault();
+                    closeModal();
+                    return;
+                }
+
+                if (event.key !== "Tab") return;
+                const focusable = Array.from(
+                    modal.querySelectorAll(
+                        'button:not([disabled]):not([hidden]), input:not([disabled]):not([hidden]), canvas[tabindex="0"]',
+                    ),
+                ).filter((el) => el instanceof HTMLElement && !el.closest("[hidden]"));
+
+                if (focusable.length === 0) return;
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (!(first instanceof HTMLElement) || !(last instanceof HTMLElement)) return;
+
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            });
+
+            window.addEventListener("pagehide", () => {
+                if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+            });
+
+
+        })();
+    </script>
+
+    <style>
+        .interpreta-entry {
+            max-width: 42rem;
+            margin: 2.5rem auto 4.5rem;
+            padding: 1.5rem 0 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .interpreta-entry-kicker,
+        .interpreta-eyebrow,
+        .interpreta-step-label,
+        .interpreta-control-title {
+            margin: 0;
+            font-family: Inter, sans-serif;
+            font-size: 0.64rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #777;
+        }
+
+        .interpreta-entry-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 0.8rem 1.05rem;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            background: transparent;
+            color: #f0f0f0;
+            font-family: Inter, sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .interpreta-entry-button:hover,
+        .interpreta-entry-button:focus-visible {
+            border-color: rgba(255, 255, 255, 0.68);
+        }
+
+        .interpreta-entry-copy {
+            max-width: 34rem;
+            margin: 1rem auto 0;
+            color: #8c8c8c;
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        .interpreta-modal[hidden] {
+            display: none;
+        }
+
+        .interpreta-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 120;
+            display: grid;
+            place-items: center;
+            padding: clamp(0.6rem, 2vw, 1.5rem);
+        }
+
+        .interpreta-backdrop {
+            position: absolute;
+            inset: 0;
+            border: 0;
+            background: rgba(0, 0, 0, 0.86);
+            backdrop-filter: blur(18px);
+            cursor: default;
+        }
+
+        .interpreta-shell {
+            position: relative;
+            width: min(1180px, 100%);
+            max-height: calc(100vh - 2rem);
+            overflow: auto;
+            background: #111;
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            box-shadow: 0 34px 90px rgba(0, 0, 0, 0.55);
+        }
+
+        .interpreta-header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            padding: 1.2rem 1.35rem;
+            background: rgba(17, 17, 17, 0.94);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+        }
+
+        .interpreta-title {
+            margin: 0.35rem 0 0;
+            color: #f2f2f2;
+            font-family: "Playfair Display", Georgia, serif;
+            font-weight: 400;
+            font-size: clamp(1.7rem, 3vw, 2.7rem);
+        }
+
+        .interpreta-subtitle {
+            margin: 0.35rem 0 0;
+            color: #898989;
+            font-size: 0.84rem;
+        }
+
+        .interpreta-close,
+        .interpreta-reset,
+        .interpreta-again {
+            border: 0;
+            background: transparent;
+            color: #9a9a9a;
+            font-family: Inter, sans-serif;
+            font-size: 0.66rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .interpreta-close:hover,
+        .interpreta-close:focus-visible,
+        .interpreta-reset:hover,
+        .interpreta-reset:focus-visible,
+        .interpreta-again:hover,
+        .interpreta-again:focus-visible {
+            color: #fff;
+        }
+
+        .interpreta-step {
+            padding: clamp(1.2rem, 3vw, 2.5rem);
+        }
+
+        .interpreta-intro-grid,
+        .interpreta-result-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(280px, 0.7fr);
+            gap: clamp(1.5rem, 5vw, 5rem);
+            align-items: center;
+            min-height: min(68vh, 720px);
+        }
+
+        .interpreta-intro-copy h3,
+        .interpreta-result-copy h3 {
+            margin: 0.7rem 0 1rem;
+            color: #f2f2f2;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: clamp(2rem, 4.5vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1.02;
+        }
+
+        .interpreta-intro-copy > p:not(.interpreta-step-label),
+        .interpreta-result-copy > p:not(.interpreta-step-label):not(.interpreta-status) {
+            max-width: 36rem;
+            color: #a2a2a2;
+            line-height: 1.75;
+        }
+
+        .interpreta-intro-actions,
+        .interpreta-result-actions,
+        .interpreta-editor-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.6rem;
+        }
+
+        .interpreta-primary,
+        .interpreta-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.9rem;
+            min-height: 2.9rem;
+            padding: 0.75rem 1rem;
+            font-family: Inter, sans-serif;
+            font-size: 0.66rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .interpreta-primary {
+            border: 1px solid #e9e0d3;
+            background: #e9e0d3;
+            color: #171717;
+        }
+
+        .interpreta-secondary {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: #d9d9d9;
+        }
+
+        .interpreta-primary:hover,
+        .interpreta-primary:focus-visible {
+            background: #fff;
+            border-color: #fff;
+        }
+
+        .interpreta-secondary:hover,
+        .interpreta-secondary:focus-visible {
+            border-color: rgba(255, 255, 255, 0.55);
+            color: #fff;
+        }
+
+        .interpreta-intro-preview {
+            margin: 0;
+            background: #0b0b0b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
+        }
+
+        .interpreta-intro-preview img {
+            display: block;
+            width: 100%;
+            max-height: 48vh;
+            object-fit: cover;
+            filter: saturate(0.88) contrast(0.98);
+        }
+
+        .interpreta-intro-preview figcaption {
+            display: grid;
+            gap: 0.18rem;
+            padding: 0.8rem 0.25rem 0.15rem;
+            color: #7f7f7f;
+            font-size: 0.68rem;
+        }
+
+        .interpreta-intro-preview strong {
+            color: #e8e8e8;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .interpreta-intro-preview small {
+            margin-top: 0.25rem;
+            color: #666;
+        }
+
+        .interpreta-editor-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+            gap: clamp(1.2rem, 3vw, 2.6rem);
+            align-items: start;
+        }
+
+        .interpreta-canvas-wrap {
+            display: grid;
+            justify-items: center;
+            min-width: 0;
+            padding: clamp(0.5rem, 2vw, 1.4rem);
+            background: #0b0b0b;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .interpreta-canvas-wrap canvas {
+            display: block;
+            width: auto;
+            max-width: 100%;
+            max-height: 64vh;
+            background: #121212;
+            box-shadow: 0 20px 52px rgba(0, 0, 0, 0.32);
+            touch-action: none;
+            cursor: grab;
+        }
+
+        .interpreta-canvas-wrap canvas:active {
+            cursor: grabbing;
+        }
+
+        .interpreta-canvas-wrap canvas:focus-visible {
+            outline: 1px solid rgba(233, 224, 211, 0.9);
+            outline-offset: 4px;
+        }
+
+        .interpreta-canvas-hint {
+            margin: 0.8rem 0 0;
+            color: #656565;
+            font-size: 0.66rem;
+            letter-spacing: 0.05em;
+        }
+
+        .interpreta-controls {
+            display: grid;
+            gap: 1.4rem;
+            padding: 0.25rem 0;
+        }
+
+        .interpreta-control-group {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .interpreta-format-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.45rem;
+        }
+
+        .interpreta-format-grid button {
+            display: grid;
+            justify-items: center;
+            gap: 0.45rem;
+            padding: 0.75rem 0.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #151515;
+            color: #8f8f8f;
+            font-size: 0.68rem;
+            cursor: pointer;
+        }
+
+        .interpreta-format-grid button[aria-pressed="true"] {
+            border-color: #e9e0d3;
+            color: #f5f5f5;
+        }
+
+        .format-icon {
+            display: block;
+            border: 1px solid currentColor;
+            opacity: 0.9;
+        }
+
+        .format-icon.square {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .format-icon.portrait {
+            width: 0.9rem;
+            height: 1.15rem;
+        }
+
+        .format-icon.story {
+            width: 0.72rem;
+            height: 1.28rem;
+        }
+
+        .interpreta-range-row {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            gap: 0.65rem;
+            align-items: center;
+            color: #777;
+        }
+
+        .interpreta-range-row input[type="range"] {
+            width: 100%;
+            accent-color: #e9e0d3;
+        }
+
+        .interpreta-reset {
+            justify-self: start;
+            padding: 0;
+            text-decoration: underline;
+            text-underline-offset: 0.25em;
+            text-decoration-color: rgba(255, 255, 255, 0.18);
+        }
+
+        .interpreta-editor-actions {
+            margin-top: 0.2rem;
+        }
+
+        .interpreta-editor-actions .interpreta-primary {
+            flex: 1 1 100%;
+        }
+
+        .interpreta-result-card {
+            display: grid;
+            place-items: center;
+            min-width: 0;
+            padding: 0.8rem;
+            background: #0b0b0b;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .interpreta-result-card img {
+            display: block;
+            width: auto;
+            max-width: 100%;
+            max-height: 66vh;
+            object-fit: contain;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        .interpreta-again {
+            margin-top: 1.25rem;
+            padding: 0;
+            text-decoration: underline;
+            text-underline-offset: 0.25em;
+            text-decoration-color: rgba(255, 255, 255, 0.18);
+        }
+
+        .interpreta-status {
+            min-height: 1.2rem;
+            margin: 1rem 0 0;
+            color: #9d9d9d;
+            font-size: 0.74rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 800px) {
+            .interpreta-modal {
+                padding: 0;
+            }
+
+            .interpreta-shell {
+                width: 100%;
+                min-height: 100dvh;
+                max-height: 100dvh;
+                border: 0;
+            }
+
+            .interpreta-header {
+                padding: 0.9rem 1rem;
+            }
+
+            .interpreta-subtitle {
+                display: none;
+            }
+
+            .interpreta-step {
+                padding: 1rem;
+            }
+
+            .interpreta-intro-grid,
+            .interpreta-result-layout,
+            .interpreta-editor-layout {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .interpreta-intro-preview {
+                order: -1;
+            }
+
+            .interpreta-intro-preview img {
+                max-height: 34vh;
+            }
+
+            .interpreta-intro-copy h3,
+            .interpreta-result-copy h3 {
+                font-size: clamp(2rem, 11vw, 3.4rem);
+            }
+
+            .interpreta-canvas-wrap canvas {
+                max-height: 55vh;
+            }
+
+            .interpreta-controls {
+                padding-bottom: 1rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .interpreta-entry-button,
+            .interpreta-primary,
+            .interpreta-secondary,
+            .interpreta-close,
+            .interpreta-reset,
+            .interpreta-again {
+                transition: none !important;
+            }
+        }
+    </style>
+)}
