@@ -1,0 +1,461 @@
+---
+interface Props {
+  image: string;
+  title: string;
+  alt?: string;
+}
+const { image, title, alt = title } = Astro.props;
+---
+
+<button
+  type="button"
+  class="contempla-trigger"
+  data-contempla-open
+  aria-haspopup="dialog"
+  aria-controls="contempla-opera"
+>
+  Contempla
+  <span aria-hidden="true">↗</span>
+</button>
+
+<div
+  id="contempla-opera"
+  class="contempla-modal"
+  data-contempla-modal
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="contempla-title"
+  hidden
+>
+  <img class="contempla-backdrop-image" src={image} alt="" aria-hidden="true" />
+  <div class="contempla-vignette" aria-hidden="true"></div>
+
+  <header class="contempla-toolbar" data-contempla-ui>
+    <div>
+      <p>MODALITÀ CONTEMPLAZIONE</p>
+      <h2 id="contempla-title">{title}</h2>
+    </div>
+
+    <div class="contempla-actions">
+      <button type="button" data-contempla-minus aria-label="Riduci zoom">−</button>
+      <button type="button" data-contempla-fit>Adatta</button>
+      <button type="button" data-contempla-plus aria-label="Aumenta zoom">+</button>
+      <button type="button" data-contempla-close>Chiudi</button>
+    </div>
+  </header>
+
+  <div
+    class="contempla-stage"
+    data-contempla-stage
+    tabindex="0"
+    aria-label="Vista contemplativa dell'opera. Trascina per esplorare, usa la rotella per ingrandire, doppio clic per alternare lo zoom."
+  >
+    <div class="contempla-image-shell" data-contempla-shell>
+      <img
+        src={image}
+        alt={alt}
+        draggable="false"
+        data-contempla-image
+      />
+      <span class="contempla-lens" data-contempla-lens aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <footer class="contempla-footer" data-contempla-ui>
+    <span>Trascina · rotella · doppio clic</span>
+    <span data-contempla-zoom>100%</span>
+  </footer>
+</div>
+
+<script is:inline>
+(() => {
+  const modal = document.querySelector("[data-contempla-modal]");
+  if (!(modal instanceof HTMLElement) || modal.dataset.bound === "true") return;
+  modal.dataset.bound = "true";
+
+  const open = document.querySelector("[data-contempla-open]");
+  const close = modal.querySelector("[data-contempla-close]");
+  const plus = modal.querySelector("[data-contempla-plus]");
+  const minus = modal.querySelector("[data-contempla-minus]");
+  const fit = modal.querySelector("[data-contempla-fit]");
+  const stage = modal.querySelector("[data-contempla-stage]");
+  const shell = modal.querySelector("[data-contempla-shell]");
+  const img = modal.querySelector("[data-contempla-image]");
+  const lens = modal.querySelector("[data-contempla-lens]");
+  const zoomLabel = modal.querySelector("[data-contempla-zoom]");
+  const ui = Array.from(modal.querySelectorAll("[data-contempla-ui]"));
+
+  if (
+    !(open instanceof HTMLButtonElement) ||
+    !(close instanceof HTMLButtonElement) ||
+    !(plus instanceof HTMLButtonElement) ||
+    !(minus instanceof HTMLButtonElement) ||
+    !(fit instanceof HTMLButtonElement) ||
+    !(stage instanceof HTMLElement) ||
+    !(shell instanceof HTMLElement) ||
+    !(img instanceof HTMLImageElement)
+  ) return;
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let scale = 1;
+  let panX = 0;
+  let panY = 0;
+  let drag = false;
+  let pointerId = null;
+  let startX = 0;
+  let startY = 0;
+  let startPanX = 0;
+  let startPanY = 0;
+  let lastFocus = null;
+  let idleTimer = 0;
+
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+  const setIdle = (idle) => {
+    modal.dataset.idle = idle ? "true" : "false";
+  };
+
+  const wake = () => {
+    setIdle(false);
+    if (idleTimer) clearTimeout(idleTimer);
+    idleTimer = window.setTimeout(() => setIdle(true), 3200);
+  };
+
+  const bounds = () => {
+    const rect = stage.getBoundingClientRect();
+    const baseW = img.naturalWidth || rect.width;
+    const baseH = img.naturalHeight || rect.height;
+    const fitScale = Math.min(rect.width / baseW, rect.height / baseH);
+    const shownW = baseW * fitScale * scale;
+    const shownH = baseH * fitScale * scale;
+    return {
+      maxX: Math.max(0, (shownW - rect.width) / 2),
+      maxY: Math.max(0, (shownH - rect.height) / 2),
+    };
+  };
+
+  const apply = () => {
+    const b = bounds();
+    panX = clamp(panX, -b.maxX, b.maxX);
+    panY = clamp(panY, -b.maxY, b.maxY);
+    shell.style.setProperty("--contempla-scale", String(scale));
+    shell.style.setProperty("--contempla-x", panX.toFixed(2) + "px");
+    shell.style.setProperty("--contempla-y", panY.toFixed(2) + "px");
+    if (zoomLabel instanceof HTMLElement) zoomLabel.textContent = Math.round(scale * 100) + "%";
+    modal.dataset.zoomed = scale > 1.02 ? "true" : "false";
+  };
+
+  const reset = () => {
+    scale = 1;
+    panX = 0;
+    panY = 0;
+    apply();
+  };
+
+  const setScale = (next) => {
+    scale = clamp(next, 1, 3.25);
+    apply();
+    wake();
+  };
+
+  const openModal = () => {
+    lastFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    modal.hidden = false;
+    document.documentElement.classList.add("overflow-hidden");
+    reset();
+    wake();
+    stage.focus({ preventScroll: true });
+
+    if (!reduce.matches) {
+      modal.animate(
+        [
+          { opacity: 0, filter: "blur(12px)" },
+          { opacity: 1, filter: "blur(0)" }
+        ],
+        { duration: 650, easing: "cubic-bezier(.22,1,.36,1)" }
+      );
+    }
+  };
+
+  const closeModal = () => {
+    modal.hidden = true;
+    document.documentElement.classList.remove("overflow-hidden");
+    if (idleTimer) clearTimeout(idleTimer);
+    if (lastFocus instanceof HTMLElement) lastFocus.focus({ preventScroll: true });
+  };
+
+  open.addEventListener("click", openModal);
+  close.addEventListener("click", closeModal);
+  plus.addEventListener("click", () => setScale(scale + .25));
+  minus.addEventListener("click", () => setScale(scale - .25));
+  fit.addEventListener("click", reset);
+
+  modal.addEventListener("pointermove", wake);
+
+  stage.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    const delta = event.deltaY > 0 ? -.12 : .12;
+    setScale(scale + delta);
+  }, { passive: false });
+
+  stage.addEventListener("dblclick", () => {
+    setScale(scale > 1.2 ? 1 : 1.9);
+    if (scale === 1) {
+      panX = 0;
+      panY = 0;
+      apply();
+    }
+  });
+
+  stage.addEventListener("pointerdown", (event) => {
+    if (scale <= 1.01) return;
+    drag = true;
+    pointerId = event.pointerId;
+    startX = event.clientX;
+    startY = event.clientY;
+    startPanX = panX;
+    startPanY = panY;
+    stage.setPointerCapture(event.pointerId);
+    modal.dataset.dragging = "true";
+  });
+
+  stage.addEventListener("pointermove", (event) => {
+    const rect = stage.getBoundingClientRect();
+    if (rect.width && rect.height && lens instanceof HTMLElement) {
+      const nx = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+      const ny = clamp((event.clientY - rect.top) / rect.height, 0, 1);
+      shell.style.setProperty("--contempla-mx", (nx * 100).toFixed(1) + "%");
+      shell.style.setProperty("--contempla-my", (ny * 100).toFixed(1) + "%");
+    }
+
+    if (!drag || event.pointerId !== pointerId) return;
+    panX = startPanX + event.clientX - startX;
+    panY = startPanY + event.clientY - startY;
+    apply();
+  });
+
+  const stopDrag = (event) => {
+    if (event.pointerId !== pointerId) return;
+    drag = false;
+    pointerId = null;
+    modal.dataset.dragging = "false";
+    try { stage.releasePointerCapture(event.pointerId); } catch {}
+  };
+
+  stage.addEventListener("pointerup", stopDrag);
+  stage.addEventListener("pointercancel", stopDrag);
+
+  modal.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeModal();
+      return;
+    }
+
+    if (event.key === "+" || event.key === "=") {
+      event.preventDefault();
+      setScale(scale + .2);
+    } else if (event.key === "-") {
+      event.preventDefault();
+      setScale(scale - .2);
+    } else if (event.key === "0") {
+      event.preventDefault();
+      reset();
+    } else if (event.key.startsWith("Arrow") && scale > 1.01) {
+      event.preventDefault();
+      const step = event.shiftKey ? 42 : 18;
+      if (event.key === "ArrowLeft") panX -= step;
+      if (event.key === "ArrowRight") panX += step;
+      if (event.key === "ArrowUp") panY -= step;
+      if (event.key === "ArrowDown") panY += step;
+      apply();
+    }
+  });
+
+  addEventListener("resize", apply, { passive: true });
+})();
+</script>
+
+<style>
+.contempla-trigger {
+  position: absolute;
+  right: .9rem;
+  bottom: .9rem;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  padding: .62rem .8rem;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(8,8,8,.68);
+  color: #eee;
+  backdrop-filter: blur(12px);
+  font: 500 .62rem/1 Inter, sans-serif;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.contempla-trigger:hover,
+.contempla-trigger:focus-visible {
+  border-color: rgba(255,255,255,.55);
+  background: rgba(8,8,8,.84);
+}
+.contempla-modal[hidden] { display: none; }
+.contempla-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  overflow: hidden;
+  background: #050505;
+  color: #eee;
+  isolation: isolate;
+}
+.contempla-backdrop-image {
+  position: absolute;
+  inset: -8%;
+  z-index: 0;
+  width: 116%;
+  height: 116%;
+  object-fit: cover;
+  filter: blur(34px) saturate(.8) brightness(.25);
+  opacity: .54;
+  transform: scale(1.08);
+}
+.contempla-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at var(--contempla-mx,50%) var(--contempla-my,50%), rgba(225,199,164,.12), transparent 24%),
+    radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,.52) 78%, rgba(0,0,0,.84) 100%);
+}
+.contempla-toolbar,
+.contempla-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  transition: opacity .45s ease, transform .45s ease;
+}
+.contempla-toolbar {
+  top: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(to bottom, rgba(0,0,0,.72), rgba(0,0,0,0));
+}
+.contempla-toolbar p {
+  margin: 0 0 .2rem;
+  color: #777;
+  font: 500 .56rem/1.2 Inter, sans-serif;
+  letter-spacing: .18em;
+}
+.contempla-toolbar h2 {
+  margin: 0;
+  font: 400 clamp(1.1rem,2vw,1.6rem)/1.2 "Playfair Display", Georgia, serif;
+}
+.contempla-actions {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.contempla-actions button {
+  min-width: 2.4rem;
+  min-height: 2.4rem;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(10,10,10,.55);
+  color: #ccc;
+  font: 500 .6rem/1 Inter, sans-serif;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.contempla-actions button:hover,
+.contempla-actions button:focus-visible {
+  border-color: rgba(255,255,255,.5);
+  color: #fff;
+}
+.contempla-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  outline: none;
+  cursor: zoom-in;
+  touch-action: none;
+}
+.contempla-modal[data-zoomed="true"] .contempla-stage { cursor: grab; }
+.contempla-modal[data-dragging="true"] .contempla-stage { cursor: grabbing; }
+.contempla-image-shell {
+  --contempla-scale: 1;
+  --contempla-x: 0px;
+  --contempla-y: 0px;
+  --contempla-mx: 50%;
+  --contempla-my: 50%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(92vw, 1500px);
+  height: min(82vh, 980px);
+  transform: translate3d(var(--contempla-x), var(--contempla-y), 0) scale(var(--contempla-scale));
+  transform-origin: center;
+  transition: transform .34s cubic-bezier(.22,1,.36,1);
+  will-change: transform;
+}
+.contempla-modal[data-dragging="true"] .contempla-image-shell {
+  transition: none;
+}
+.contempla-image-shell img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 40px 70px rgba(0,0,0,.55));
+}
+.contempla-lens {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--contempla-mx) var(--contempla-my), rgba(255,235,204,.12), transparent 14%);
+  mix-blend-mode: screen;
+  opacity: .8;
+}
+.contempla-footer {
+  bottom: 0;
+  padding: 1rem 1.2rem;
+  color: #777;
+  background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,0));
+  font: 500 .58rem/1.2 Inter, sans-serif;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.contempla-modal[data-idle="true"] .contempla-toolbar {
+  opacity: 0;
+  transform: translateY(-14px);
+}
+.contempla-modal[data-idle="true"] .contempla-footer {
+  opacity: 0;
+  transform: translateY(14px);
+}
+@media (max-width: 720px) {
+  .contempla-toolbar { align-items: flex-start; }
+  .contempla-toolbar h2 { max-width: 48vw; }
+  .contempla-actions { gap: .25rem; }
+  .contempla-actions button { min-width: 2.15rem; min-height: 2.15rem; padding: .4rem; }
+  .contempla-actions [data-contempla-fit] { display: none; }
+  .contempla-image-shell { width: 96vw; height: 78vh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contempla-toolbar,
+  .contempla-footer,
+  .contempla-image-shell,
+  .contempla-trigger { transition: none !important; }
+}
+</style>
