@@ -185,7 +185,7 @@ const {
 
                         <div class="interpreta-result-actions">
                             <button type="button" class="interpreta-primary" data-interpreta-share>
-                                Condividi
+                                <span data-interpreta-share-label>Condividi</span>
                                 <span aria-hidden="true">↗</span>
                             </button>
                             <button type="button" class="interpreta-secondary" data-interpreta-download>
@@ -293,6 +293,7 @@ const {
             const createButton = modal.querySelector("[data-interpreta-create]");
             const editAgainButton = modal.querySelector("[data-interpreta-edit-again]");
             const shareButton = modal.querySelector("[data-interpreta-share]");
+            const shareLabel = modal.querySelector("[data-interpreta-share-label]");
             const downloadButton = modal.querySelector("[data-interpreta-download]");
             const resetButton = modal.querySelector("[data-interpreta-reset]");
             const effectsButton = modal.querySelector("[data-interpreta-effects]");
@@ -899,11 +900,20 @@ const {
                 drawEditor();
             };
 
+            const syncShareLabel = () => {
+                if (shareLabel instanceof HTMLElement) {
+                    shareLabel.textContent = isActualMobileDevice()
+                        ? "Condividi"
+                        : "Copia link interpretazione";
+                }
+            };
+
             const openModal = async () => {
                 lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
                 modal.hidden = false;
                 document.documentElement.classList.add("overflow-hidden");
                 await ensureArtwork();
+                syncShareLabel();
                 setStep("intro");
                 syncEffectsUi();
                 pushEvent("artwork_interpretation_open");
@@ -1003,6 +1013,16 @@ const {
                 typeof navigator.share === "function" &&
                 (typeof navigator.canShare !== "function" || navigator.canShare({ files: [file] }));
 
+            const isActualMobileDevice = () => {
+                try {
+                    if (navigator.userAgentData?.mobile === true) return true;
+                } catch {}
+                const ua = navigator.userAgent || "";
+                if (/Android|iPhone|iPod|Mobile/i.test(ua)) return true;
+                // iPadOS can expose a desktop-class user agent.
+                return /Macintosh/i.test(ua) && (navigator.maxTouchPoints || 0) > 1;
+            };
+
             const socialLabel = (network) =>
                 ({
                     instagram: "Instagram",
@@ -1021,7 +1041,7 @@ const {
                 if (network === "whatsapp") {
                     return "WhatsApp riceverà il link della tua interpretazione; l’anteprima userà il ritaglio selezionato.";
                 }
-                return "Instagram non permette a un sito di precompilare il composer web con un’immagine locale. Su mobile proveremo a passare direttamente il file; altrimenti prepareremo file e didascalia.";
+                return "Instagram non consente a un normale sito web di precompilare il composer con il file. Qui vedi l’anteprima corretta: su telefono proveremo a passare il JPEG direttamente all’app; su Mac/PC salveremo il ritaglio, copieremo la didascalia e apriremo Instagram senza mostrare il menu di condivisione di macOS.";
             };
 
             const openSocialPreview = async (network) => {
@@ -1032,7 +1052,12 @@ const {
                 const label = socialLabel(network);
 
                 if (previewNetwork instanceof HTMLElement) previewNetwork.textContent = label;
-                if (previewContinueLabel instanceof HTMLElement) previewContinueLabel.textContent = label;
+                if (previewContinueLabel instanceof HTMLElement) {
+                    previewContinueLabel.textContent =
+                        network === "instagram" && !isActualMobileDevice()
+                            ? "Salva e apri Instagram"
+                            : label;
+                }
                 if (previewNote instanceof HTMLElement) previewNote.textContent = socialNote(network);
                 if (previewCaption instanceof HTMLTextAreaElement) previewCaption.value = baseCaption();
                 if (previewImage instanceof HTMLImageElement) previewImage.src = currentObjectUrl || resultImg.src;
@@ -1119,7 +1144,7 @@ const {
 
                 try {
                     if (network === "instagram") {
-                        if (canNativeShareFile(file)) {
+                        if (isActualMobileDevice() && canNativeShareFile(file)) {
                             await navigator.share({
                                 files: [file],
                                 title: `Uno sguardo su ${title}`,
@@ -1139,8 +1164,8 @@ const {
                         openPopup("https://www.instagram.com/");
                         setStatus(
                             copied
-                                ? "Ritaglio salvato e didascalia copiata. Instagram è aperto: carica il file."
-                                : "Ritaglio salvato. Instagram è aperto: carica il file.",
+                                ? "Ritaglio salvato e didascalia copiata. Instagram è aperto: crea un nuovo post e seleziona il JPEG appena salvato."
+                                : "Ritaglio salvato. Instagram è aperto: crea un nuovo post e seleziona il JPEG appena salvato.",
                         );
                         pushEvent("artwork_interpretation_social", {
                             format: currentFormat,
@@ -1209,21 +1234,24 @@ const {
                 };
 
                 try {
-                    if (canNativeShareFile(file)) {
+                    if (isActualMobileDevice() && canNativeShareFile(file)) {
                         await navigator.share(payload);
                         setStatus("Condivisione aperta.");
                         pushEvent("artwork_interpretation_share", { format: currentFormat, mode: "native" });
                         return;
                     }
 
-                    await downloadCurrent();
-                    try {
-                        await navigator.clipboard.writeText(shareUrl);
-                        setStatus("Immagine salvata e link dell’opera copiato.");
-                    } catch {
-                        setStatus("Immagine salvata. Puoi condividerla dal tuo dispositivo.");
-                    }
-                    pushEvent("artwork_interpretation_share", { format: currentFormat, mode: "fallback" });
+                    const share = await ensureHostedShare(baseCaption());
+                    const copied = share?.pageUrl ? await copyText(share.pageUrl) : false;
+                    setStatus(
+                        copied
+                            ? "Link della tua interpretazione copiato. Puoi incollarlo nel social o messaggio che preferisci."
+                            : "La tua interpretazione è pronta: usa uno dei pulsanti social qui sotto."
+                    );
+                    pushEvent("artwork_interpretation_share", {
+                        format: currentFormat,
+                        mode: copied ? "hosted-link" : "fallback",
+                    });
                 } catch (error) {
                     if (error instanceof DOMException && error.name === "AbortError") {
                         setStatus("Condivisione annullata.");
