@@ -942,6 +942,39 @@ const {
 
 
 
+
+            // TEMP WOW_QA_PREVIEW — deploy-preview only, removed before merge.
+            const runWowQaPreview = async () => {
+                const params = new URLSearchParams(window.location.search);
+                if (
+                    params.get("wow-test") !== "1" ||
+                    !window.location.hostname.startsWith("deploy-preview-")
+                ) return;
+                await openModal();
+                if (!(await ensureArtwork())) return;
+                setStep("editor");
+                zoom = 1.28;
+                panX = 0.045;
+                panY = -0.035;
+                zoomInput.value = String(zoom);
+                ambientPointerX = 0.68;
+                ambientPointerY = 0.42;
+                drawEditor();
+                if (stage instanceof HTMLElement) {
+                    stage.style.setProperty("--stage-rx", "-3.8deg");
+                    stage.style.setProperty("--stage-ry", "5.5deg");
+                    stage.style.setProperty("--stage-mx", "68%");
+                    stage.style.setProperty("--stage-my", "42%");
+                }
+                const marker = document.createElement("div");
+                marker.id = "wow-qa-preview";
+                marker.style.cssText =
+                    "position:fixed;left:12px;bottom:12px;z-index:9999;padding:8px 10px;background:#111;color:#fff;border:1px solid #777;font:12px monospace";
+                marker.textContent = "WOW_QA_PREVIEW: editor + ambient + tilt";
+                document.body.appendChild(marker);
+            };
+            window.setTimeout(runWowQaPreview, 120);
+
             window.addEventListener("resize", resizeAmbientCanvas, { passive: true });
             reducedMotion.addEventListener?.("change", () => {
                 if (reducedMotion.matches) stopAmbient();
