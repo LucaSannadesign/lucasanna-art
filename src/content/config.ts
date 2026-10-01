@@ -48,6 +48,8 @@ const opere = defineCollection({
             .string()
             .regex(/^#[0-9a-fA-F]{6}$/, "ambientColor deve essere un colore esadecimale #rrggbb")
             .optional(),
+        // Abilita il prototipo partecipativo “Il mio sguardo” solo sulle opere selezionate.
+        interpretationEnabled: z.boolean().optional(),
         seo: z
             .object({
                 primary: z.string(),
