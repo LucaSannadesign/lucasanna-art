@@ -1,0 +1,159 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  getSguardoStore,
+  isValidSguardoId,
+  sguardoImageKey,
+  type SguardoShareMetadata,
+} from "../../lib/sguardoSocial";
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+if (!isValidSguardoId(id)) {
+  return Astro.redirect("/opere/", 302);
+}
+
+let metadata: SguardoShareMetadata | null = null;
+
+try {
+  const store = getSguardoStore();
+  const entry = await store.getMetadata(sguardoImageKey(id));
+  metadata = (entry?.metadata ?? null) as SguardoShareMetadata | null;
+} catch (error) {
+  console.error("[sguardo-page] metadata read failed", error);
+}
+
+if (!metadata?.title || !metadata?.sourceUrl) {
+  return Astro.redirect("/opere/", 302);
+}
+
+const imageUrl = new URL(`/api/sguardo/image/${id}`, Astro.url.origin).href;
+const pageTitle = `Il mio sguardo su “${metadata.title}” · Luca Sanna`;
+const pageDescription =
+  metadata.caption || `Una lettura personale di “${metadata.title}” di Luca Sanna.`;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  image={imageUrl}
+  ogImageWidth={metadata.width}
+  ogImageHeight={metadata.height}
+  canonicalUrl={Astro.url.href}
+  ogType="website"
+  alternateUrl={null}
+>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex,follow" />
+    <meta property="og:image:type" content="image/jpeg" />
+  </Fragment>
+
+  <article class="sguardo-shared">
+    <header class="sguardo-shared-head">
+      <p>LUCA SANNA · IL MIO SGUARDO</p>
+      <h1>Una lettura personale di<br />“{metadata.title}”</h1>
+      <p class="sguardo-shared-copy">{pageDescription}</p>
+    </header>
+
+    <figure class="sguardo-shared-card">
+      <img
+        src={imageUrl}
+        alt={`Interpretazione personale di ${metadata.title}`}
+        width={metadata.width}
+        height={metadata.height}
+        loading="eager"
+        decoding="async"
+      />
+    </figure>
+
+    <div class="sguardo-shared-actions">
+      <a href={metadata.sourceUrl}>Guarda l’opera originale</a>
+      <a href="/opere/">Esplora le opere</a>
+    </div>
+  </article>
+
+  <style>
+    .sguardo-shared {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: clamp(1rem, 4vw, 4rem) 0 5rem;
+    }
+
+    .sguardo-shared-head {
+      max-width: 52rem;
+      margin: 0 auto 2rem;
+      text-align: center;
+    }
+
+    .sguardo-shared-head > p:first-child {
+      margin: 0 0 1rem;
+      color: #777;
+      font-family: Inter, sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+    }
+
+    .sguardo-shared-head h1 {
+      margin: 0;
+      color: #f0f0f0;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(2.2rem, 7vw, 5.5rem);
+      font-weight: 400;
+      line-height: 1.02;
+    }
+
+    .sguardo-shared-copy {
+      max-width: 38rem;
+      margin: 1.4rem auto 0;
+      color: #969696;
+      line-height: 1.7;
+    }
+
+    .sguardo-shared-card {
+      display: grid;
+      place-items: center;
+      margin: 0 auto;
+      padding: clamp(0.7rem, 2vw, 1.4rem);
+      background:
+        radial-gradient(circle at 50% 36%, rgba(217, 190, 151, 0.12), transparent 36%),
+        #0b0b0b;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .sguardo-shared-card img {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      max-height: 76vh;
+      object-fit: contain;
+      box-shadow: 0 30px 80px rgba(0,0,0,.42);
+    }
+
+    .sguardo-shared-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .sguardo-shared-actions a {
+      padding: 0.8rem 1rem;
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #d9d9d9;
+      font-family: Inter, sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .sguardo-shared-actions a:hover,
+    .sguardo-shared-actions a:focus-visible {
+      border-color: rgba(255,255,255,0.5);
+      color: #fff;
+    }
+  </style>
+</BaseLayout>
