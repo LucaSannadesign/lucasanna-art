@@ -1,0 +1,58 @@
+---
+/**
+ * Immagine d'opera responsive: srcset dal CDN immagini Netlify, dimensioni reali
+ * (niente layout shift), lazy loading di default. L'originale non viene alterato.
+ */
+import type { HTMLAttributes } from "astro/types";
+import { netlifyImageSrcSet, netlifyImageUrl } from "../lib/imageCdn";
+import { getImageMeta } from "../lib/imageMeta";
+
+interface Props extends Omit<HTMLAttributes<"img">, "src" | "srcset" | "width" | "height"> {
+    src: string;
+    alt: string;
+    sizes: string;
+    widths?: number[];
+    quality?: number;
+    /** Larghezza del `src` di fallback. */
+    fallbackWidth?: number;
+    /**
+     * Usa l'URL originale come `src` (le varianti CDN restano nello srcset).
+     * Per l'immagine principale della pagina opera: URL stabile per Google Immagini.
+     */
+    originalSrc?: boolean;
+}
+
+const {
+    src,
+    alt,
+    sizes,
+    widths = [320, 480, 640, 800, 1024],
+    quality = 76,
+    fallbackWidth = 640,
+    originalSrc = false,
+    loading = "lazy",
+    decoding = "async",
+    ...attrs
+} = Astro.props;
+
+const meta = await getImageMeta(src);
+// Se l'immagine non è leggibile in build (es. WebP con header non standard, che il
+// browser visualizza ma il CDN non elabora) si serve l'originale, senza srcset.
+const useCdn = meta?.processable ?? false;
+// Non chiedere al CDN versioni più larghe dell'originale.
+const usable = meta ? widths.filter((w) => w <= meta.width) : widths;
+const finalWidths = usable.length ? usable : [meta?.width ?? widths[0]!];
+const fallback = Math.min(fallbackWidth, finalWidths.at(-1)!);
+---
+
+<img
+    src={useCdn && !originalSrc ? netlifyImageUrl(src, fallback, quality) : src}
+    srcset={useCdn ? netlifyImageSrcSet(src, finalWidths, quality) : undefined}
+    sizes={useCdn ? sizes : undefined}
+    alt={alt}
+    width={meta?.width}
+    height={meta?.height}
+    loading={loading}
+    decoding={decoding}
+    {...attrs}
+/>

@@ -1,316 +1,579 @@
 ---
-import OperaFocus from "./OperaFocus.astro";
+/**
+ * Percorso curatoriale: una piccola mostra digitale dentro un <dialog>.
+ * Ingresso (scelta di chiave e sala) → sala (tappe con progressione, testo
+ * curatoriale, opera corrente e relazione con la successiva) → congedo.
+ * Ogni tappa rimanda alla pagina statica dell'opera: nessun contenuto
+ * indicizzabile vive solo qui. Deep link: #percorso=chiave/sala/tappa.
+ */
+import { CATEGORY_LABELS } from "../lib/opere";
+import { PERCORSO_CHIAVI, PERCORSO_SALE, PERIODO_ORDER, type PercorsoWork } from "../lib/percorso";
 
-const { works = [] } = Astro.props;
+interface Props {
+    works: PercorsoWork[];
+    /** Ambito (es. nome della sezione) mostrato nell'ingresso. */
+    scope?: string;
+}
+
+const { works = [], scope } = Astro.props;
+const chiavi = Object.keys(PERCORSO_CHIAVI) as Array<keyof typeof PERCORSO_CHIAVI>;
+const payload = JSON.stringify({
+    works,
+    chiavi: PERCORSO_CHIAVI,
+    sale: PERCORSO_SALE,
+    periodoOrder: PERIODO_ORDER,
+    categorie: CATEGORY_LABELS,
+}).replace(/</g, "\\u003c");
 ---
 
-<div
-    id="percorso-overlay"
-    class="percorso-overlay"
-    role="dialog"
-    aria-modal="true"
-    aria-hidden="true"
-    hidden
->
-    <div class="percorso-overlay__inner">
-        <div class="percorso-overlay__top">
-            <div>
-                <p class="text-xs uppercase tracking-[0.2em] text-gray-400 mb-3">
-                    Percorso Curatoriale Dinamico
-                </p>
-                <div class="percorso-keybar" id="percorso-keybar" role="tablist" aria-label="Scegli chiave curatoriale">
-                    <button type="button" class="percorso-key-btn" data-key="tema">Tema</button>
-                    <button type="button" class="percorso-key-btn" data-key="periodo">Periodo</button>
-                    <button type="button" class="percorso-key-btn" data-key="emozione">Emozione</button>
-                </div>
-                <div id="percorso-valuebar" class="percorso-valuebar" aria-live="polite"></div>
+<dialog id="percorso" class="percorso" data-percorso aria-labelledby="percorso-heading">
+    <script is:inline type="application/json" data-percorso-data set:html={payload} />
+
+    <header class="percorso__top">
+        <div class="percorso__heading-wrap">
+            <p class="percorso__eyebrow">{scope ? `Percorso curatoriale · ${scope}` : "Percorso curatoriale"}</p>
+            <h2 id="percorso-heading" class="percorso__heading" tabindex="-1" data-percorso-heading>
+                Una mostra in cammino
+            </h2>
+        </div>
+        <div class="percorso__top-actions">
+            <button type="button" class="percorso__btn percorso__btn--quiet" data-percorso-back hidden>Cambia sala</button>
+            <button type="button" class="percorso__btn" data-percorso-close aria-label="Chiudi il percorso curatoriale">
+                Chiudi
+            </button>
+        </div>
+    </header>
+
+    <!-- Ingresso: scelta della chiave di lettura e della sala -->
+    <section class="percorso__ingresso" data-percorso-ingresso aria-label="Scegli il percorso">
+        <div class="percorso__keys" role="group" aria-label="Chiave di lettura" data-percorso-keys>
+            {
+                chiavi.map((key, i) => (
+                    <button type="button" class="percorso__key" data-key={key} aria-pressed={i === 0 ? "true" : "false"}>
+                        {PERCORSO_CHIAVI[key].label}
+                    </button>
+                ))
+            }
+        </div>
+        <p class="percorso__key-text" data-percorso-key-text>{PERCORSO_CHIAVI.tema.testo}</p>
+        <ul class="percorso__sale" data-percorso-sale></ul>
+    </section>
+
+    <!-- Sala: le tappe -->
+    <section class="percorso__sala" data-percorso-sala hidden aria-labelledby="percorso-sala-title">
+        <div class="percorso__progress">
+            <p class="percorso__progress-label">
+                <span data-percorso-sala-label></span>
+                <span aria-hidden="true">·</span>
+                <span data-percorso-count></span>
+            </p>
+            <div
+                class="percorso__bar"
+                role="progressbar"
+                aria-label="Avanzamento nel percorso"
+                aria-valuemin="1"
+                data-percorso-bar
+            >
+                <span class="percorso__bar-fill" data-percorso-bar-fill></span>
             </div>
-
-            <button type="button" id="percorso-close" class="percorso-close" aria-label="Chiudi percorso curatoriale">Chiudi ✕</button>
         </div>
 
-        <OperaFocus />
+        <div class="percorso__stage" data-percorso-stage>
+            <figure class="percorso__media">
+                <img data-percorso-img alt="" decoding="async" />
+            </figure>
+            <div class="percorso__info" data-percorso-info>
+                <p class="percorso__sala-text" data-percorso-sala-text></p>
+                <h3 id="percorso-sala-title" class="percorso__title" data-percorso-title></h3>
+                <p class="percorso__meta" data-percorso-meta></p>
+                <p class="percorso__desc" data-percorso-desc></p>
+                <a class="percorso__link" data-percorso-link href="/opere/">Apri la scheda dell'opera</a>
 
-        <div class="percorso-overlay__bottom">
-            <button type="button" id="percorso-prev" class="percorso-nav-btn" aria-label="Opera precedente">←</button>
-            <p id="percorso-progress" class="text-xs md:text-sm uppercase tracking-[0.16em] text-gray-400">0 / 0</p>
-            <button type="button" id="percorso-next" class="percorso-nav-btn" aria-label="Opera successiva">→</button>
+                <div class="percorso__next" data-percorso-next>
+                    <img class="percorso__next-thumb" data-percorso-next-thumb alt="" loading="lazy" decoding="async" />
+                    <div>
+                        <p class="percorso__next-label">Verso la prossima opera</p>
+                        <p class="percorso__next-title" data-percorso-next-title></p>
+                        <p class="percorso__next-rel" data-percorso-next-rel></p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<script is:inline define:vars={{ works }}>
-    const initPercorsoOverlay = () => {
-        const overlay = document.getElementById("percorso-overlay");
-        const trigger = document.getElementById("percorso-trigger");
-        const closeButton = document.getElementById("percorso-close");
-        const prevButton = document.getElementById("percorso-prev");
-        const nextButton = document.getElementById("percorso-next");
-        const progressNode = document.getElementById("percorso-progress");
-        const valueBar = document.getElementById("percorso-valuebar");
-        const keyButtons = Array.from(document.querySelectorAll(".percorso-key-btn"));
+        <div class="percorso__end" data-percorso-end hidden>
+            <p class="percorso__eyebrow">Fine della sala</p>
+            <p class="percorso__end-text" data-percorso-end-text></p>
+            <div class="percorso__end-actions">
+                <button type="button" class="percorso__btn" data-percorso-restart>Ricomincia la sala</button>
+                <button type="button" class="percorso__btn" data-percorso-other>Scegli un'altra sala</button>
+                <a class="percorso__btn" href="/opere/">Tutte le opere</a>
+            </div>
+        </div>
 
-        const imageNode = document.getElementById("percorso-opera-image");
-        const titleNode = document.getElementById("percorso-opera-title");
-        const metaNode = document.getElementById("percorso-opera-meta");
-        const descriptionNode = document.getElementById("percorso-opera-description");
-        const linkNode = document.getElementById("percorso-opera-link");
-        const noteNode = document.getElementById("percorso-curator-note");
+        <nav class="percorso__nav" aria-label="Tappe del percorso">
+            <button type="button" class="percorso__btn percorso__btn--nav" data-percorso-prev>
+                <span aria-hidden="true">←</span> Precedente
+            </button>
+            <button type="button" class="percorso__btn percorso__btn--nav" data-percorso-next-btn>
+                Successiva <span aria-hidden="true">→</span>
+            </button>
+        </nav>
+    </section>
 
-        if (!overlay || overlay.dataset.bound === "true") return;
-        if (!trigger || !imageNode || !titleNode || !metaNode || !descriptionNode || !linkNode || !noteNode || !valueBar) return;
-        overlay.dataset.bound = "true";
+    <p class="sr-only" aria-live="polite" data-percorso-live></p>
+</dialog>
 
-        const state = {
-            key: "tema",
-            value: "",
-            list: [],
-            index: 0,
-            touchStartX: 0,
-        };
-
-        const periodoOrder = {
-            radici: 1,
-            passaggio: 2,
-            orizzonti: 3,
-            contemporaneo: 4,
-        };
-
-        const getValuesForKey = (key) => {
-            const values = Array.from(new Set(works.map((work) => (work[key] || "").toString().trim()).filter(Boolean)));
-            if (key === "periodo") return values.sort((a, b) => (periodoOrder[a] || 99) - (periodoOrder[b] || 99));
-            return values.sort((a, b) => a.localeCompare(b, "it"));
-        };
-
-        const narrativeSort = (list, key) => {
-            return [...list].sort((a, b) => {
-                const periodDelta = (periodoOrder[a.periodo] || 99) - (periodoOrder[b.periodo] || 99);
-                if (periodDelta !== 0) return periodDelta;
-
-                const dateA = new Date(a.date || a.year || 0).getTime();
-                const dateB = new Date(b.date || b.year || 0).getTime();
-                if (dateA !== dateB) return dateA - dateB;
-
-                if (key === "emozione") return (a.tema || "").localeCompare(b.tema || "", "it");
-                return a.title.localeCompare(b.title, "it");
-            });
-        };
-
-        const curatorNote = (work, index, total) => {
-            const family = state.key === "tema" ? work.tema : state.key === "periodo" ? work.periodo : work.emozione;
-            return `Tappa ${index + 1} di ${total}: ${family}. Una progressione visiva tra linguaggio, memoria e presenza.`;
-        };
-
-        const updateUI = () => {
-            const current = state.list[state.index];
-            if (!current) return;
-
-            imageNode.src = current.image || "";
-            imageNode.alt = current.title || "Opera";
-            titleNode.textContent = current.title || "Opera";
-            metaNode.textContent = [current.year, current.technique].filter(Boolean).join(" • ");
-            descriptionNode.textContent = (current.description || "").trim();
-            linkNode.href = current.href || "/opere/";
-            progressNode.textContent = `${state.index + 1} / ${state.list.length}`;
-            noteNode.textContent = curatorNote(current, state.index, state.list.length);
-
-            prevButton.disabled = state.index <= 0;
-            nextButton.disabled = state.index >= state.list.length - 1;
-        };
-
-        const applySelection = (key, value) => {
-            state.key = key;
-            state.value = value;
-
-            keyButtons.forEach((btn) => {
-                const active = btn.dataset.key === key;
-                btn.classList.toggle("is-active", active);
-                btn.setAttribute("aria-selected", active ? "true" : "false");
-            });
-
-            state.list = narrativeSort(works.filter((work) => work[key] === value), key);
-            state.index = 0;
-            updateUI();
-        };
-
-        const renderValues = (key) => {
-            const values = getValuesForKey(key);
-            if (!values.length) {
-                valueBar.innerHTML = "<p class='text-xs text-gray-500'>Nessun percorso disponibile.</p>";
-                return;
-            }
-
-            valueBar.innerHTML = values
-                .map(
-                    (value, index) =>
-                        `<button type=\"button\" class=\"percorso-value-btn ${index === 0 ? "is-active" : ""}\" data-value=\"${value}\">${value}</button>`,
-                )
-                .join("");
-
-            Array.from(valueBar.querySelectorAll(".percorso-value-btn")).forEach((button) => {
-                button.addEventListener("click", () => {
-                    const selected = button.getAttribute("data-value") || "";
-                    Array.from(valueBar.querySelectorAll(".percorso-value-btn")).forEach((node) =>
-                        node.classList.toggle("is-active", node === button),
-                    );
-                    applySelection(key, selected);
-                });
-            });
-
-            applySelection(key, values[0]);
-        };
-
-        const openOverlay = () => {
-            overlay.hidden = false;
-            overlay.setAttribute("aria-hidden", "false");
-            document.body.classList.add("percorso-lock-scroll");
-            renderValues(state.key);
-        };
-
-        const closeOverlay = () => {
-            overlay.hidden = true;
-            overlay.setAttribute("aria-hidden", "true");
-            document.body.classList.remove("percorso-lock-scroll");
-        };
-
-        trigger.addEventListener("click", openOverlay);
-        closeButton.addEventListener("click", closeOverlay);
-
-        prevButton.addEventListener("click", () => {
-            if (state.index > 0) {
-                state.index -= 1;
-                updateUI();
-            }
-        });
-
-        nextButton.addEventListener("click", () => {
-            if (state.index < state.list.length - 1) {
-                state.index += 1;
-                updateUI();
-            }
-        });
-
-        keyButtons.forEach((button) => {
-            button.addEventListener("click", () => {
-                const key = button.dataset.key || "tema";
-                renderValues(key);
-            });
-        });
-
-        document.addEventListener("keydown", (event) => {
-            if (overlay.hidden) return;
-            if (event.key === "Escape") closeOverlay();
-            if (event.key === "ArrowLeft") prevButton.click();
-            if (event.key === "ArrowRight") nextButton.click();
-        });
-
-        overlay.addEventListener("touchstart", (event) => {
-            state.touchStartX = event.changedTouches[0]?.clientX || 0;
-        });
-
-        overlay.addEventListener("touchend", (event) => {
-            const touchEndX = event.changedTouches[0]?.clientX || 0;
-            const delta = touchEndX - state.touchStartX;
-            if (Math.abs(delta) < 40) return;
-            if (delta > 0) prevButton.click();
-            if (delta < 0) nextButton.click();
-        });
-    };
-
-    initPercorsoOverlay();
-    document.addEventListener("DOMContentLoaded", initPercorsoOverlay, { once: true });
-    document.addEventListener("astro:page-load", initPercorsoOverlay);
+<script>
+    import { initPercorso } from "../scripts/percorso";
+    initPercorso();
 </script>
 
 <style>
-    :global(body.percorso-lock-scroll) {
+    .percorso {
+        --percorso-ambient: #121212;
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        max-width: none;
+        max-height: none;
+        margin: 0;
+        padding: clamp(1rem, 3vw, 2.5rem);
+        border: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        color: #e6e6e6;
+        background: color-mix(in oklab, var(--percorso-ambient) 65%, #0b0b0b);
+        transition: background-color 1400ms ease;
+    }
+
+    :global(html[data-silent="true"]) .percorso {
+        transition-duration: 1800ms !important;
+    }
+
+    .percorso[open] {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(1.25rem, 3vw, 2rem);
+    }
+
+    .percorso::backdrop {
+        background: rgba(6, 6, 6, 0.94);
+    }
+
+    .percorso__top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        max-width: 72rem;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .percorso__top-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .percorso__eyebrow {
+        margin: 0 0 0.5rem;
+        font-size: 0.66rem;
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+        color: #a3a3a3;
+    }
+
+    .percorso__heading {
+        margin: 0;
+        font-family: var(--font-heading);
+        font-weight: 400;
+        font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+        line-height: 1.15;
+        color: #f4f4f4;
+        text-transform: none;
+        letter-spacing: 0.01em;
+    }
+
+    .percorso__heading:focus {
+        outline: none;
+    }
+
+    .percorso__btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 2.75rem;
+        padding: 0 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: transparent;
+        color: #f0f0f0;
+        font-size: 0.66rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .percorso__btn--quiet {
+        border-color: transparent;
+        color: #cfcfcf;
+    }
+
+    .percorso__btn:hover {
+        border-color: rgba(255, 255, 255, 0.55);
+        color: #ffffff;
+    }
+
+    .percorso__btn:disabled {
+        opacity: 0.32;
+        cursor: default;
+    }
+
+    .percorso :focus-visible {
+        outline: 2px solid #f2f2f2;
+        outline-offset: 3px;
+    }
+
+    /* Il titolo riceve il focus solo come punto di partenza per i lettori di schermo. */
+    .percorso .percorso__heading:focus-visible {
+        outline: none;
+    }
+
+    /* ---------- ingresso ---------- */
+
+    .percorso__ingresso {
+        max-width: 72rem;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .percorso__keys {
+        display: flex;
+        gap: 1.75rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .percorso__key {
+        min-height: 2.75rem;
+        padding: 0;
+        border: 0;
+        border-bottom: 1px solid transparent;
+        margin-bottom: -1px;
+        background: none;
+        color: #a3a3a3;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        cursor: pointer;
+    }
+
+    .percorso__key[aria-pressed="true"] {
+        color: #f4f4f4;
+        border-bottom-color: #f4f4f4;
+    }
+
+    .percorso__key-text {
+        max-width: 40rem;
+        margin: 1.25rem 0 2rem;
+        font-family: var(--font-heading);
+        font-style: italic;
+        font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+        line-height: 1.55;
+        color: #d4d4d4;
+    }
+
+    .percorso__sale {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+        gap: 1rem;
+    }
+
+    .percorso__sale :global(.percorso__room) {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem;
+        text-align: left;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.02);
+        color: inherit;
+        cursor: pointer;
+        transition: border-color 300ms ease, background-color 300ms ease;
+    }
+
+    .percorso__sale :global(.percorso__room:hover) {
+        border-color: rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .percorso__sale :global(.percorso__room-thumbs) {
+        display: flex;
+        gap: 0.35rem;
+        height: 4.5rem;
+    }
+
+    .percorso__sale :global(.percorso__room-thumbs img) {
+        height: 100%;
+        width: auto;
+        max-width: 33%;
+        object-fit: cover;
+    }
+
+    .percorso__sale :global(.percorso__room-name) {
+        font-family: var(--font-heading);
+        font-size: 1.35rem;
+        line-height: 1.2;
+        color: #f4f4f4;
+    }
+
+    .percorso__sale :global(.percorso__room-count) {
+        font-size: 0.64rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: #a3a3a3;
+    }
+
+    .percorso__sale :global(.percorso__room-text) {
+        font-size: 0.85rem;
+        line-height: 1.55;
+        color: #c4c4c4;
+    }
+
+    /* ---------- sala ---------- */
+
+    .percorso__sala {
+        max-width: 72rem;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(1rem, 2.5vw, 1.75rem);
+        flex: 1;
+    }
+
+    .percorso__progress-label {
+        margin: 0 0 0.6rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        font-size: 0.66rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #b5b5b5;
+    }
+
+    .percorso__bar {
+        position: relative;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.12);
         overflow: hidden;
     }
 
-    .percorso-overlay {
-        position: fixed;
+    .percorso__bar-fill {
+        position: absolute;
         inset: 0;
-        z-index: 80;
-        background: rgba(6, 6, 6, 0.96);
-        padding: 1.25rem;
-        overflow-y: auto;
+        background: color-mix(in oklab, var(--percorso-ambient) 25%, #f2f2f2);
+        transform-origin: left center;
+        transform: scaleX(var(--progress, 0));
+        transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .percorso-overlay__inner {
-        max-width: 1100px;
-        margin: 0 auto;
-        min-height: calc(100vh - 2.5rem);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 1.25rem;
+    .percorso__stage {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+        gap: clamp(1.25rem, 4vw, 3.5rem);
+        align-items: center;
+        flex: 1;
+        touch-action: pan-y;
     }
 
-    .percorso-overlay__top,
-    .percorso-overlay__bottom {
+    .percorso__media {
+        margin: 0;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        flex-wrap: wrap;
+        justify-content: center;
+        min-height: 40vh;
     }
 
-    .percorso-keybar,
-    .percorso-valuebar {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        flex-wrap: wrap;
+    .percorso__media img {
+        max-width: 100%;
+        max-height: 66vh;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
     }
 
-    .percorso-key-btn,
-    .percorso-value-btn,
-    .percorso-nav-btn,
-    .percorso-close {
-        border: 1px solid rgba(255, 255, 255, 0.24);
-        color: #fff;
-        background: transparent;
+    .percorso__sala-text {
+        margin: 0 0 1.5rem;
+        padding-left: 1rem;
+        border-left: 1px solid color-mix(in oklab, var(--percorso-ambient) 30%, rgba(255, 255, 255, 0.5));
+        font-family: var(--font-heading);
+        font-style: italic;
+        font-size: 1rem;
+        line-height: 1.55;
+        color: #cfcfcf;
+    }
+
+    .percorso__title {
+        margin: 0 0 0.6rem;
+        font-family: var(--font-heading);
+        font-weight: 400;
+        font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+        line-height: 1.2;
+        color: #f6f6f6;
+    }
+
+    .percorso__meta {
+        margin: 0 0 1rem;
+        font-size: 0.66rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: #a8a8a8;
+    }
+
+    .percorso__desc {
+        margin: 0 0 1.25rem;
+        font-size: 0.92rem;
+        line-height: 1.65;
+        color: #c8c8c8;
+    }
+
+    .percorso__link {
+        display: inline-block;
+        padding: 0.4rem 0;
         font-size: 0.68rem;
         text-transform: uppercase;
-        letter-spacing: 0.14em;
-        padding: 0.55rem 0.9rem;
-        transition: 180ms ease;
+        letter-spacing: 0.18em;
+        color: #f2f2f2;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+        text-decoration: none;
     }
 
-    .percorso-key-btn.is-active,
-    .percorso-value-btn.is-active,
-    .percorso-nav-btn:hover,
-    .percorso-close:hover {
-        border-color: rgba(255, 255, 255, 0.64);
-        background: rgba(255, 255, 255, 0.1);
-    }
-
-    .percorso-nav-btn[disabled] {
-        opacity: 0.4;
-        pointer-events: none;
-    }
-
-    :global(.percorso-opera-focus) {
-        display: grid;
-        grid-template-columns: 1.1fr 1fr;
-        gap: 1.5rem;
+    .percorso__next {
+        display: flex;
+        gap: 0.9rem;
         align-items: center;
+        margin-top: 2rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    :global(.percorso-opera-media) {
-        background: #111;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        min-height: 42vh;
-        padding: 1rem;
+    .percorso__next[hidden] {
+        display: none;
     }
 
-    @media (max-width: 900px) {
-        :global(.percorso-opera-focus) {
+    .percorso__next-thumb {
+        width: 3.5rem;
+        height: 3.5rem;
+        object-fit: cover;
+        flex: none;
+        opacity: 0.85;
+    }
+
+    .percorso__next-label {
+        margin: 0;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #a3a3a3;
+    }
+
+    .percorso__next-title {
+        margin: 0.15rem 0;
+        font-family: var(--font-heading);
+        font-size: 1rem;
+        color: #e8e8e8;
+    }
+
+    .percorso__next-rel {
+        margin: 0;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        color: #b5b5b5;
+    }
+
+    .percorso__end {
+        max-width: 40rem;
+        margin: 2rem auto;
+        text-align: center;
+    }
+
+    .percorso__end-text {
+        font-family: var(--font-heading);
+        font-style: italic;
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #d8d8d8;
+    }
+
+    .percorso__end-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6rem;
+        margin-top: 1.5rem;
+    }
+
+    .percorso__nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .percorso__btn--nav {
+        min-width: 9rem;
+    }
+
+    @media (max-width: 640px) {
+        .percorso__top {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+        .percorso__top-actions {
+            justify-content: space-between;
+        }
+    }
+
+    @media (max-width: 860px) {
+        .percorso__stage {
             grid-template-columns: 1fr;
+            align-items: start;
         }
 
-        :global(.percorso-opera-media) {
-            min-height: 36vh;
+        .percorso__media {
+            min-height: 0;
         }
+
+        .percorso__media img {
+            max-height: 52vh;
+        }
+
+        .percorso__nav {
+            position: sticky;
+            bottom: 0;
+            padding: 0.75rem 0 0.25rem;
+            background: linear-gradient(to top, color-mix(in oklab, var(--percorso-ambient) 65%, #0b0b0b) 70%, transparent);
+        }
+
+        .percorso__btn--nav {
+            flex: 1;
+            min-width: 0;
+        }
+    }
+
+    :global(html.percorso-open) {
+        overflow: hidden;
     }
 </style>

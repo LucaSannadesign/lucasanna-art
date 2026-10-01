@@ -2,12 +2,26 @@
 const { triggerId = "percorso-trigger" } = Astro.props;
 ---
 
-<div class="text-center mb-12">
+<!-- Senza JavaScript il percorso non è disponibile: il pulsante resta nascosto (html.js). -->
+<div class="percorso-trigger-wrap text-center mb-12">
     <button
         id={triggerId}
         type="button"
+        data-percorso-open
+        aria-haspopup="dialog"
+        aria-controls="percorso"
         class="percorso-trigger inline-flex items-center justify-center border border-white/25 px-6 py-3 text-xs md:text-sm uppercase tracking-[0.18em] text-white transition hover:border-white/60 hover:bg-white/10"
     >
         Vivi un percorso curatoriale
     </button>
 </div>
+
+<style>
+    :global(html:not(.js)) .percorso-trigger-wrap {
+        display: none;
+    }
+
+    .percorso-trigger {
+        min-height: 2.75rem;
+    }
+</style>

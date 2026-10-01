@@ -9,10 +9,18 @@
  *
  * Intensità, durata e permanenza minima: token --atmo-* (Silenzio / Rumore) in global.css.
  * Disattivata con prefers-reduced-motion: reduce, prefers-contrast: more, forced-colors: active.
+ *
+ * `color` (opzionale): tinta statica, ad es. nella pagina della singola opera.
+ * È applicata già nell'HTML, quindi presente dal primo paint e senza JavaScript.
  */
+interface Props {
+    color?: string;
+}
+
+const { color } = Astro.props;
 ---
 
-<div class="atmosfera" data-atmosfera aria-hidden="true"></div>
+<div class="atmosfera" data-atmosfera aria-hidden="true" style={color ? `--atmo-target: ${color}` : undefined}></div>
 
 <script is:inline>
     (() => {

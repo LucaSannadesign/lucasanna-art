@@ -39,10 +39,14 @@ const initial = safeVariants[0] || "";
             }
             if (!Array.isArray(variants) || variants.length < 2) return;
 
+            // Con riduzione del movimento la frase resta fissa (nessun contenuto che cambia da solo).
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
             const every = Number(node.dataset.interval || 24000);
             let index = 0;
 
             window.setInterval(() => {
+                if (document.hidden) return;
                 index = (index + 1) % variants.length;
                 node.classList.add("is-fading");
                 window.setTimeout(() => {
@@ -59,8 +63,19 @@ const initial = safeVariants[0] || "";
 
 <style>
     .testo-mutabile {
-        margin: 0;
+        margin-top: 0;
+        margin-inline: 0;
         transition: opacity 600ms ease;
+    }
+
+    /* Senza classe di margine esplicita resta a filo (come prima). */
+    .testo-mutabile:not([class*="mb-"]) {
+        margin-bottom: 0;
+    }
+
+    /* Nei blocchi centrati (pagina opera, categorie) la frase resta in asse. */
+    :global(.text-center) > .testo-mutabile {
+        margin-inline: auto;
     }
 
     .testo-mutabile.is-fading {

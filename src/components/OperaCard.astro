@@ -1,0 +1,117 @@
+---
+/**
+ * Card d'opera per le gallerie (archivio IT/EN e pagine categoria).
+ * È un semplice link server-rendered: senza JavaScript resta perfettamente navigabile.
+ * Reveal, inclinazione prospettica, atmosfera cromatica e View Transition
+ * si agganciano solo tramite data-attributes.
+ */
+import OperaImg from "./OperaImg.astro";
+import { getImageMeta } from "../lib/imageMeta";
+
+interface Props {
+    href: string;
+    title: string;
+    image?: string;
+    alt: string;
+    category: string;
+    index: number;
+    technique?: string;
+    year?: string | number;
+    description?: string;
+    /** Sottotitolo (es. titolo inglese). */
+    subtitle?: string;
+    /** Colore ambientale manuale: ha la precedenza su quello estratto in build. */
+    ambientColor?: string;
+    memoriaSlug?: string;
+    lang?: string;
+    titleLang?: string;
+    ariaLabel?: string;
+    headingLevel?: "h2" | "h3";
+    /** Prime card visibili: caricamento non lazy. */
+    eager?: boolean;
+}
+
+const {
+    href,
+    title,
+    image,
+    alt,
+    category,
+    index,
+    technique,
+    year,
+    description,
+    subtitle,
+    ambientColor,
+    memoriaSlug,
+    lang,
+    titleLang,
+    ariaLabel,
+    headingLevel = "h2",
+    eager = false,
+} = Astro.props;
+
+const Heading = headingLevel;
+const meta = await getImageMeta(image);
+const ambient = ambientColor || meta?.ambient;
+const metaLine = [technique, year != null && year !== "" ? String(year) : ""].filter(Boolean).join(" · ");
+---
+
+<a
+    href={href}
+    lang={lang}
+    aria-label={ariaLabel}
+    class="group block opere-card"
+    data-gallery-card
+    data-tilt
+    data-reveal-item
+    data-reveal-order={String(index)}
+    data-atmosfera-item
+    data-ambient={ambient}
+    data-memoria-slug={memoriaSlug}
+    data-categoria={category}
+>
+    <div class="opere-media overflow-hidden bg-[#1a1a1a] mb-6 relative" data-reveal-media data-tilt-target>
+        {
+            image ? (
+                <OperaImg
+                    src={image}
+                    alt={alt}
+                    sizes="(max-width: 639px) calc(100vw - 2rem), (max-width: 1023px) calc(50vw - 3rem), 400px"
+                    widths={[320, 480, 640, 800, 960]}
+                    loading={eager ? "eager" : "lazy"}
+                    data-opera-reattiva
+                    data-vt-media
+                    class="w-full h-full object-cover"
+                />
+            ) : (
+                <div class="aspect-[4/5] w-full bg-[#1a1a1a] flex items-center justify-center text-gray-500 font-light tracking-widest uppercase text-sm">
+                    No Image
+                </div>
+            )
+        }
+
+        <span class="opere-card-link-hint" aria-hidden="true">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-4 h-4"
+            >
+                <path d="M7 17L17 7M7 7h10v10"></path>
+            </svg>
+        </span>
+    </div>
+    <div class="opere-card-caption text-center">
+        <Heading class="opere-card-title text-xl font-heading text-white mb-2" lang={titleLang}>
+            {title}
+        </Heading>
+        {subtitle && <p class="opere-card-subtitle font-heading italic">{subtitle}</p>}
+        {metaLine && <p class="opere-card-meta text-xs uppercase tracking-widest mb-2">{metaLine}</p>}
+        {description && <p class="opere-card-description text-xs leading-relaxed">{description}</p>}
+    </div>
+</a>

@@ -4,6 +4,7 @@ import { getEntry, getCollection, type CollectionEntry } from "astro:content";
 import { netlifyImageSrcSet, netlifyImageUrl } from "../lib/imageCdn";
 import RevealNarrativo from "../components/RevealNarrativo.astro";
 import AtmosferaCromatica from "../components/AtmosferaCromatica.astro";
+import OpereRecenti, { type OperaRecente } from "../components/OpereRecenti.astro";
 
 const entry = await getEntry("pages", "index");
 if (!entry) throw new Error("Missing index page");
@@ -17,6 +18,15 @@ const recentWorks: CollectionEntry<"opere">[] = (await getCollection("opere"))
 			new Date(a.data.date || 0).getTime(),
 	)
 	.slice(0, 6);
+
+const recentItems: OperaRecente[] = recentWorks.map((work) => ({
+	href: `/opere/${work.slug}/`,
+	title: work.data.title,
+	image: work.data.featuredImage,
+	alt: work.data.imageAlt || work.data.title,
+	technique: work.data.technique,
+	ambientColor: work.data.ambientColor,
+}));
 
 const recentPosts: CollectionEntry<"posts">[] = (await getCollection("posts"))
 	.sort(
@@ -76,6 +86,7 @@ const heroAvifSrcSet = heroImage
 						srcset={netlifyImageSrcSet(heroImage, [480, 768, 1024, 1200], 78)}
 						sizes={heroSizes}
 						alt="Luca Sanna"
+						data-home-hero
 						fetchpriority="high"
 						loading="eager"
 						decoding="async"
@@ -156,51 +167,7 @@ const heroAvifSrcSet = heroImage
 		>
 			Opere recenti dal percorso visivo
 		</h2>
-		<div
-			class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10"
-			data-atmosfera-zone
-		>
-			{
-				recentWorks.map((work, index) => {
-					const image = work.data.featuredImage;
-					return (
-						<a
-							href={`/opere/${work.slug}/`}
-							class="group block"
-							data-reveal-item
-							data-reveal-order={String(index)}
-							data-atmosfera-item
-							data-ambient={work.data.ambientColor}
-						>
-							<div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6" data-reveal-media>
-								{image && (
-									<img
-										src={netlifyImageUrl(image, 640, 76)}
-										srcset={netlifyImageSrcSet(image, [320, 480, 640, 800], 76)}
-										sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1023px) 45vw, 30vw"
-										alt={work.data.imageAlt || work.data.title}
-										loading="lazy"
-										decoding="async"
-										data-vt-media
-										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
-									/>
-								)}
-							</div>
-							<div class="text-center">
-								<h3 class="text-xl font-heading text-white mb-2 group-hover:text-gray-300 transition-colors">
-									{work.data.title}
-								</h3>
-								{work.data.technique && (
-									<p class="text-xs text-gray-500 uppercase tracking-widest mb-1">
-										{work.data.technique}
-									</p>
-								)}
-							</div>
-						</a>
-					);
-				})
-			}
-		</div>
+		<OpereRecenti items={recentItems} />
 		<div class="text-center mt-12">
 			<a
 				href="/opere/"
@@ -297,4 +264,11 @@ const heroAvifSrcSet = heroImage
 
 	<RevealNarrativo selector="[data-reveal-item]" />
 	<AtmosferaCromatica />
+	<script>
+		import { initTilt } from "../scripts/motion/tilt";
+		import { initHome } from "../scripts/home";
+
+		initTilt();
+		initHome();
+	</script>
 </BaseLayout>

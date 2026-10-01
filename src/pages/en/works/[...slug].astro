@@ -4,6 +4,12 @@ import {
     featuredWorksEn,
     type FeaturedWorkEn,
 } from "../../../i18n/featuredWorks.en";
+import OperaImg from "../../../components/OperaImg.astro";
+import OperaViewer from "../../../components/OperaViewer.astro";
+import OperaNav from "../../../components/OperaNav.astro";
+import TransizioneOpere from "../../../components/TransizioneOpere.astro";
+import AtmosferaCromatica from "../../../components/AtmosferaCromatica.astro";
+import { getImageMeta } from "../../../lib/imageMeta";
 
 export function getStaticPaths() {
     return featuredWorksEn.map((work) => ({
@@ -21,6 +27,16 @@ const italianUrl = new URL(`/opere/${work.itSlug}/`, siteBase).href;
 const relatedWorks = featuredWorksEn
     .filter((candidate) => candidate.enSlug !== work.enSlug)
     .slice(0, 3);
+
+// Precedente / successiva nella selezione inglese (stesso ordine dell'elenco curato).
+const position = featuredWorksEn.findIndex((candidate) => candidate.enSlug === work.enSlug);
+const toLink = (candidate: FeaturedWorkEn | undefined) =>
+    candidate
+        ? { href: `/en/works/${candidate.enSlug}/`, title: candidate.englishTitle, image: candidate.image }
+        : null;
+const prevWork = toLink(featuredWorksEn[position - 1]);
+const nextWork = toLink(featuredWorksEn[position + 1]);
+const ambient = (await getImageMeta(work.image))?.ambient;
 ---
 
 <BaseLayout
@@ -32,7 +48,10 @@ const relatedWorks = featuredWorksEn
     ogType="article"
     context="page"
     locale="en"
+    viewTransitions
 >
+    <link slot="head" rel="expect" href="#opera-hero" blocking="render" />
+    <TransizioneOpere slot="head" />
     <article class="-mt-4 px-4 pb-12 md:-mt-16 md:pb-20">
         <header class="mx-auto max-w-5xl border-b border-white/10 pb-9 text-center md:pb-12">
             <p class="mb-4 text-[0.65rem] uppercase tracking-[0.24em] text-gray-600">{work.category}</p>
@@ -49,14 +68,47 @@ const relatedWorks = featuredWorksEn
             </div>
         </header>
 
-        <figure class="mx-auto mt-10 max-w-6xl md:mt-14">
-            <img
-                src={work.image}
-                alt={work.imageAlt}
-                class="mx-auto max-h-[85vh] w-full object-contain shadow-2xl"
-                loading="eager"
-            />
+        <figure class="opera-stage mx-auto mt-10 max-w-6xl md:mt-14" data-opera-stage>
+            <a
+                href={work.image}
+                class="opera-stage__open"
+                data-viewer-open
+                aria-haspopup="dialog"
+                aria-label={`Look closer: ${work.englishTitle}`}
+            >
+                <OperaImg
+                    src={work.image}
+                    alt={work.imageAlt}
+                    id="opera-hero"
+                    sizes="(max-width: 1200px) calc(100vw - 2rem), 1152px"
+                    widths={[480, 768, 1024, 1400, 1800]}
+                    fallbackWidth={1024}
+                    quality={80}
+                    originalSrc
+                    loading="eager"
+                    fetchpriority="high"
+                    data-vt-hero
+                    class="mx-auto max-h-[85vh] w-full object-contain shadow-2xl"
+                />
+                <span class="opera-stage__hint" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" class="w-4 h-4">
+                        <circle cx="11" cy="11" r="6.5"></circle>
+                        <path d="M20 20l-4.2-4.2M11 8.5v5M8.5 11h5"></path>
+                    </svg>
+                    Look closer
+                </span>
+            </a>
         </figure>
+
+        <div class="mt-10">
+            <OperaNav
+                prev={prevWork}
+                next={nextWork}
+                label="More selected works"
+                prevLabel="Previous"
+                nextLabel="Next"
+            />
+        </div>
 
         <div class="mx-auto mt-12 max-w-3xl md:mt-16">
             <p class="font-heading text-2xl leading-relaxed text-gray-200 md:text-3xl">
@@ -121,10 +173,12 @@ const relatedWorks = featuredWorksEn
                 {relatedWorks.map((related) => (
                     <a href={`/en/works/${related.enSlug}/`} class="group block">
                         <div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a]">
-                            <img
+                            <OperaImg
                                 src={related.image}
                                 alt={related.imageAlt}
-                                loading="lazy"
+                                sizes="(max-width: 639px) calc(100vw - 2rem), 360px"
+                                widths={[320, 480, 640, 800]}
+                                data-vt-media
                                 class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.025]"
                             />
                         </div>
@@ -135,4 +189,16 @@ const relatedWorks = featuredWorksEn
             </div>
         </section>
     </article>
+
+    <OperaViewer
+        image={work.image}
+        alt={work.imageAlt}
+        title={work.englishTitle}
+        meta={`${work.year} · ${work.technique}`}
+        prev={prevWork}
+        next={nextWork}
+        ambient={ambient}
+        locale="en"
+    />
+    <AtmosferaCromatica color={ambient} />
 </BaseLayout>

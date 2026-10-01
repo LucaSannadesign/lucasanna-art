@@ -1,0 +1,400 @@
+---
+/**
+ * Visore d'osservazione dell'opera.
+ * - Senza JS: l'immagine in pagina è un link all'originale ad alta risoluzione.
+ * - Con JS: {image && (
+<Fragment>
+<dialog> modale (focus trap e Escape nativi), zoom/pan con mouse,
+ *   rotella, tastiera, pinch e doppio tap; opera precedente/successiva.
+ * - Deep link: /opere/…/#osserva apre direttamente il visore.
+ * La pagina opera resta HTML statico indicizzabile; il visore è solo un livello sopra.
+ */
+import { getImageMeta } from "../lib/imageMeta";
+
+type WorkLink = { href: string; title: string } | null;
+
+interface Props {
+    /** Senza immagine il visore non viene generato. */
+    image?: string;
+    alt: string;
+    title: string;
+    meta?: string;
+    prev?: WorkLink;
+    next?: WorkLink;
+    ambient?: string;
+    locale?: "it" | "en";
+}
+
+const { image, alt, title, meta, prev = null, next = null, ambient, locale = "it" } = Astro.props;
+const size = image ? await getImageMeta(image) : null;
+
+const copy =
+    locale === "en"
+        ? {
+              dialog: "Artwork viewer",
+              stage: "Zoomable artwork",
+              help: "Drag to explore · scroll, pinch or double-click to zoom · ← → other works",
+              zoom: "Zoom",
+              zoomIn: "Zoom in",
+              zoomOut: "Zoom out",
+              fit: "Fit",
+              close: "Close",
+              closeLabel: "Close viewer",
+              prev: "Previous work",
+              next: "Next work",
+          }
+        : {
+              dialog: "Visore dell'opera",
+              stage: "Opera ingrandibile",
+              help: "Trascina per esplorare · rotella, pizzico o doppio clic per lo zoom · ← → altre opere",
+              zoom: "Zoom",
+              zoomIn: "Aumenta zoom",
+              zoomOut: "Riduci zoom",
+              fit: "Adatta",
+              close: "Chiudi",
+              closeLabel: "Chiudi il visore",
+              prev: "Opera precedente",
+              next: "Opera successiva",
+          };
+---
+
+<dialog
+    id="opera-viewer"
+    class="viewer"
+    data-viewer
+    aria-label={`${copy.dialog}: ${title}`}
+    style={ambient ? `--viewer-ambient: ${ambient}` : undefined}
+>
+    <div class="viewer__bar">
+        <p class="viewer__title">
+            <span class="viewer__name">{title}</span>
+            {meta && <span class="viewer__meta">{meta}</span>}
+        </p>
+        <div class="viewer__zoom" role="group" aria-label={copy.zoom}>
+            <button type="button" class="viewer__btn" data-zoom-out aria-label={copy.zoomOut}>
+                <span aria-hidden="true">−</span>
+            </button>
+            <output class="viewer__level" data-zoom-level aria-live="polite">100%</output>
+            <button type="button" class="viewer__btn" data-zoom-in aria-label={copy.zoomIn}>
+                <span aria-hidden="true">+</span>
+            </button>
+            <button type="button" class="viewer__btn viewer__btn--text" data-zoom-reset>{copy.fit}</button>
+        </div>
+        <button type="button" class="viewer__btn viewer__btn--text" data-viewer-close aria-label={copy.closeLabel}>
+            {copy.close}
+        </button>
+    </div>
+
+    <div
+        class="viewer__stage"
+        data-viewer-stage
+        tabindex="0"
+        role="group"
+        aria-label={copy.stage}
+        aria-describedby="opera-viewer-help"
+        autofocus
+    >
+        <img
+            class="viewer__img"
+            data-viewer-img
+            data-full={image}
+            src={image}
+            alt={alt}
+            width={size?.width}
+            height={size?.height}
+            loading="lazy"
+            decoding="async"
+            draggable="false"
+        />
+    </div>
+
+    <div class="viewer__foot">
+        {
+            prev ? (
+                <a class="viewer__nav" href={`${prev.href}#osserva`} data-work-nav="prev" rel="prev">
+                    <span aria-hidden="true">←</span>
+                    <span class="viewer__nav-label">
+                        <span class="sr-only">{copy.prev}: </span>
+                        {prev.title}
+                    </span>
+                </a>
+            ) : (
+                <span class="viewer__nav viewer__nav--empty" aria-hidden="true" />
+            )
+        }
+        <p id="opera-viewer-help" class="viewer__help">{copy.help}</p>
+        {
+            next ? (
+                <a class="viewer__nav viewer__nav--next" href={`${next.href}#osserva`} data-work-nav="next" rel="next">
+                    <span class="viewer__nav-label">
+                        <span class="sr-only">{copy.next}: </span>
+                        {next.title}
+                    </span>
+                    <span aria-hidden="true">→</span>
+                </a>
+            ) : (
+                <span class="viewer__nav viewer__nav--empty" aria-hidden="true" />
+            )
+        }
+    </div>
+</dialog>
+
+<!-- Deep link #osserva: apertura sincrona, prima del primo paint (nessun flash). -->
+<script is:inline>
+    (() => {
+        if (location.hash !== "#osserva") return;
+        const dialog = document.getElementById("opera-viewer");
+        if (!(dialog instanceof HTMLDialogElement) || typeof dialog.showModal !== "function") return;
+        try {
+            dialog.showModal();
+            document.documentElement.classList.add("viewer-open");
+        } catch {}
+    })();
+</script>
+
+<script>
+    import { initViewer } from "../scripts/viewer";
+    initViewer();
+</script>
+</Fragment>
+)}
+
+<style>
+    .viewer {
+        --viewer-ambient: #121212;
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        max-width: none;
+        max-height: none;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        color: #e6e6e6;
+        background: color-mix(in oklab, var(--viewer-ambient) 60%, #0a0a0a);
+        overflow: hidden;
+    }
+
+    .viewer[open] {
+        display: grid;
+        /* Colonna vincolata alla viewport: i testi lunghi non allargano il visore. */
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+
+    .viewer::backdrop {
+        background: rgba(6, 6, 6, 0.92);
+    }
+
+    .viewer__bar,
+    .viewer__foot {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem 1rem;
+        padding: 0.75rem 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .viewer__bar {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        border-bottom: 1px solid color-mix(in oklab, var(--viewer-ambient) 40%, rgba(255, 255, 255, 0.14));
+    }
+
+    .viewer__title {
+        margin: 0;
+        flex: 1 1 14rem;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        line-height: 1.3;
+    }
+
+    .viewer__name {
+        font-family: var(--font-heading);
+        font-size: 1.05rem;
+        color: #f2f2f2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .viewer__meta {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: #a3a3a3;
+    }
+
+    .viewer__zoom {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .viewer__level {
+        min-width: 3.4rem;
+        text-align: center;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        color: #c8c8c8;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .viewer__btn {
+        min-width: 2.75rem;
+        min-height: 2.75rem;
+        padding: 0 0.75rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.25);
+        color: #f0f0f0;
+        font-size: 1.1rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .viewer__btn--text {
+        font-size: 0.66rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+    }
+
+    .viewer__btn:hover {
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .viewer__btn:disabled {
+        opacity: 0.35;
+        cursor: default;
+    }
+
+    .viewer__btn:focus-visible,
+    .viewer__nav:focus-visible {
+        outline: 2px solid #f2f2f2;
+        outline-offset: -4px;
+    }
+
+    /* Lo stage riceve il focus all'apertura: indicatore presente ma discreto. */
+    .viewer__stage:focus-visible {
+        outline: 1px solid rgba(255, 255, 255, 0.35);
+        outline-offset: -6px;
+    }
+
+    .viewer__stage {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: clamp(0.5rem, 2vw, 1.5rem);
+        touch-action: none;
+        cursor: zoom-in;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .viewer__stage.is-zoomed {
+        cursor: grab;
+    }
+
+    .viewer__stage.is-dragging {
+        cursor: grabbing;
+    }
+
+    .viewer__img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        transform-origin: 50% 50%;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+        -webkit-user-drag: none;
+        will-change: auto;
+        backface-visibility: visible;
+    }
+
+    .viewer__foot {
+        justify-content: space-between;
+        border-top: 1px solid color-mix(in oklab, var(--viewer-ambient) 40%, rgba(255, 255, 255, 0.14));
+    }
+
+    .viewer__nav {
+        flex: 0 1 30%;
+        min-height: 2.75rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: #d6d6d6;
+        text-decoration: none;
+        min-width: 0;
+    }
+
+    .viewer__nav:hover {
+        color: #ffffff;
+    }
+
+    .viewer__nav--next {
+        justify-content: flex-end;
+        text-align: right;
+    }
+
+    .viewer__nav-label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .viewer__help {
+        margin: 0;
+        flex: 1 1 auto;
+        text-align: center;
+        font-size: 0.66rem;
+        letter-spacing: 0.08em;
+        color: #a3a3a3;
+    }
+
+    @media (max-width: 640px) {
+        .viewer__bar {
+            gap: 0.5rem;
+            padding: 0.6rem 0.75rem;
+        }
+
+        .viewer__title {
+            flex-basis: 100%;
+        }
+
+        .viewer__zoom {
+            flex: 1;
+        }
+
+        .viewer__help {
+            display: none;
+        }
+
+        .viewer__nav {
+            flex-basis: 48%;
+        }
+
+        .viewer__name {
+            font-size: 0.95rem;
+        }
+    }
+
+    :global(html.viewer-open) {
+        overflow: hidden;
+    }
+</style>

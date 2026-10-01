@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
-import OperaReattiva from "../../components/OperaReattiva.astro";
 import TempoDiSguardo from "../../components/TempoDiSguardo.astro";
 import RevealNarrativo from "../../components/RevealNarrativo.astro";
 import TestoMutabile from "../../components/TestoMutabile.astro";
@@ -10,6 +9,15 @@ import AtmosferaCromatica from "../../components/AtmosferaCromatica.astro";
 import PercorsoTrigger from "../../components/PercorsoTrigger.astro";
 import PercorsoOverlay from "../../components/PercorsoOverlay.astro";
 import ContactFormScript from "../../components/ContactFormScript.astro";
+import OperaCard from "../../components/OperaCard.astro";
+import OperaImg from "../../components/OperaImg.astro";
+import OperaViewer from "../../components/OperaViewer.astro";
+import OperaNav from "../../components/OperaNav.astro";
+import TransizioneOpere from "../../components/TransizioneOpere.astro";
+import GalleriaInterattiva from "../../components/GalleriaInterattiva.astro";
+import { byDateDesc, getAdjacentWorks, getWorkCategory } from "../../lib/opere";
+import { buildPercorsoWorks } from "../../lib/percorso";
+import { getImageMeta } from "../../lib/imageMeta";
 
 const CATEGORY_LABELS: Record<string, string> = {
     animali: "Animali",
@@ -400,7 +408,6 @@ function pickRelatedWorks(
 }
 
 const INTERACTIONS = {
-    reactiveMotion: true,
     gazeTime: true,
     reveal: true,
     mutableText: true,
@@ -506,73 +513,36 @@ if (!isCategoryPage && operaShareUrl) {
     };
 }
 
-// If category page, get all artworks in that category
+// Pagina categoria: opere della sezione (dalla più recente) e dati del percorso.
 let categoryWorks: CollectionEntry<"opere">[] = [];
-let percorsoWorks: any[] = [];
+let percorsoWorks: Awaited<ReturnType<typeof buildPercorsoWorks>> = [];
 
 if (isCategoryPage) {
-    const allWorks = (await getCollection("opere")).filter(
-        (work) => work.slug.includes("/")
-    );
-    
-    categoryWorks = allWorks
+    categoryWorks = (await getCollection("opere"))
         .filter((work) => work.slug.startsWith(currentCategory + "/"))
-        .sort(
-            (a, b) =>
-                new Date(b.data.date || 0).getTime() -
-                new Date(a.data.date || 0).getTime()
-        );
-
-    const getWorkCategory = (work: CollectionEntry<"opere">) => {
-        const explicitCategory = work.data.categories?.[0]?.toLowerCase();
-        if (explicitCategory) return explicitCategory;
-        return work.slug.split("/")[0]?.toLowerCase() || "altro";
-    };
-
-    const inferTema = (work: CollectionEntry<"opere">) => {
-        if (work.data.tema) return work.data.tema.toLowerCase();
-        const category = getWorkCategory(work);
-        const tags = (work.data.tags || []).map((tag) => tag.toLowerCase());
-        if (tags.some((tag) => tag.includes("natura") || tag.includes("paesaggio"))) return "natura";
-        if (tags.some((tag) => tag.includes("ritratto") || tag.includes("volto"))) return "figura";
-        if (category === "animali") return "fauna";
-        if (category === "grafica") return "segno";
-        if (category === "ritratti") return "identità";
-        return "luce";
-    };
-
-    const inferPeriodo = (work: CollectionEntry<"opere">) => {
-        if (work.data.periodo) return work.data.periodo.toLowerCase();
-        const sourceYear = Number(work.data.year || new Date(work.data.date || 0).getFullYear() || 0);
-        if (sourceYear && sourceYear <= 2021) return "radici";
-        if (sourceYear && sourceYear <= 2023) return "passaggio";
-        if (sourceYear && sourceYear <= 2024) return "orizzonti";
-        return "contemporaneo";
-    };
-
-    const inferEmozione = (work: CollectionEntry<"opere">) => {
-        if (work.data.emozione) return work.data.emozione.toLowerCase();
-        const category = getWorkCategory(work);
-        if (category === "paesaggio") return "contemplazione";
-        if (category === "ritratti") return "intimità";
-        if (category === "animali") return "vitalità";
-        if (category === "grafica") return "tensione";
-        return "meraviglia";
-    };
-
-    percorsoWorks = categoryWorks.map((work) => ({
-        title: work.data.title,
-        image: work.data.featuredImage || "",
-        description: work.data.description || "",
-        year: work.data.year ? String(work.data.year) : "",
-        date: work.data.date ? String(work.data.date) : "",
-        technique: work.data.technique || "",
-        href: `/opere/${work.slug}/`,
-        tema: inferTema(work),
-        periodo: inferPeriodo(work),
-        emozione: inferEmozione(work),
-    }));
+        .sort(byDateDesc);
+    percorsoWorks = await buildPercorsoWorks(categoryWorks);
 }
+
+// Pagina opera: adiacenti nella sezione, metadati immagine, colore ambientale.
+const adjacent = !isCategoryPage
+    ? getAdjacentWorks(entry, (await getCollection("opere")).filter((work) => work.slug.includes("/")))
+    : { prev: null, next: null };
+const toWorkLink = (work: CollectionEntry<"opere"> | null) =>
+    work
+        ? {
+              href: `/opere/${work.slug}/`,
+              title: work.data.title,
+              image: work.data.featuredImage,
+          }
+        : null;
+const prevWork = toWorkLink(adjacent.prev);
+const nextWork = toWorkLink(adjacent.next);
+const heroMeta = !isCategoryPage ? await getImageMeta(entry.data.featuredImage) : null;
+const operaAmbient = entry.data.ambientColor || heroMeta?.ambient;
+const operaMetaLine = [entry.data.year != null ? String(entry.data.year) : "", entry.data.technique || ""]
+    .filter(Boolean)
+    .join(" · ");
 ---
 
 <BaseLayout
@@ -587,6 +557,7 @@ if (isCategoryPage) {
     {!isCategoryPage && entry.data.featuredImage && (
         <link slot="head" rel="expect" href="#opera-hero" blocking="render" />
     )}
+    {!isCategoryPage && <TransizioneOpere slot="head" />}
     {isCategoryPage ? (
         <!-- Category Gallery View -->
         <div class="py-12 md:py-20 px-4">
@@ -631,79 +602,22 @@ if (isCategoryPage) {
                 data-atmosfera-zone
             >
                 {
-                    categoryWorks.map((work, index) => {
-                        const category = work.slug.split("/")[0]?.toLowerCase() || "altro";
-                        const tags = (work.data.tags || [])
-                            .map((tag) => tag.toLowerCase())
-                            .join(" ");
-
-                        return (
-                        <a
+                    categoryWorks.map((work, index) => (
+                        <OperaCard
                             href={`/opere/${work.slug}/`}
-                            class="group block opere-card"
-                            data-gallery-card
-                            data-fx-card
-                            data-reveal-item
-                            data-reveal-order={String(index)}
-                            data-atmosfera-item
-                            data-ambient={work.data.ambientColor}
-                            data-memoria-slug={work.slug}
-                            data-categoria={category}
-                            data-tipo={category}
-                            data-tema={tags}
-                        >
-                            <div class="opere-media aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6 relative" data-reveal-media>
-                                {work.data.featuredImage ? (
-                                    <img
-                                        src={work.data.featuredImage}
-                                        alt={work.data.imageAlt || work.data.title}
-                                        data-opera-reattiva
-                                        data-gaze-media
-                                        data-parallax-strength="3"
-                                        data-vt-media
-                                        class="w-full h-full object-cover"
-                                    />
-                                ) : (
-                                    <div class="w-full h-full bg-[#1a1a1a] flex items-center justify-center text-gray-600 font-light tracking-widest uppercase text-sm">
-                                        No Image
-                                    </div>
-                                )}
-
-                                <span
-                                    class="opere-card-link-hint"
-                                    aria-hidden="true"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        class="w-4 h-4"
-                                    >
-                                        <path d="M7 17L17 7M7 7h10v10"></path>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="text-center">
-                                <h2 class="opere-card-title text-xl font-heading text-white mb-2 transition-colors">
-                                    {work.data.title}
-                                </h2>
-                                {work.data.technique && (
-                                    <p class="text-xs text-gray-500 uppercase tracking-widest mb-2">
-                                        {work.data.technique}
-                                    </p>
-                                )}
-                                {work.data.description && (
-                                    <p class="opere-card-description text-xs text-gray-400 leading-relaxed">
-                                        {work.data.description}
-                                    </p>
-                                )}
-                            </div>
-                        </a>
-                    )})
+                            title={work.data.title}
+                            image={work.data.featuredImage}
+                            alt={work.data.imageAlt || work.data.title}
+                            category={getWorkCategory(work)}
+                            index={index}
+                            technique={work.data.technique}
+                            year={work.data.year}
+                            description={work.data.description}
+                            ambientColor={work.data.ambientColor}
+                            memoriaSlug={work.slug}
+                            eager={index < 3}
+                        />
+                    ))
                 }
             </div>
 
@@ -715,13 +629,13 @@ if (isCategoryPage) {
                 >
             </div>
 
-            <PercorsoOverlay works={percorsoWorks} />
+            <PercorsoOverlay works={percorsoWorks} scope={CATEGORY_LABELS[currentCategory!] || entry.data.title} />
         </div>
 
         <AtmosferaCromatica />
         <RevealNarrativo enabled={INTERACTIONS.reveal} selector="[data-reveal-item]" />
-        <OperaReattiva enabled={INTERACTIONS.reactiveMotion} selector="[data-opera-reattiva]" />
         <MemoriaVisiva enabled={INTERACTIONS.memoriaVisiva} selector="[data-memoria-slug]" />
+        <GalleriaInterattiva />
     ) : (
         <!-- Individual Artwork Detail View -->
         <div class="max-w-6xl mx-auto px-4 pt-5 pb-12 md:pt-8 md:pb-20">
@@ -761,29 +675,52 @@ if (isCategoryPage) {
             </div>
         </div>
 
-        <div
-            class="mb-16 relative"
+        <figure
+            class="opera-stage mb-10 md:mb-12 relative"
             data-tempo-sguardo
             data-memoria-slug={entry.slug}
+            data-opera-stage
         >
             {
                 entry.data.featuredImage && (
-                    <img
-                        src={entry.data.featuredImage}
-                        alt={operaImageAlt}
-                        title={entry.data.imageTitle || undefined}
-                        id="opera-hero"
-                        data-opera-reattiva
-                        data-vt-hero
-                        class="w-full h-auto max-h-[85vh] object-contain mx-auto shadow-2xl"
-                    />
+                    <a
+                        href={entry.data.featuredImage}
+                        class="opera-stage__open"
+                        data-viewer-open
+                        aria-haspopup="dialog"
+                        aria-label={`Osserva da vicino: ${entry.data.title}`}
+                    >
+                        <OperaImg
+                            src={entry.data.featuredImage}
+                            alt={operaImageAlt}
+                            title={entry.data.imageTitle || undefined}
+                            id="opera-hero"
+                            sizes="(max-width: 1200px) calc(100vw - 2rem), 1152px"
+                            widths={[480, 768, 1024, 1400, 1800]}
+                            fallbackWidth={1024}
+                            quality={80}
+                            originalSrc
+                            loading="eager"
+                            fetchpriority="high"
+                            data-opera-reattiva
+                            data-vt-hero
+                            class="w-full h-auto max-h-[85vh] object-contain mx-auto shadow-2xl"
+                        />
+                        <span class="opera-stage__hint" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" class="w-4 h-4">
+                                <circle cx="11" cy="11" r="6.5"></circle>
+                                <path d="M20 20l-4.2-4.2M11 8.5v5M8.5 11h5"></path>
+                            </svg>
+                            Osserva
+                        </span>
+                    </a>
                 )
             }
 
             {entry.data.imageCaption && (
-                <p class="text-center text-sm text-gray-400 mt-3 max-w-2xl mx-auto leading-relaxed">
+                <figcaption class="text-center text-sm text-gray-400 mt-3 max-w-2xl mx-auto leading-relaxed">
                     {entry.data.imageCaption}
-                </p>
+                </figcaption>
             )}
 
             <p
@@ -793,7 +730,15 @@ if (isCategoryPage) {
             >
                 L'opera si apre nel tempo del tuo sguardo.
             </p>
-        </div>
+        </figure>
+
+        <OperaNav
+            prev={prevWork}
+            next={nextWork}
+            label={`Altre opere della sezione ${CATEGORY_LABELS[artworkCategoryKey] || artworkCategoryKey}`}
+            prevLabel="Precedente"
+            nextLabel="Successiva"
+        />
 
         {showOperaFallback && fallbackCopy ? (
             <article
@@ -1013,9 +958,11 @@ if (isCategoryPage) {
                         >
                             <div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-4">
                                 {work.data.featuredImage ? (
-                                    <img
+                                    <OperaImg
                                         src={work.data.featuredImage}
                                         alt={work.data.imageAlt || work.data.title}
+                                        sizes="(max-width: 639px) calc(100vw - 2rem), 300px"
+                                        widths={[320, 480, 640]}
                                         data-vt-media
                                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                                     />
@@ -1162,8 +1109,17 @@ if (isCategoryPage) {
         </div>
     </div>
 
+    <OperaViewer
+        image={entry.data.featuredImage}
+        alt={operaImageAlt}
+        title={entry.data.title}
+        meta={operaMetaLine}
+        prev={prevWork}
+        next={nextWork}
+        ambient={operaAmbient}
+    />
+    <AtmosferaCromatica color={operaAmbient} />
     <RevealNarrativo enabled={INTERACTIONS.reveal} selector="[data-reveal-item]" />
-    <OperaReattiva enabled={INTERACTIONS.reactiveMotion} selector="[data-opera-reattiva]" />
     <TempoDiSguardo enabled={INTERACTIONS.gazeTime} selector="[data-tempo-sguardo]" delayMs={3600} />
     <MemoriaVisiva enabled={INTERACTIONS.memoriaVisiva} selector="[data-memoria-slug]" />
 

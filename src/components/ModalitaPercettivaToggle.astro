@@ -28,6 +28,7 @@ const copy = locale === "en"
     data-silent-label={copy.silent}
     data-noise-label={copy.noise}
     aria-label={copy.ariaLabel}
+    aria-pressed="true"
     title={copy.ariaLabel}
 >
     <span class="modalita-toggle__label">{copy.label}</span>
@@ -56,10 +57,18 @@ const copy = locale === "en"
                 normalized === "silenzio" ? "true" : "false",
             );
             if (valueNode) valueNode.textContent = normalized === "silenzio" ? silentLabel : noiseLabel;
-            localStorage.setItem(MODALITA_KEY, normalized);
+            // Stato esposto alle tecnologie assistive: "Riduci animazioni" attivo = Silenzio.
+            toggle.setAttribute("aria-pressed", normalized === "silenzio" ? "true" : "false");
+            try {
+                localStorage.setItem(MODALITA_KEY, normalized);
+            } catch {}
         };
 
-        const initial = localStorage.getItem(MODALITA_KEY) || document.documentElement.getAttribute("data-modalita-percettiva") || "silenzio";
+        let stored = null;
+        try {
+            stored = localStorage.getItem(MODALITA_KEY);
+        } catch {}
+        const initial = stored || document.documentElement.getAttribute("data-modalita-percettiva") || "silenzio";
         applyMode(initial);
 
         toggle.addEventListener("click", () => {
@@ -95,6 +104,15 @@ const copy = locale === "en"
             background: rgba(11, 11, 11, 0.86);
             backdrop-filter: blur(6px);
         }
+    }
+
+    .modalita-toggle {
+        min-height: 2.75rem;
+    }
+
+    .modalita-toggle:focus-visible {
+        outline: 2px solid #f2f2f2;
+        outline-offset: 2px;
     }
 
     .modalita-toggle__value {

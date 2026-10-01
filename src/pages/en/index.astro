@@ -2,6 +2,10 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 import { netlifyImageSrcSet, netlifyImageUrl } from "../../lib/imageCdn";
+import { featuredWorksEnByItSlug } from "../../i18n/featuredWorks.en";
+import OpereRecenti, { type OperaRecente } from "../../components/OpereRecenti.astro";
+import RevealNarrativo from "../../components/RevealNarrativo.astro";
+import AtmosferaCromatica from "../../components/AtmosferaCromatica.astro";
 
 const recentWorks: CollectionEntry<"opere">[] = (await getCollection("opere"))
     .filter((work) => work.slug.includes("/"))
@@ -27,6 +31,22 @@ const translateTechnique = (value?: string) => {
         .replace(/matita/gi, "pencil");
 };
 
+// Opere con scheda inglese → pagina EN; le altre restano sulla pagina italiana (lang="it").
+const recentItems: OperaRecente[] = recentWorks.map((work) => {
+    const translated = featuredWorksEnByItSlug.get(work.slug);
+    return {
+        href: translated ? `/en/works/${translated.enSlug}/` : `/opere/${work.slug}/`,
+        lang: translated ? undefined : "it",
+        title: work.data.title,
+        titleLang: "it",
+        subtitle: translated?.englishTitle,
+        image: work.data.featuredImage,
+        alt: translated?.imageAlt || work.data.imageAlt || work.data.title,
+        technique: translated?.technique || translateTechnique(work.data.technique),
+        ambientColor: work.data.ambientColor,
+    };
+});
+
 const homeTitle = "Luca Sanna — Contemporary Visual Artist";
 const homeDescription =
     "Luca Sanna is an Italian visual artist based in Sardinia. Painting, drawing and digital practice explore nature, memory, metamorphosis and inner landscapes.";
@@ -42,6 +62,7 @@ const heroImage = "/assets/uploads/Uccello-Verde-tra-i-rami-Luca-Sanna-2022-acri
     ogImageHeight={630}
     canonicalUrl="https://lucasanna.art/en/"
     locale="en"
+    viewTransitions
 >
     <section class="max-w-5xl mx-auto mb-14 md:mb-20 pt-3 md:pt-0 md:-mt-6 text-center">
         <img
@@ -49,6 +70,7 @@ const heroImage = "/assets/uploads/Uccello-Verde-tra-i-rami-Luca-Sanna-2022-acri
             srcset={netlifyImageSrcSet(heroImage, [480, 768, 1024, 1200], 80)}
             sizes="(max-width: 768px) calc(100vw - 2rem), (max-width: 1100px) calc(100vw - 4rem), 960px"
             alt="Artwork by Luca Sanna"
+            data-home-hero
             fetchpriority="high"
             loading="eager"
             decoding="async"
@@ -58,7 +80,7 @@ const heroImage = "/assets/uploads/Uccello-Verde-tra-i-rami-Luca-Sanna-2022-acri
         <div class="prose prose-invert lg:prose-xl mx-auto font-light text-gray-300 leading-relaxed">
             <h1>Luca Sanna</h1>
             <p>Italian visual artist based in Sardinia — contemporary painting, nature and inner landscapes.</p>
-            <p><em>I paint what endures while it transforms.</em></p>
+            <p class="home-manifesto"><em>I paint what endures while it transforms.</em></p>
 
             <p>
                 My practice moves between <strong>nature and the body</strong>, <strong>mark and memory</strong>,
@@ -90,40 +112,7 @@ const heroImage = "/assets/uploads/Uccello-Verde-tra-i-rami-Luca-Sanna-2022-acri
         <h2 class="text-3xl md:text-4xl font-heading font-normal text-center mb-10 md:mb-12 uppercase tracking-[0.2em] text-white">
             Recent works
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
-            {
-                recentWorks.map((work) => {
-                    const image = work.data.featuredImage;
-                    return (
-                        <a href={`/opere/${work.slug}/`} lang="it" class="group block">
-                            <div class="aspect-[4/5] overflow-hidden bg-[#1a1a1a] mb-6">
-                                {image && (
-                                    <img
-                                        src={netlifyImageUrl(image, 640, 76)}
-                                        srcset={netlifyImageSrcSet(image, [320, 480, 640, 800], 76)}
-                                        sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1023px) 45vw, 30vw"
-                                        alt={work.data.imageAlt || work.data.title}
-                                        loading="lazy"
-                                        decoding="async"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
-                                    />
-                                )}
-                            </div>
-                            <div class="text-center">
-                                <h3 class="text-xl font-heading text-white mb-2 group-hover:text-gray-300 transition-colors">
-                                    {work.data.title}
-                                </h3>
-                                {work.data.technique && (
-                                    <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">
-                                        {translateTechnique(work.data.technique)}
-                                    </p>
-                                )}
-                            </div>
-                        </a>
-                    );
-                })
-            }
-        </div>
+        <OpereRecenti items={recentItems} />
         <div class="text-center mt-12">
             <a
                 href="/en/works/"
@@ -147,6 +136,16 @@ const heroImage = "/assets/uploads/Uccello-Verde-tra-i-rami-Luca-Sanna-2022-acri
             Explore the art blog
         </a>
     </section>
+
+    <RevealNarrativo selector="[data-reveal-item]" />
+    <AtmosferaCromatica />
+    <script>
+        import { initTilt } from "../../scripts/motion/tilt";
+        import { initHome } from "../../scripts/home";
+
+        initTilt();
+        initHome();
+    </script>
 </BaseLayout>
 
 <style is:global>

@@ -27,6 +27,7 @@
     --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
     --vt-duration: 720ms;
     --vt-root-duration: 460ms;
+    --vt-nav-duration: 420ms;
     --vt-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
     /* Atmosfera cromatica (Rumore): quota di ambientColor mescolata allo sfondo base. */
@@ -46,6 +47,7 @@ html[data-silent="true"] {
     --reveal-stagger: 80ms;
     --vt-duration: 520ms;
     --vt-root-duration: 340ms;
+    --vt-nav-duration: 340ms;
 
     --atmo-intensity: 32%;
     --atmo-duration: 4500ms;
@@ -70,7 +72,7 @@ html[data-silent="true"] .opere-gallery [data-gallery-card] .opere-media {
     transition-timing-function: ease !important;
 }
 
-html[data-silent="true"] img:not([data-opera-reattiva]) {
+html[data-silent="true"] img:not([data-opera-reattiva]):not([data-viewer-img]):not([data-percorso-img]) {
     filter: none !important;
     transform: none !important;
 }
@@ -121,7 +123,6 @@ body {
 }
 
 [data-opera-reattiva] {
-    will-change: transform, filter;
     transition: transform 1120ms cubic-bezier(0.16, 1, 0.3, 1), filter 1080ms ease, border-radius 1000ms ease;
     filter: var(--perc-filter);
     border-radius: 0.1rem;
@@ -543,6 +544,54 @@ body.ui-evanescente :focus-within {
     animation-timing-function: var(--vt-ease);
 }
 
+/* Testata del sito e controllo modalità restano fermi durante le transizioni di pagina.
+   Solo la testata globale (figlia diretta di body): i nomi devono essere unici. */
+body > header {
+    view-transition-name: site-header;
+}
+
+.modalita-toggle {
+    view-transition-name: modalita-toggle;
+}
+
+/* Transizione tra opere (precedente / successiva): dissolvenza, scala minima,
+   18px nella direzione del cammino. Tipi assegnati da TransizioneOpere. */
+@keyframes opera-uscita-avanti {
+    to { opacity: 0; transform: translateX(-18px) scale(0.99); }
+}
+@keyframes opera-ingresso-avanti {
+    from { opacity: 0; transform: translateX(18px) scale(0.99); }
+}
+@keyframes opera-uscita-indietro {
+    to { opacity: 0; transform: translateX(18px) scale(0.99); }
+}
+@keyframes opera-ingresso-indietro {
+    from { opacity: 0; transform: translateX(-18px) scale(0.99); }
+}
+
+html:active-view-transition-type(opera-avanti)::view-transition-old(root) {
+    animation: opera-uscita-avanti var(--vt-nav-duration) var(--vt-ease) both;
+}
+html:active-view-transition-type(opera-avanti)::view-transition-new(root) {
+    animation: opera-ingresso-avanti var(--vt-nav-duration) var(--vt-ease) both;
+}
+html:active-view-transition-type(opera-indietro)::view-transition-old(root) {
+    animation: opera-uscita-indietro var(--vt-nav-duration) var(--vt-ease) both;
+}
+html:active-view-transition-type(opera-indietro)::view-transition-new(root) {
+    animation: opera-ingresso-indietro var(--vt-nav-duration) var(--vt-ease) both;
+}
+
+/* Browser senza View Transition: breve ingresso dell'opera (solo transform/opacity). */
+@media (prefers-reduced-motion: no-preference) {
+    html[data-arrivo="opera-avanti"] [data-opera-stage] {
+        animation: opera-ingresso-avanti 360ms var(--vt-ease) both !important;
+    }
+    html[data-arrivo="opera-indietro"] [data-opera-stage] {
+        animation: opera-ingresso-indietro 360ms var(--vt-ease) both !important;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     [data-vt-hero] {
         view-transition-name: none;
@@ -788,8 +837,8 @@ img {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
     
-    /* Force GPU acceleration for smooth scaling */
-    will-change: transform;
+    /* Niente will-change permanente: con decine di opere in pagina
+       moltiplicava i layer GPU (memoria) senza benefici visibili. */
     
     /* Prevent subpixel blur */
     -webkit-font-smoothing: subpixel-antialiased;
@@ -945,8 +994,6 @@ img[src*=".webp"] {
     image-rendering: auto;
     image-rendering: -webkit-optimize-contrast;
     
-    /* Force hardware acceleration */
-    will-change: transform, filter;
 }
 
 /* Gallery Hover Effects - optimized for sharpness (esclusa galleria opere) */
@@ -1069,4 +1116,233 @@ html[data-silent="true"] .atmosfera {
     .atmosfera {
         display: none;
     }
+}
+
+
+/* ============================================
+   GALLERIA IMMERSIVA (OperaCard)
+   Didascalie leggibili (WCAG AA) anche a riposo; hover e focus da tastiera
+   equivalenti. Su touch nessuno stato nascosto: tutto è già visibile.
+   ============================================ */
+
+.opere-gallery [data-gallery-card][hidden] {
+    display: none !important;
+}
+
+.opere-gallery [data-gallery-card] {
+    outline: none;
+}
+
+.opere-gallery [data-gallery-card]:focus-visible .opere-media {
+    outline: 1px solid rgba(255, 255, 255, 0.75);
+    outline-offset: 6px;
+}
+
+.opere-gallery [data-gallery-card] [data-tilt-target] {
+    transform-origin: 50% 50%;
+}
+
+.opere-gallery [data-gallery-card] .opere-card-title {
+    opacity: 1;
+    transform: none;
+    color: #bdbdbd;
+}
+
+.opere-gallery [data-gallery-card] p.opere-card-meta {
+    opacity: 1;
+    color: #929292;
+}
+
+.opere-gallery [data-gallery-card] p.opere-card-description {
+    opacity: 1;
+    color: #8f8f8f !important;
+}
+
+.opere-card-subtitle {
+    margin: -0.2rem 0 0.4rem;
+    font-size: 0.85rem;
+    color: #a6a6a6;
+}
+
+.opere-card-caption {
+    position: relative;
+    padding-top: 0.15rem;
+}
+
+/* Filo sottile che si disegna sotto il titolo: stato attivo senza coprire l'opera. */
+.opere-card-caption::before {
+    content: "";
+    position: absolute;
+    top: -0.9rem;
+    left: 50%;
+    width: 2.5rem;
+    height: 1px;
+    margin-left: -1.25rem;
+    background: rgba(255, 255, 255, 0.55);
+    transform: scaleX(0);
+    transition: transform 520ms var(--reveal-ease);
+}
+
+.opere-gallery [data-gallery-card]:focus-visible .opere-card-caption::before {
+    transform: scaleX(1);
+}
+
+.opere-gallery [data-gallery-card]:focus-visible .opere-card-title {
+    color: #f4f4f4;
+}
+
+.opere-gallery [data-gallery-card]:focus-visible p.opere-card-meta {
+    color: #c2c2c2;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .opere-gallery [data-gallery-card]:hover .opere-card-caption::before {
+        transform: scaleX(1);
+    }
+
+    .opere-gallery [data-gallery-card]:hover .opere-card-title {
+        color: #f4f4f4;
+    }
+
+    .opere-gallery [data-gallery-card]:hover p.opere-card-meta {
+        color: #c2c2c2;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .opere-card-caption::before {
+        transition: none;
+    }
+}
+
+/* Filtri editoriali delle gallerie (IT/EN) */
+.opere-intro button.opere-filter-btn--editorial {
+    padding: 0.6rem 0 0.55rem;
+    min-height: 2.75rem;
+    border-width: 0 0 1px !important;
+    border-radius: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.opere-intro button.opere-filter-btn--editorial[aria-pressed="false"] {
+    color: rgba(160, 160, 160, 0.95) !important;
+    border-color: transparent !important;
+}
+
+.opere-intro button.opere-filter-btn--editorial[aria-pressed="true"] {
+    color: #f2f2f2 !important;
+    border-color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.opere-intro button.opere-filter-btn--editorial:focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.7);
+    outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .opere-intro button.opere-filter-btn--editorial:hover {
+        color: #ffffff !important;
+        border-color: rgba(255, 255, 255, 0.42) !important;
+    }
+}
+
+/* ============================================
+   PAGINA OPERA: stage e accesso al visore
+   ============================================ */
+
+.opera-stage {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.opera-stage__open {
+    display: block;
+    cursor: zoom-in;
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+}
+
+/* L'immagine occupa tutta la larghezza con object-fit: contain: un'ombra sul box
+   disegnerebbe un riquadro attorno alle opere verticali. */
+.opera-stage__open img {
+    box-shadow: none !important;
+}
+
+.opera-stage__open:focus-visible img {
+    outline: 1px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 6px;
+}
+
+.opera-stage__hint {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0.9rem auto 0;
+    padding: 0.55rem 0.9rem;
+    min-height: 2.75rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #c9c9c9;
+    border: 1px solid color-mix(in oklab, var(--atmo-target, #ffffff) 30%, rgba(255, 255, 255, 0.16));
+    transition: color 300ms ease, border-color 300ms ease;
+}
+
+.opera-stage__open:hover .opera-stage__hint,
+.opera-stage__open:focus-visible .opera-stage__hint {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+html:not(.js) .opera-stage__hint {
+    display: none;
+}
+
+/* ============================================
+   HOMEPAGE: frase-manifesto e opera d'apertura
+   La frase diventa il cardine tra l'immagine e le opere recenti.
+   ============================================ */
+
+p.home-manifesto,
+.home-editorial-content > p:has(> em:only-child) {
+    max-width: 34ch;
+    margin: 2.25rem auto 2.5rem;
+    font-family: var(--font-heading);
+    font-size: clamp(1.45rem, 2.6vw, 2.15rem);
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+    color: #ececec;
+    text-align: center;
+}
+
+p.home-manifesto em,
+.home-editorial-content > p:has(> em:only-child) em {
+    font-style: italic;
+    color: inherit;
+}
+
+/* Filo verticale che lega l'opera d'apertura alla frase. */
+p.home-manifesto::before,
+.home-editorial-content > p:has(> em:only-child)::before {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 2.75rem;
+    margin: 0 auto 1.4rem;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.42));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html.js p.home-manifesto:not(.is-revealed),
+    html.js .home-editorial-content > p:has(> em:only-child):not(.is-revealed) {
+        opacity: 0;
+    }
+}
+
+[data-home-hero].is-awake {
+    filter: none !important;
 }

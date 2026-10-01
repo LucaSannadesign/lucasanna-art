@@ -1,0 +1,14 @@
+---
+/**
+ * Comportamenti condivisi delle gallerie d'opere (un solo bundle, caricato
+ * solo dove serve): inclinazione prospettica desktop e filtro per categoria.
+ */
+---
+
+<script>
+    import { initTilt } from "../scripts/motion/tilt";
+    import { initGalleryFilter } from "../scripts/gallery-filter";
+
+    initTilt();
+    initGalleryFilter();
+</script>
