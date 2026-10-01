@@ -96,6 +96,7 @@ const {
             <section class="interpreta-step" data-interpreta-step="editor" hidden>
                 <div class="interpreta-editor-layout">
                     <div class="interpreta-canvas-wrap" data-interpreta-stage>
+                        <canvas class="interpreta-stage-fx" data-interpreta-stage-fx aria-hidden="true"></canvas>
                         <canvas
                             data-interpreta-canvas
                             tabindex="0"
@@ -239,6 +240,8 @@ const {
             const shell = modal.querySelector("[data-interpreta-shell]");
             const ambientCanvas = modal.querySelector("[data-interpreta-ambient]");
             const stage = modal.querySelector("[data-interpreta-stage]");
+            const stageFxCanvas = modal.querySelector("[data-interpreta-stage-fx]");
+            const resultCard = modal.querySelector(".interpreta-result-card");
             const socialButtons = Array.from(modal.querySelectorAll("[data-interpreta-social]"));
             const formatButtons = Array.from(modal.querySelectorAll("[data-interpreta-format]"));
             const steps = Array.from(modal.querySelectorAll("[data-interpreta-step]"));
@@ -289,6 +292,9 @@ const {
             let ambientPointerY = 0.5;
             let ambientEnergy = 0.38;
             let currentStepName = "intro";
+            let stageFxRaf = 0;
+            let stageFxPointerX = 0.5;
+            let stageFxPointerY = 0.5;
 
             const resizeAmbientCanvas = () => {
                 if (!(ambientCanvas instanceof HTMLCanvasElement) || !(shell instanceof HTMLElement)) return;
@@ -408,6 +414,154 @@ const {
                 }
             };
 
+            const resizeStageFx = () => {
+                if (!(stageFxCanvas instanceof HTMLCanvasElement) || !(stage instanceof HTMLElement)) return;
+                const rect = stage.getBoundingClientRect();
+                const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+                const width = Math.max(1, Math.round(rect.width * dpr));
+                const height = Math.max(1, Math.round(rect.height * dpr));
+                if (stageFxCanvas.width !== width || stageFxCanvas.height !== height) {
+                    stageFxCanvas.width = width;
+                    stageFxCanvas.height = height;
+                    stageFxCanvas.style.width = rect.width + "px";
+                    stageFxCanvas.style.height = rect.height + "px";
+                }
+            };
+
+            const drawStageFx = (time) => {
+                if (
+                    reducedMotion.matches ||
+                    modal.hidden ||
+                    currentStepName !== "editor" ||
+                    !(stageFxCanvas instanceof HTMLCanvasElement)
+                ) {
+                    stageFxRaf = 0;
+                    return;
+                }
+
+                resizeStageFx();
+                const ctx = stageFxCanvas.getContext("2d");
+                if (!ctx) return;
+                const w = stageFxCanvas.width;
+                const h = stageFxCanvas.height;
+                const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+                const t = time * 0.001;
+                const px = stageFxPointerX * w;
+                const py = stageFxPointerY * h;
+
+                ctx.clearRect(0, 0, w, h);
+                ctx.globalCompositeOperation = "screen";
+
+                // Graphite dust orbiting the user's gaze.
+                for (let i = 0; i < 54; i += 1) {
+                    const angle = i * 2.399 + t * (0.08 + (i % 5) * 0.012);
+                    const orbit = Math.min(w, h) * (0.08 + ((i * 37) % 100) / 100 * 0.38);
+                    const wobble = Math.sin(t * 0.9 + i * 1.7) * Math.min(w, h) * 0.018;
+                    const x = px + Math.cos(angle) * (orbit + wobble);
+                    const y = py + Math.sin(angle * 1.13) * (orbit * 0.72 + wobble);
+                    const radius = (0.7 + (i % 4) * 0.42) * dpr;
+                    ctx.beginPath();
+                    ctx.arc(x, y, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = i % 5 === 0
+                        ? "rgba(126,178,190,0.34)"
+                        : "rgba(238,220,191,0.34)";
+                    ctx.fill();
+                }
+
+                // Three animated charcoal strokes bend toward the pointer.
+                for (let i = 0; i < 3; i += 1) {
+                    const phase = t * (0.42 + i * 0.06) + i * 1.4;
+                    const startY = h * (0.24 + i * 0.23);
+                    const amp = h * (0.035 + i * 0.008);
+                    ctx.beginPath();
+                    ctx.moveTo(w * 0.03, startY);
+                    ctx.bezierCurveTo(
+                        w * 0.28,
+                        startY + Math.sin(phase) * amp,
+                        px - w * 0.1,
+                        py + Math.cos(phase * 1.2) * amp,
+                        px,
+                        py,
+                    );
+                    ctx.strokeStyle = i === 1
+                        ? "rgba(128,176,188,0.22)"
+                        : "rgba(231,205,169,0.24)";
+                    ctx.lineWidth = (1.15 + i * 0.5) * dpr;
+                    ctx.stroke();
+                }
+
+                // Responsive lens: clearly visible but never baked into the exported artwork.
+                const pulse = 0.5 + Math.sin(t * 2.1) * 0.5;
+                ctx.beginPath();
+                ctx.arc(px, py, Math.min(w, h) * (0.055 + pulse * 0.018), 0, Math.PI * 2);
+                ctx.strokeStyle = "rgba(244,222,187,0.44)";
+                ctx.lineWidth = 1.5 * dpr;
+                ctx.stroke();
+
+                ctx.globalCompositeOperation = "source-over";
+                stageFxRaf = window.requestAnimationFrame(drawStageFx);
+            };
+
+            const startStageFx = () => {
+                if (reducedMotion.matches || stageFxRaf || currentStepName !== "editor") return;
+                stageFxRaf = window.requestAnimationFrame(drawStageFx);
+            };
+
+            const stopStageFx = () => {
+                if (stageFxRaf) window.cancelAnimationFrame(stageFxRaf);
+                stageFxRaf = 0;
+                if (stageFxCanvas instanceof HTMLCanvasElement) {
+                    const ctx = stageFxCanvas.getContext("2d");
+                    ctx?.clearRect(0, 0, stageFxCanvas.width, stageFxCanvas.height);
+                }
+            };
+
+            const playCreationBurst = async () => {
+                if (reducedMotion.matches || !(stage instanceof HTMLElement)) return;
+                const animation = stage.animate(
+                    [
+                        {
+                            transform: "perspective(1050px) rotateX(var(--stage-rx)) rotateY(var(--stage-ry)) scale(1.012)",
+                            filter: "brightness(1) contrast(1)",
+                            boxShadow: "0 44px 100px rgba(0,0,0,.44), 0 0 50px rgba(205,177,137,.08)",
+                        },
+                        {
+                            offset: 0.46,
+                            transform: "perspective(1050px) rotateX(0deg) rotateY(0deg) scale(1.045)",
+                            filter: "brightness(1.24) contrast(1.12)",
+                            boxShadow: "0 54px 130px rgba(0,0,0,.5), 0 0 95px rgba(232,203,160,.25)",
+                        },
+                        {
+                            transform: "perspective(1050px) rotateX(0deg) rotateY(0deg) scale(.985)",
+                            filter: "brightness(.82) contrast(1.08) blur(1.5px)",
+                            boxShadow: "0 32px 70px rgba(0,0,0,.48), 0 0 32px rgba(113,164,176,.12)",
+                        },
+                    ],
+                    {
+                        duration: 720,
+                        easing: "cubic-bezier(.22,1,.36,1)",
+                        fill: "both",
+                    },
+                );
+                try { await animation.finished; } catch {}
+                animation.cancel();
+            };
+
+            const playResultReveal = () => {
+                if (reducedMotion.matches || !(resultCard instanceof HTMLElement)) return;
+                resultCard.animate(
+                    [
+                        { opacity: 0, transform: "scale(.9) rotate(-1.5deg)", filter: "blur(18px) brightness(1.35)" },
+                        { offset: 0.55, opacity: 1, transform: "scale(1.025) rotate(.35deg)", filter: "blur(0) brightness(1.12)" },
+                        { opacity: 1, transform: "scale(1) rotate(0)", filter: "blur(0) brightness(1)" },
+                    ],
+                    {
+                        duration: 980,
+                        easing: "cubic-bezier(.16,1,.3,1)",
+                    },
+                );
+            };
+
             const pushEvent = (name, extra = {}) => {
                 try {
                     window.dataLayer = window.dataLayer || [];
@@ -436,8 +590,11 @@ const {
                     window.requestAnimationFrame(() => {
                         resizeEditorCanvas();
                         drawEditor();
+                        startStageFx();
                         editorCanvas.focus({ preventScroll: true });
                     });
+                } else {
+                    stopStageFx();
                 }
             };
 
@@ -600,6 +757,7 @@ const {
                 modal.hidden = true;
                 document.documentElement.classList.remove("overflow-hidden");
                 stopAmbient();
+                stopStageFx();
                 setStatus("");
                 if (lastFocused instanceof HTMLElement) lastFocused.focus({ preventScroll: true });
             };
@@ -623,11 +781,14 @@ const {
                     return;
                 }
 
+                await playCreationBurst();
+
                 if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
                 currentBlob = blob;
                 currentObjectUrl = URL.createObjectURL(blob);
                 resultImg.src = currentObjectUrl;
                 setStep("result");
+                window.requestAnimationFrame(playResultReveal);
                 pushEvent("artwork_interpretation_created", { format: currentFormat });
             };
 
@@ -861,6 +1022,8 @@ const {
                 const ny = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
                 ambientPointerX = nx;
                 ambientPointerY = ny;
+                stageFxPointerX = nx;
+                stageFxPointerY = ny;
                 const rotateY = (nx - 0.5) * 11;
                 const rotateX = (0.5 - ny) * 8;
                 stage.style.setProperty("--stage-rx", rotateX.toFixed(2) + "deg");
@@ -975,14 +1138,23 @@ const {
             };
             window.setTimeout(runWowQaPreview, 120);
 
-            window.addEventListener("resize", resizeAmbientCanvas, { passive: true });
+            window.addEventListener("resize", () => {
+                resizeAmbientCanvas();
+                resizeStageFx();
+            }, { passive: true });
             reducedMotion.addEventListener?.("change", () => {
-                if (reducedMotion.matches) stopAmbient();
-                else if (!modal.hidden) startAmbient();
+                if (reducedMotion.matches) {
+                    stopAmbient();
+                    stopStageFx();
+                } else if (!modal.hidden) {
+                    startAmbient();
+                    if (currentStepName === "editor") startStageFx();
+                }
             });
 
             window.addEventListener("pagehide", () => {
                 stopAmbient();
+                stopStageFx();
                 if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
             });
 
@@ -1344,7 +1516,18 @@ const {
             to { transform: rotate(360deg); }
         }
 
-        .interpreta-canvas-wrap canvas {
+        .interpreta-stage-fx {
+            position: absolute !important;
+            inset: 0;
+            z-index: 2 !important;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            opacity: 0.95;
+        }
+
+        .interpreta-canvas-wrap canvas[data-interpreta-canvas] {
             position: relative;
             z-index: 1;
             display: block;
@@ -1357,11 +1540,11 @@ const {
             cursor: grab;
         }
 
-        .interpreta-canvas-wrap canvas:active {
+        .interpreta-canvas-wrap canvas[data-interpreta-canvas]:active {
             cursor: grabbing;
         }
 
-        .interpreta-canvas-wrap canvas:focus-visible {
+        .interpreta-canvas-wrap canvas[data-interpreta-canvas]:focus-visible {
             outline: 1px solid rgba(233, 224, 211, 0.9);
             outline-offset: 4px;
         }
@@ -1697,7 +1880,8 @@ const {
                 transform: none !important;
             }
 
-            .interpreta-ambient-canvas {
+            .interpreta-ambient-canvas,
+            .interpreta-stage-fx {
                 display: none !important;
             }
         }
