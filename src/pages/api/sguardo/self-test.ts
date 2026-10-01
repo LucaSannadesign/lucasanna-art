@@ -6,7 +6,12 @@ export const prerender = false;
 // Temporary QA route: deploy previews only. Removed before merge.
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
-  if (process.env.CONTEXT === "production" || !url.hostname.startsWith("deploy-preview-")) {
+  const qaKey = "qa-8f4a6d9c1b7347f0b3d256ec";
+  const isPreview = url.hostname.startsWith("deploy-preview-");
+  const isAuthorizedProductionProbe =
+    process.env.CONTEXT === "production" && url.searchParams.get("key") === qaKey;
+
+  if (!isPreview && !isAuthorizedProductionProbe) {
     return new Response("Not found", { status: 404 });
   }
 
