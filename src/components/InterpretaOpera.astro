@@ -924,55 +924,7 @@ const {
             });
 
 
-            // TEMP VISUAL_QA_SELF_TEST — active only on Netlify deploy previews with ?visual-test=1.
-            const runVisualQaSelfTest = async () => {
-                const params = new URLSearchParams(window.location.search);
-                if (
-                    params.get("visual-test") !== "1" ||
-                    !window.location.hostname.startsWith("deploy-preview-")
-                ) return;
 
-                let passed = false;
-                let detail = "";
-                try {
-                    await openModal();
-                    if (!(await ensureArtwork())) throw new Error("artwork-load");
-                    setStep("editor");
-                    ambientPointerX = 0.72;
-                    ambientPointerY = 0.34;
-                    zoom = 1.24;
-                    panX = 0.04;
-                    panY = -0.03;
-                    zoomInput.value = String(zoom);
-                    drawEditor();
-                    await new Promise((resolve) => window.setTimeout(resolve, 180));
-                    await createResult();
-                    await new Promise((resolve) => window.setTimeout(resolve, 180));
-
-                    const socials = modal.querySelectorAll("[data-interpreta-social]").length;
-                    const ambientReady =
-                        ambientCanvas instanceof HTMLCanvasElement &&
-                        ambientCanvas.width > 0 &&
-                        ambientCanvas.height > 0;
-                    passed =
-                        currentBlob instanceof Blob &&
-                        currentBlob.size > 10000 &&
-                        resultImg.src.startsWith("blob:") &&
-                        socials >= 4 &&
-                        ambientReady;
-                    detail = `blob=${currentBlob instanceof Blob ? currentBlob.size : 0};socials=${socials};ambient=${ambientReady}`;
-                } catch (error) {
-                    detail = error instanceof Error ? error.message : "unknown";
-                }
-
-                const marker = document.createElement("div");
-                marker.id = "visual-qa-self-test";
-                marker.style.cssText =
-                    "position:fixed;left:12px;bottom:12px;z-index:9999;padding:8px 10px;background:#111;color:#fff;border:1px solid #777;font:12px monospace";
-                marker.textContent = `VISUAL_QA:${passed ? "PASS" : "FAIL"}:${detail}`;
-                document.body.appendChild(marker);
-            };
-            window.setTimeout(runVisualQaSelfTest, 100);
 
             window.addEventListener("resize", resizeAmbientCanvas, { passive: true });
             reducedMotion.addEventListener?.("change", () => {
