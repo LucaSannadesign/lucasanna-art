@@ -473,9 +473,8 @@ const {
             };
 
             const filename = () => {
-                const safe = String(slug)
-                    .split("/")
-                    .pop()
+                const tail = String(slug).split("/").pop() || "opera";
+                const safe = tail
                     .replace(/[^a-z0-9-]+/gi, "-")
                     .replace(/^-+|-+$/g, "")
                     .toLowerCase();
