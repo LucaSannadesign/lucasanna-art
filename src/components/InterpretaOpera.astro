@@ -61,9 +61,20 @@ const {
                         L’opera resta originale. Tu scegli soltanto come guardarla.
                     </p>
                 </div>
-                <button type="button" class="interpreta-close" data-interpreta-close>
-                    Chiudi
-                </button>
+                <div class="interpreta-header-actions">
+                    <button
+                        type="button"
+                        class="interpreta-effects-toggle"
+                        data-interpreta-effects
+                        aria-pressed="true"
+                        title="Attiva o riduci gli effetti immersivi"
+                    >
+                        Effetti <span data-interpreta-effects-label>attivi</span>
+                    </button>
+                    <button type="button" class="interpreta-close" data-interpreta-close>
+                        Chiudi
+                    </button>
+                </div>
             </header>
 
             <section class="interpreta-step" data-interpreta-step="intro">
@@ -233,6 +244,8 @@ const {
             const shareButton = modal.querySelector("[data-interpreta-share]");
             const downloadButton = modal.querySelector("[data-interpreta-download]");
             const resetButton = modal.querySelector("[data-interpreta-reset]");
+            const effectsButton = modal.querySelector("[data-interpreta-effects]");
+            const effectsLabel = modal.querySelector("[data-interpreta-effects-label]");
             const zoomInput = modal.querySelector("[data-interpreta-zoom]");
             const editorCanvas = modal.querySelector("[data-interpreta-canvas]");
             const resultImg = modal.querySelector("[data-interpreta-result-img]");
@@ -287,6 +300,7 @@ const {
             artwork.src = image;
 
             const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+            let effectsEnabled = !reducedMotion.matches;
             let ambientRaf = 0;
             let ambientPointerX = 0.5;
             let ambientPointerY = 0.5;
@@ -312,7 +326,7 @@ const {
 
             const drawAmbient = (time) => {
                 if (
-                    reducedMotion.matches ||
+                    !effectsEnabled ||
                     modal.hidden ||
                     !(ambientCanvas instanceof HTMLCanvasElement)
                 ) {
@@ -401,7 +415,7 @@ const {
             };
 
             const startAmbient = () => {
-                if (reducedMotion.matches || ambientRaf) return;
+                if (!effectsEnabled || ambientRaf) return;
                 ambientRaf = window.requestAnimationFrame(drawAmbient);
             };
 
@@ -430,7 +444,7 @@ const {
 
             const drawStageFx = (time) => {
                 if (
-                    reducedMotion.matches ||
+                    !effectsEnabled ||
                     modal.hidden ||
                     currentStepName !== "editor" ||
                     !(stageFxCanvas instanceof HTMLCanvasElement)
@@ -561,7 +575,7 @@ const {
             };
 
             const startStageFx = () => {
-                if (reducedMotion.matches || stageFxRaf || currentStepName !== "editor") return;
+                if (!effectsEnabled || stageFxRaf || currentStepName !== "editor") return;
                 stageFxRaf = window.requestAnimationFrame(drawStageFx);
             };
 
@@ -575,7 +589,7 @@ const {
             };
 
             const playCreationBurst = async () => {
-                if (reducedMotion.matches || !(stage instanceof HTMLElement)) return;
+                if (!effectsEnabled || !(stage instanceof HTMLElement)) return;
                 const animation = stage.animate(
                     [
                         {
@@ -606,7 +620,7 @@ const {
             };
 
             const playResultReveal = () => {
-                if (reducedMotion.matches || !(resultCard instanceof HTMLElement)) return;
+                if (!effectsEnabled || !(resultCard instanceof HTMLElement)) return;
                 resultCard.animate(
                     [
                         { opacity: 0, transform: "scale(.9) rotate(-1.5deg)", filter: "blur(18px) brightness(1.35)" },
@@ -634,6 +648,30 @@ const {
 
             const setStatus = (message = "") => {
                 if (status instanceof HTMLElement) status.textContent = message;
+            };
+
+            const syncEffectsUi = () => {
+                modal.dataset.effects = effectsEnabled ? "on" : "off";
+                if (effectsButton instanceof HTMLButtonElement) {
+                    effectsButton.setAttribute("aria-pressed", effectsEnabled ? "true" : "false");
+                }
+                if (effectsLabel instanceof HTMLElement) {
+                    effectsLabel.textContent = effectsEnabled ? "attivi" : "ridotti";
+                }
+
+                if (effectsEnabled && !modal.hidden) {
+                    startAmbient();
+                    if (currentStepName === "editor") startStageFx();
+                } else {
+                    stopAmbient();
+                    stopStageFx();
+                    if (stage instanceof HTMLElement) {
+                        stage.style.setProperty("--stage-rx", "0deg");
+                        stage.style.setProperty("--stage-ry", "0deg");
+                        stage.style.setProperty("--stage-mx", "50%");
+                        stage.style.setProperty("--stage-my", "50%");
+                    }
+                }
             };
 
             const setStep = (name) => {
@@ -805,8 +843,8 @@ const {
                 document.documentElement.classList.add("overflow-hidden");
                 await ensureArtwork();
                 setStep("intro");
+                syncEffectsUi();
                 pushEvent("artwork_interpretation_open");
-                startAmbient();
                 const first = modal.querySelector("[data-interpreta-start]");
                 if (first instanceof HTMLButtonElement) first.focus({ preventScroll: true });
             };
@@ -1008,6 +1046,16 @@ const {
             createButton.addEventListener("click", createResult);
             downloadButton.addEventListener("click", downloadCurrent);
             shareButton.addEventListener("click", shareCurrent);
+            if (effectsButton instanceof HTMLButtonElement) {
+                effectsButton.addEventListener("click", () => {
+                    effectsEnabled = !effectsEnabled;
+                    syncEffectsUi();
+                    pushEvent("artwork_interpretation_effects", {
+                        enabled: effectsEnabled,
+                        system_reduced_motion: reducedMotion.matches,
+                    });
+                });
+            }
             socialButtons.forEach((button) => {
                 if (!(button instanceof HTMLButtonElement)) return;
                 button.addEventListener("click", () => {
@@ -1073,7 +1121,7 @@ const {
             editorCanvas.addEventListener("pointercancel", endDrag);
 
             const applyStageDepth = (event) => {
-                if (reducedMotion.matches || !(stage instanceof HTMLElement)) return;
+                if (!effectsEnabled || !(stage instanceof HTMLElement)) return;
                 const rect = stage.getBoundingClientRect();
                 if (!rect.width || !rect.height) return;
                 const nx = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
@@ -1102,7 +1150,7 @@ const {
 
             if (shell instanceof HTMLElement) {
                 shell.addEventListener("pointermove", (event) => {
-                    if (reducedMotion.matches) return;
+                    if (!effectsEnabled) return;
                     const rect = shell.getBoundingClientRect();
                     if (!rect.width || !rect.height) return;
                     ambientPointerX = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
@@ -1164,50 +1212,15 @@ const {
 
 
 
-            // TEMP WOW_QA_PREVIEW — deploy-preview only, removed before merge.
-            const runWowQaPreview = async () => {
-                const params = new URLSearchParams(window.location.search);
-                if (
-                    params.get("wow-test") !== "1" ||
-                    !window.location.hostname.startsWith("deploy-preview-")
-                ) return;
-                await openModal();
-                if (!(await ensureArtwork())) return;
-                setStep("editor");
-                zoom = 1.28;
-                panX = 0.045;
-                panY = -0.035;
-                zoomInput.value = String(zoom);
-                ambientPointerX = 0.68;
-                ambientPointerY = 0.42;
-                drawEditor();
-                if (stage instanceof HTMLElement) {
-                    stage.style.setProperty("--stage-rx", "-3.8deg");
-                    stage.style.setProperty("--stage-ry", "5.5deg");
-                    stage.style.setProperty("--stage-mx", "68%");
-                    stage.style.setProperty("--stage-my", "42%");
-                }
-                const marker = document.createElement("div");
-                marker.id = "wow-qa-preview";
-                marker.style.cssText =
-                    "position:fixed;left:12px;bottom:12px;z-index:9999;padding:8px 10px;background:#111;color:#fff;border:1px solid #777;font:12px monospace";
-                marker.textContent = `WOW_QA_PREVIEW: reduce=${reducedMotion.matches}; fxCanvas=${stageFxCanvas instanceof HTMLCanvasElement ? stageFxCanvas.width + "x" + stageFxCanvas.height : "missing"}`;
-                document.body.appendChild(marker);
-            };
-            window.setTimeout(runWowQaPreview, 120);
+
 
             window.addEventListener("resize", () => {
                 resizeAmbientCanvas();
                 resizeStageFx();
             }, { passive: true });
             reducedMotion.addEventListener?.("change", () => {
-                if (reducedMotion.matches) {
-                    stopAmbient();
-                    stopStageFx();
-                } else if (!modal.hidden) {
-                    startAmbient();
-                    if (currentStepName === "editor") startStageFx();
-                }
+                effectsEnabled = !reducedMotion.matches;
+                syncEffectsUi();
             });
 
             window.addEventListener("pagehide", () => {
@@ -1345,6 +1358,30 @@ const {
             margin: 0.35rem 0 0;
             color: #898989;
             font-size: 0.84rem;
+        }
+
+        .interpreta-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .interpreta-effects-toggle {
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.025);
+            color: #9f9f9f;
+            padding: 0.5rem 0.65rem;
+            font-family: Inter, sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .interpreta-effects-toggle[aria-pressed="true"] {
+            color: #eee2cf;
+            border-color: rgba(238,226,207,0.38);
+            box-shadow: inset 0 0 18px rgba(224,195,153,0.05);
         }
 
         .interpreta-close,
@@ -1918,6 +1955,23 @@ const {
             transition-duration: 260ms !important;
         }
 
+        .interpreta-modal[data-effects="off"] .interpreta-ambient-canvas,
+        .interpreta-modal[data-effects="off"] .interpreta-stage-fx {
+            display: none !important;
+        }
+
+        .interpreta-modal[data-effects="off"] .interpreta-step:not([hidden]),
+        .interpreta-modal[data-effects="off"] .interpreta-canvas-wrap::before,
+        .interpreta-modal[data-effects="off"] .interpreta-canvas-wrap::after,
+        .interpreta-modal[data-effects="off"] .interpreta-result-card::before {
+            animation: none !important;
+        }
+
+        .interpreta-modal[data-effects="off"] .interpreta-canvas-wrap {
+            transform: none !important;
+            transition: none !important;
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .interpreta-entry-button,
             .interpreta-primary,
@@ -1928,19 +1982,8 @@ const {
                 transition: none !important;
             }
 
-            .interpreta-step:not([hidden]),
-            .interpreta-canvas-wrap::before,
-            .interpreta-result-card::before {
-                animation: none !important;
-            }
-
-            .interpreta-canvas-wrap {
-                transform: none !important;
-            }
-
-            .interpreta-ambient-canvas,
-            .interpreta-stage-fx {
-                display: none !important;
+            .interpreta-effects-toggle {
+                transition: none !important;
             }
         }
     </style>
