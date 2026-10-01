@@ -4,6 +4,7 @@ import { getEntry, getCollection, type CollectionEntry } from "astro:content";
 import { netlifyImageSrcSet, netlifyImageUrl } from "../lib/imageCdn";
 import RevealNarrativo from "../components/RevealNarrativo.astro";
 import AtmosferaCromatica from "../components/AtmosferaCromatica.astro";
+import PaesaggioRespira from "../components/PaesaggioRespira.astro";
 
 const entry = await getEntry("pages", "index");
 if (!entry) throw new Error("Missing index page");
@@ -65,7 +66,7 @@ const heroAvifSrcSet = heroImage
 	<section class="max-w-5xl mx-auto mb-14 md:mb-20 pt-3 md:pt-0 md:-mt-6 text-center">
 		{
 			heroImage && (
-				<picture class="block w-full mb-10 md:mb-12">
+				<picture class="home-respira block w-full mb-10 md:mb-12" data-paesaggio-respira>
 					<source
 						type="image/avif"
 						srcset={heroAvifSrcSet}
@@ -79,7 +80,8 @@ const heroAvifSrcSet = heroImage
 						fetchpriority="high"
 						loading="eager"
 						decoding="async"
-						class="w-full h-[46vh] min-h-[300px] max-h-[520px] md:h-[62vh] md:max-h-[720px] object-cover transition-[filter] duration-1000 ease-in-out shadow-2xl [@media(hover:hover)_and_(pointer:fine)]:grayscale [@media(hover:hover)_and_(pointer:fine)]:hover:grayscale-0"
+						data-respira-image
+						class="w-full h-[46vh] min-h-[300px] max-h-[520px] md:h-[62vh] md:max-h-[720px] object-cover shadow-2xl"
 					/>
 				</picture>
 			)
@@ -295,6 +297,7 @@ const heroAvifSrcSet = heroImage
 		document.addEventListener("astro:page-load", initHomeEditorialCta);
 	</script>
 
+	<PaesaggioRespira />
 	<RevealNarrativo selector="[data-reveal-item]" />
 	<AtmosferaCromatica />
 </BaseLayout>
