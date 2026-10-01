@@ -1955,19 +1955,19 @@ const {
             transition-duration: 260ms !important;
         }
 
-        .interpreta-modal[data-effects="off"] .interpreta-ambient-canvas,
-        .interpreta-modal[data-effects="off"] .interpreta-stage-fx {
+        :global(html) .interpreta-modal[data-effects="off"] .interpreta-ambient-canvas,
+        :global(html) .interpreta-modal[data-effects="off"] .interpreta-stage-fx {
             display: none !important;
         }
 
-        .interpreta-modal[data-effects="off"] .interpreta-step:not([hidden]),
-        .interpreta-modal[data-effects="off"] .interpreta-canvas-wrap::before,
-        .interpreta-modal[data-effects="off"] .interpreta-canvas-wrap::after,
-        .interpreta-modal[data-effects="off"] .interpreta-result-card::before {
+        :global(html) .interpreta-modal[data-effects="off"] .interpreta-step:not([hidden]),
+        :global(html) .interpreta-modal[data-effects="off"] .interpreta-canvas-wrap::before,
+        :global(html) .interpreta-modal[data-effects="off"] .interpreta-canvas-wrap::after,
+        :global(html) .interpreta-modal[data-effects="off"] .interpreta-result-card::before {
             animation: none !important;
         }
 
-        .interpreta-modal[data-effects="off"] .interpreta-canvas-wrap {
+        :global(html) .interpreta-modal[data-effects="off"] .interpreta-canvas-wrap {
             transform: none !important;
             transition: none !important;
         }
