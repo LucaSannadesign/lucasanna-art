@@ -15,7 +15,13 @@ export type SguardoShareMetadata = {
 };
 
 export function getSguardoStore() {
-  const context = process.env.CONTEXT || "";
+  const runtimeContext =
+    (globalThis as typeof globalThis & {
+      Netlify?: { context?: { deploy?: { context?: string } } };
+    }).Netlify?.context?.deploy?.context || "";
+
+  const context = runtimeContext || process.env.CONTEXT || "";
+
   if (context === "production") {
     return getStore(SGUARDO_STORE_NAME, { consistency: "strong" });
   }
