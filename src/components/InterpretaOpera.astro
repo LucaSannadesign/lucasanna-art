@@ -196,13 +196,13 @@ const {
                                     <span class="social-mark social-whatsapp" aria-hidden="true">◉</span>
                                     WhatsApp
                                 </button>
-                                <button type="button" data-interpreta-social="tiktok" aria-label="Prepara per TikTok">
-                                    <span class="social-mark social-tiktok" aria-hidden="true">♪</span>
-                                    TikTok
+                                <button type="button" data-interpreta-social="pinterest" aria-label="Prepara per Pinterest">
+                                    <span class="social-mark social-pinterest" aria-hidden="true">P</span>
+                                    Pinterest
                                 </button>
                             </div>
                             <small>
-                                Su mobile il sistema prova a condividere direttamente il file. Su desktop salva l’immagine, copia la didascalia e apre il social scelto.
+                                Su mobile il sistema prova a passare direttamente il ritaglio generato. Su desktop salva il ritaglio, copia la didascalia e apre il social per il caricamento: non condivide la foto originale della pagina.
                             </small>
                         </div>
 
@@ -324,16 +324,30 @@ const {
                 const px = ambientPointerX * w;
                 const py = ambientPointerY * h;
                 const t = time * 0.00022;
-                const energy = currentStepName === "result" ? 0.72 : currentStepName === "editor" ? 0.56 : ambientEnergy;
+                const energy = currentStepName === "result" ? 1 : currentStepName === "editor" ? 0.82 : 0.58;
 
                 const glow = ctx.createRadialGradient(px, py, 0, px, py, Math.max(w, h) * 0.72);
-                glow.addColorStop(0, `rgba(210,191,162,${0.08 * energy})`);
-                glow.addColorStop(0.42, `rgba(114,132,138,${0.045 * energy})`);
+                glow.addColorStop(0, `rgba(222,196,157,${0.18 * energy})`);
+                glow.addColorStop(0.34, `rgba(128,156,164,${0.095 * energy})`);
+                glow.addColorStop(0.68, `rgba(109,86,70,${0.055 * energy})`);
                 glow.addColorStop(1, "rgba(0,0,0,0)");
                 ctx.fillStyle = glow;
                 ctx.fillRect(0, 0, w, h);
 
-                const branches = currentStepName === "result" ? 34 : 24;
+                // A visible “breathing lens” makes the interaction legible even without moving the artwork.
+                const pulse = (Math.sin(t * 8) + 1) / 2;
+                for (let ring = 0; ring < 3; ring += 1) {
+                    const radius = Math.max(w, h) * (0.055 + ring * 0.035 + pulse * 0.012);
+                    ctx.beginPath();
+                    ctx.arc(px, py, radius, 0, Math.PI * 2);
+                    ctx.strokeStyle = ring === 0
+                        ? `rgba(236,210,172,${0.18 * energy})`
+                        : `rgba(125,164,174,${0.09 * energy})`;
+                    ctx.lineWidth = (1.4 - ring * 0.25) * dpr;
+                    ctx.stroke();
+                }
+
+                const branches = currentStepName === "result" ? 48 : currentStepName === "editor" ? 38 : 28;
                 ctx.lineCap = "round";
                 for (let i = 0; i < branches; i += 1) {
                     const side = i % 2 === 0 ? -1 : 1;
@@ -355,8 +369,8 @@ const {
                     );
                     const warm = i % 3 !== 0;
                     ctx.strokeStyle = warm
-                        ? `rgba(202,181,151,${(0.055 + (i % 5) * 0.008) * energy})`
-                        : `rgba(132,154,160,${(0.045 + (i % 4) * 0.007) * energy})`;
+                        ? `rgba(220,190,148,${(0.095 + (i % 5) * 0.014) * energy})`
+                        : `rgba(126,168,178,${(0.075 + (i % 4) * 0.012) * energy})`;
                     ctx.lineWidth = (0.55 + (i % 3) * 0.3) * dpr;
                     ctx.stroke();
 
@@ -371,7 +385,7 @@ const {
                             twigX,
                             twigY,
                         );
-                        ctx.strokeStyle = `rgba(224,205,177,${0.035 * energy})`;
+                        ctx.strokeStyle = `rgba(236,214,181,${0.075 * energy})`;
                         ctx.lineWidth = 0.45 * dpr;
                         ctx.stroke();
                     }
@@ -688,11 +702,13 @@ const {
                     }
                 }
 
+                // Desktop social URLs are upload destinations, never URL-share endpoints:
+                // URL sharers would use the page Open Graph image instead of the user's generated crop.
                 const urls = {
                     instagram: "https://www.instagram.com/",
-                    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
-                    whatsapp: `https://wa.me/?text=${encodeURIComponent(shareCaption())}`,
-                    tiktok: "https://www.tiktok.com/upload",
+                    facebook: "https://www.facebook.com/",
+                    whatsapp: "https://web.whatsapp.com/",
+                    pinterest: "https://www.pinterest.com/",
                 };
                 const target = urls[network] || shareUrl;
                 const popup = window.open(target, "_blank", "noopener,noreferrer");
@@ -704,14 +720,14 @@ const {
                 const label = network.charAt(0).toUpperCase() + network.slice(1);
                 setStatus(
                     copied
-                        ? `Immagine salvata e didascalia copiata. ${label} è stato aperto.`
-                        : `Immagine salvata. ${label} è stato aperto: carica il file appena creato.`,
+                        ? `Ritaglio salvato e didascalia copiata. ${label} è stato aperto: carica il file appena creato.`
+                        : `Ritaglio salvato. ${label} è stato aperto: carica il file appena creato.`,
                 );
                 if (!popup) {
                     setStatus(
                         copied
-                            ? `Immagine salvata e didascalia copiata. Apri ${label} e carica il file.`
-                            : `Immagine salvata. Apri ${label} e carica il file.`,
+                            ? `Ritaglio salvato e didascalia copiata. Apri ${label} e carica il file.`
+                            : `Ritaglio salvato. Apri ${label} e carica il file.`,
                     );
                 }
                 pushEvent("artwork_interpretation_social", {
@@ -845,8 +861,8 @@ const {
                 const ny = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
                 ambientPointerX = nx;
                 ambientPointerY = ny;
-                const rotateY = (nx - 0.5) * 5.5;
-                const rotateX = (0.5 - ny) * 4.2;
+                const rotateY = (nx - 0.5) * 11;
+                const rotateX = (0.5 - ny) * 8;
                 stage.style.setProperty("--stage-rx", rotateX.toFixed(2) + "deg");
                 stage.style.setProperty("--stage-ry", rotateY.toFixed(2) + "deg");
                 stage.style.setProperty("--stage-mx", (nx * 100).toFixed(1) + "%");
@@ -1238,15 +1254,16 @@ const {
             min-width: 0;
             padding: clamp(0.75rem, 2.4vw, 1.7rem);
             background:
-                radial-gradient(circle at var(--stage-mx) var(--stage-my), rgba(222, 201, 169, 0.13), transparent 34%),
+                radial-gradient(circle at var(--stage-mx) var(--stage-my), rgba(235, 205, 165, 0.24), transparent 31%),
                 linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0) 44%),
                 #090909;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow:
-                0 38px 80px rgba(0,0,0,0.34),
-                inset 0 0 70px rgba(213,190,156,0.025);
+                0 44px 100px rgba(0,0,0,0.44),
+                0 0 50px rgba(205,177,137,0.08),
+                inset 0 0 90px rgba(213,190,156,0.055);
             transform-style: preserve-3d;
-            transform: perspective(1100px) rotateX(var(--stage-rx)) rotateY(var(--stage-ry));
+            transform: perspective(1050px) rotateX(var(--stage-rx)) rotateY(var(--stage-ry)) scale(1.012);
             transition: transform 260ms cubic-bezier(0.22,1,0.36,1), border-color 300ms ease, box-shadow 300ms ease;
             overflow: hidden;
         }
@@ -1268,8 +1285,26 @@ const {
 
         .interpreta-canvas-wrap::after {
             inset: 0;
-            border: 1px solid rgba(231,210,180,0.08);
-            box-shadow: inset 0 0 42px rgba(233,211,180,0.035);
+            border: 1px solid rgba(231,210,180,0.12);
+            background:
+                linear-gradient(
+                    115deg,
+                    transparent 0 40%,
+                    rgba(245,220,184,0.0) 44%,
+                    rgba(245,220,184,0.16) 49%,
+                    rgba(132,177,188,0.09) 51%,
+                    rgba(245,220,184,0.0) 56%,
+                    transparent 60% 100%
+                );
+            background-size: 260% 100%;
+            box-shadow: inset 0 0 54px rgba(233,211,180,0.06);
+            animation: interpreta-scan 5.8s cubic-bezier(0.4,0,0.2,1) infinite;
+        }
+
+        @keyframes interpreta-scan {
+            0%, 18% { background-position: 180% 0; opacity: 0.25; }
+            48% { opacity: 1; }
+            82%, 100% { background-position: -80% 0; opacity: 0.25; }
         }
 
         @keyframes interpreta-orbit {
@@ -1398,7 +1433,8 @@ const {
             min-width: 0;
             padding: clamp(0.8rem, 2vw, 1.35rem);
             background:
-                radial-gradient(circle at 52% 38%, rgba(207,184,151,0.12), transparent 36%),
+                radial-gradient(circle at 52% 38%, rgba(223,190,145,0.2), transparent 34%),
+                radial-gradient(circle at 78% 68%, rgba(113,158,170,0.11), transparent 32%),
                 #080808;
             border: 1px solid rgba(229, 208, 177, 0.16);
             box-shadow: 0 44px 100px rgba(0,0,0,0.42), inset 0 0 80px rgba(196,172,139,0.035);
@@ -1511,10 +1547,11 @@ const {
             border-color: transparent;
         }
 
-        .social-tiktok {
-            background: #050505;
-            box-shadow: -2px 0 #25f4ee, 2px 0 #fe2c55;
-            border-color: rgba(255,255,255,0.2);
+        .social-pinterest {
+            background: #e60023;
+            border-color: transparent;
+            font-family: Georgia, serif;
+            font-weight: 700;
         }
 
         .interpreta-social-share small {
@@ -1584,6 +1621,27 @@ const {
             .interpreta-controls {
                 padding-bottom: 1rem;
             }
+        }
+
+        :global(html[data-silent="true"]) .interpreta-modal .interpreta-step:not([hidden]) {
+            animation: interpreta-step-in 560ms cubic-bezier(0.22, 1, 0.36, 1) both !important;
+        }
+
+        :global(html[data-silent="true"]) .interpreta-modal .interpreta-canvas-wrap::before {
+            animation: interpreta-orbit 16s linear infinite !important;
+        }
+
+        :global(html[data-silent="true"]) .interpreta-modal .interpreta-canvas-wrap::after {
+            animation: interpreta-scan 5.8s cubic-bezier(0.4,0,0.2,1) infinite !important;
+        }
+
+        :global(html[data-silent="true"]) .interpreta-modal .interpreta-result-card::before {
+            animation: interpreta-result-aura 18s linear infinite !important;
+        }
+
+        :global(html[data-silent="true"]) .interpreta-modal .interpreta-canvas-wrap,
+        :global(html[data-silent="true"]) .interpreta-modal .interpreta-social-grid button {
+            transition-duration: 260ms !important;
         }
 
         @media (prefers-reduced-motion: reduce) {
