@@ -450,6 +450,64 @@ const {
                 const py = stageFxPointerY * h;
 
                 ctx.clearRect(0, 0, w, h);
+
+                // Interactive magnifying lens: a second, enlarged gaze that follows the pointer.
+                if (stage instanceof HTMLElement) {
+                    const stageRect = stage.getBoundingClientRect();
+                    const editorRect = editorCanvas.getBoundingClientRect();
+                    const pointerCssX = stageFxPointerX * stageRect.width;
+                    const pointerCssY = stageFxPointerY * stageRect.height;
+                    const editorLeft = editorRect.left - stageRect.left;
+                    const editorTop = editorRect.top - stageRect.top;
+                    const insideEditor =
+                        pointerCssX >= editorLeft &&
+                        pointerCssX <= editorLeft + editorRect.width &&
+                        pointerCssY >= editorTop &&
+                        pointerCssY <= editorTop + editorRect.height;
+
+                    if (insideEditor && editorCanvas.width > 0 && editorCanvas.height > 0) {
+                        const sx = ((pointerCssX - editorLeft) / editorRect.width) * editorCanvas.width;
+                        const sy = ((pointerCssY - editorTop) / editorRect.height) * editorCanvas.height;
+                        const lensR = Math.min(92 * dpr, Math.min(w, h) * 0.13);
+                        const srcW = editorCanvas.width * 0.15;
+                        const srcH = srcW;
+
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.arc(px, py, lensR, 0, Math.PI * 2);
+                        ctx.clip();
+                        ctx.globalAlpha = 0.96;
+                        ctx.drawImage(
+                            editorCanvas,
+                            sx - srcW / 2,
+                            sy - srcH / 2,
+                            srcW,
+                            srcH,
+                            px - lensR,
+                            py - lensR,
+                            lensR * 2,
+                            lensR * 2,
+                        );
+                        const vignette = ctx.createRadialGradient(px, py, lensR * 0.45, px, py, lensR);
+                        vignette.addColorStop(0, "rgba(255,255,255,0)");
+                        vignette.addColorStop(0.82, "rgba(18,18,18,0.05)");
+                        vignette.addColorStop(1, "rgba(18,18,18,0.42)");
+                        ctx.fillStyle = vignette;
+                        ctx.fillRect(px - lensR, py - lensR, lensR * 2, lensR * 2);
+                        ctx.restore();
+
+                        ctx.save();
+                        ctx.shadowColor = "rgba(235,206,164,.55)";
+                        ctx.shadowBlur = 22 * dpr;
+                        ctx.beginPath();
+                        ctx.arc(px, py, lensR, 0, Math.PI * 2);
+                        ctx.strokeStyle = "rgba(244,224,192,.82)";
+                        ctx.lineWidth = 1.5 * dpr;
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+                }
+
                 ctx.globalCompositeOperation = "screen";
 
                 // Graphite dust orbiting the user's gaze.
@@ -1024,8 +1082,8 @@ const {
                 ambientPointerY = ny;
                 stageFxPointerX = nx;
                 stageFxPointerY = ny;
-                const rotateY = (nx - 0.5) * 11;
-                const rotateX = (0.5 - ny) * 8;
+                const rotateY = (nx - 0.5) * 16;
+                const rotateX = (0.5 - ny) * 11;
                 stage.style.setProperty("--stage-rx", rotateX.toFixed(2) + "deg");
                 stage.style.setProperty("--stage-ry", rotateY.toFixed(2) + "deg");
                 stage.style.setProperty("--stage-mx", (nx * 100).toFixed(1) + "%");
