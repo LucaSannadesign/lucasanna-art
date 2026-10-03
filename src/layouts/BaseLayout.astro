@@ -4,6 +4,7 @@ import Footer from "../components/Footer.astro";
 import ModalitaPercettivaToggle from "../components/ModalitaPercettivaToggle.astro";
 import InterfacciaEvanescente from "../components/InterfacciaEvanescente.astro";
 import TransizionePercettiva from "../components/TransizionePercettiva.astro";
+import LuceDiGalleria from "../components/LuceDiGalleria.astro";
 import { alternatePath, localeConfig, type Locale } from "../i18n/site";
 import "../styles/global.css";
 
@@ -189,6 +190,7 @@ const googleFontsHref = "https://fonts.googleapis.com/css2?family=Inter:wght@300
         <ModalitaPercettivaToggle enabled={ENABLE_PERCEPTIVE_TOGGLE} locale={locale} />
         <InterfacciaEvanescente enabled={ENABLE_EVANESCENTE_UI} idleMs={5200} />
         <TransizionePercettiva enabled={ENABLE_PERCETTIVE_TRANSITIONS} />
+        <LuceDiGalleria />
 
         <Footer locale={locale} />
 
