@@ -1,0 +1,154 @@
+---
+// Decorative accents outside the paintings; no image filters or layout shifts.
+---
+<div class="gallery-reading-line" data-gallery-reading-line aria-hidden="true"></div>
+
+<script>
+    let dispose: (() => void) | undefined;
+
+    function initGalleryLight() {
+        dispose?.();
+        const controller = new AbortController();
+        const { signal } = controller;
+        const disabled = matchMedia("(prefers-reduced-motion: reduce), (prefers-contrast: more), (forced-colors: active)");
+        const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
+        const frames = Array.from(document.querySelectorAll<HTMLElement>(
+            "[data-atmosfera-item] [data-reveal-media], .opere-gallery .opere-media",
+        ));
+        const headings = Array.from(document.querySelectorAll<HTMLElement>(
+            ".home-editorial-content h1, main > section > h2, .opere-intro h1",
+        ));
+        const line = document.querySelector<HTMLElement>("[data-gallery-reading-line]");
+        let frame = 0;
+        const pending = new Map<HTMLElement, { x: number; y: number }>();
+
+        const paint = () => {
+            frame = 0;
+            if (disabled.matches || document.hidden) return;
+            const distance = document.documentElement.scrollHeight - innerHeight;
+            line?.style.setProperty("--reading-progress", String(distance > 0 ? Math.max(0, Math.min(1, scrollY / distance)) : 0));
+            pending.forEach(({ x, y }, node) => {
+                node.style.setProperty("--gallery-light-x", `${x}%`);
+                node.style.setProperty("--gallery-light-y", `${y}%`);
+            });
+            pending.clear();
+        };
+        const schedule = () => {
+            if (!frame && !disabled.matches && !document.hidden) frame = requestAnimationFrame(paint);
+        };
+        frames.forEach((node) => {
+            node.classList.add("gallery-light-frame");
+            node.addEventListener("pointermove", (event) => {
+                if (disabled.matches || !finePointer.matches || event.pointerType === "touch") return;
+                const rect = node.getBoundingClientRect();
+                if (!rect.width || !rect.height) return;
+                pending.set(node, {
+                    x: Math.max(0, Math.min(100, (event.clientX - rect.left) / rect.width * 100)),
+                    y: Math.max(0, Math.min(100, (event.clientY - rect.top) / rect.height * 100)),
+                });
+                schedule();
+            }, { signal, passive: true });
+            node.addEventListener("pointerleave", () => {
+                pending.delete(node);
+                node.style.removeProperty("--gallery-light-x");
+                node.style.removeProperty("--gallery-light-y");
+            }, { signal });
+        });
+
+        const observer = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add("is-light-visible");
+                observer?.unobserve(entry.target);
+            });
+        }, { threshold: 0.2 }) : undefined;
+        headings.forEach((node) => {
+            node.classList.add("gallery-light-heading");
+            if (observer) observer.observe(node);
+            else node.classList.add("is-light-visible");
+        });
+        const reset = () => {
+            pending.clear();
+            frames.forEach((node) => {
+                node.style.removeProperty("--gallery-light-x");
+                node.style.removeProperty("--gallery-light-y");
+            });
+            schedule();
+        };
+        addEventListener("scroll", schedule, { signal, passive: true });
+        addEventListener("resize", schedule, { signal, passive: true });
+        document.addEventListener("visibilitychange", schedule, { signal });
+        document.addEventListener("load", schedule, { signal, capture: true });
+        disabled.addEventListener("change", reset, { signal });
+        finePointer.addEventListener("change", reset, { signal });
+        schedule();
+        dispose = () => {
+            controller.abort();
+            observer?.disconnect();
+            cancelAnimationFrame(frame);
+            pending.clear();
+        };
+    }
+    initGalleryLight();
+    document.addEventListener("astro:page-load", initGalleryLight);
+    document.addEventListener("astro:before-swap", () => dispose?.());
+</script>
+
+<style is:global>
+    .gallery-reading-line {
+        position: fixed;
+        inset: 0 0 auto;
+        height: 2px;
+        z-index: 90;
+        pointer-events: none;
+        background: linear-gradient(90deg, #859b9b, #e2c7a2, #f1e5d3);
+        transform: scaleX(var(--reading-progress, 0));
+        transform-origin: left;
+        opacity: .7;
+    }
+    .gallery-light-frame {
+        position: relative;
+        --gallery-light-x: 50%;
+        --gallery-light-y: 50%;
+    }
+    .gallery-light-frame::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+        border: 1px solid transparent;
+        border-radius: inherit;
+        background: radial-gradient(ellipse at var(--gallery-light-x) var(--gallery-light-y), #e4c7a2, #769b9e 35%, transparent 72%) border-box;
+        mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 650ms ease;
+    }
+    .gallery-light-frame:focus-within::after,
+    a:focus-visible .gallery-light-frame::after { opacity: .9; }
+    .gallery-light-heading::after {
+        content: "";
+        display: block;
+        width: 3rem;
+        height: 1px;
+        margin: 1.15rem auto 0;
+        background: linear-gradient(90deg, #b9956b, #d8c1a3, transparent);
+        transform: scaleX(.15);
+        transform-origin: left;
+        opacity: 0;
+        transition: transform 1200ms cubic-bezier(.22,1,.36,1), opacity 900ms ease;
+    }
+    .opere-intro .gallery-light-heading::after { margin-left: 0; }
+    .gallery-light-heading.is-light-visible::after { transform: scaleX(1); opacity: .8; }
+    html[data-silent="true"] .gallery-light-frame::after,
+    html[data-silent="true"] .gallery-light-heading::after { transition-duration: 850ms !important; }
+    html[data-silent="true"] .gallery-reading-line { opacity: .4; }
+    @media (hover: hover) and (pointer: fine) {
+        a:hover .gallery-light-frame::after { opacity: .95; }
+        html[data-silent="true"] a:hover .gallery-light-frame::after { opacity: .5; }
+    }
+    @media (prefers-reduced-motion: reduce), (prefers-contrast: more), (forced-colors: active) {
+        .gallery-reading-line, .gallery-light-frame::after, .gallery-light-heading::after { display: none; }
+    }
+</style>
