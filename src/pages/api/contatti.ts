@@ -71,9 +71,8 @@ function readEnv(key: string): string {
 }
 
 function isTurnstileEnabled(): boolean {
-    const siteKey = readEnv("PUBLIC_TURNSTILE_SITE_KEY").trim();
     const secret = readEnv("TURNSTILE_SECRET_KEY").trim();
-    if (!siteKey || !secret) return false;
+    if (!secret) return false;
 
     const context = readEnv("CONTEXT").trim();
     return context !== "deploy-preview" && context !== "branch-deploy";

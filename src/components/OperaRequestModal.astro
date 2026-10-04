@@ -19,7 +19,8 @@ const {
 
 const deployContext = String(import.meta.env.CONTEXT ?? "");
 const configuredTurnstileSiteKey = String(
-    import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "",
+    import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ??
+        "0x4AAAAAAFNXRySwD6WaSApy",
 ).trim();
 const turnstileEnabled =
     Boolean(configuredTurnstileSiteKey) &&
