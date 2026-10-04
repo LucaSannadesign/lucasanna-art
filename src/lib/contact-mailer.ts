@@ -25,9 +25,24 @@ const MIN_FILL_MS = 2500;
 
 /** Finestra e soglia del rate limit per IP. */
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
-const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_MAX = 3;
 
 export type ContactKind = "contatti" | "richiesta-opera";
+
+const REQUEST_TYPES: Record<ContactKind, readonly string[]> = {
+    contatti: [
+        "Acquisto opera",
+        "Commissione personalizzata",
+        "Collaborazione",
+        "Informazioni generali",
+    ],
+    "richiesta-opera": [
+        "Prezzo",
+        "Disponibilità",
+        "Commissione simile",
+        "Informazioni generali",
+    ],
+};
 
 export interface ContactPayload {
     kind: ContactKind;
@@ -94,12 +109,12 @@ export function isValidEmail(value: string): boolean {
 
 function requireField(value: string, field: string, max: number): string {
     if (!value) {
-        throw new ValidationError("campi", `Il campo "${field}" e' obbligatorio.`);
+        throw new ValidationError("campi", 'Il campo "' + field + '" e\' obbligatorio.');
     }
     if (value.length > max) {
         throw new ValidationError(
             "lunghezza",
-            `Il campo "${field}" supera la lunghezza massima consentita.`,
+            'Il campo "' + field + '" supera la lunghezza massima consentita.',
         );
     }
     return value;
@@ -111,8 +126,8 @@ function requireField(value: string, field: string, max: number): string {
 
 /**
  * Rate limit in memoria, per IP. Best effort: su piattaforme serverless lo
- * stato non e' condiviso fra istanze, quindi vale come freno agli invii
- * ripetuti dallo stesso client, non come protezione forte.
+ * stato non e' condiviso fra istanze, quindi resta un freno secondario.
+ * La protezione forte del form opera e' demandata anche a Turnstile.
  */
 const submissions = new Map<string, number[]>();
 
@@ -132,7 +147,6 @@ export function enforceRateLimit(ip: string): void {
     recent.push(now);
     submissions.set(ip, recent);
 
-    // Evita che la mappa cresca indefinitamente sulle istanze longeve.
     if (submissions.size > 500) {
         for (const [key, values] of submissions) {
             if (values.every((ts) => now - ts >= RATE_LIMIT_WINDOW_MS)) {
@@ -143,20 +157,81 @@ export function enforceRateLimit(ip: string): void {
 }
 
 /**
- * Controlli antibot: honeypot (deve restare vuoto) e tempo minimo di
- * compilazione. Il timestamp e' impostato via JS al caricamento del form:
- * se manca (utente senza JS) il controllo temporale viene saltato.
+ * Controlli antibot a costo zero: due honeypot e tempo minimo di compilazione.
+ * Per il form opera il timestamp e' obbligatorio, perché il modale richiede JS.
  */
-export function enforceBotChecks(honeypot: unknown, startedAt: unknown): void {
-    if (typeof honeypot === "string" && honeypot.trim() !== "") {
+export function enforceBotChecks(
+    honeypot: unknown,
+    startedAt: unknown,
+    secondaryHoneypot?: unknown,
+    requireTiming = false,
+): void {
+    const primaryFilled =
+        typeof honeypot === "string" && honeypot.trim() !== "";
+    const secondaryFilled =
+        typeof secondaryHoneypot === "string" && secondaryHoneypot.trim() !== "";
+
+    if (primaryFilled || secondaryFilled) {
         throw new ValidationError("spam", "Invio non valido.");
     }
 
-    if (typeof startedAt === "string" && startedAt.trim() !== "") {
-        const started = Number.parseInt(startedAt, 10);
-        if (Number.isFinite(started) && Date.now() - started < MIN_FILL_MS) {
+    const rawStartedAt =
+        typeof startedAt === "string" ? startedAt.trim() : "";
+
+    if (!rawStartedAt) {
+        if (requireTiming) {
             throw new ValidationError("spam", "Invio non valido.");
         }
+        return;
+    }
+
+    const started = Number.parseInt(rawStartedAt, 10);
+    const elapsed = Date.now() - started;
+
+    if (!Number.isFinite(started) || elapsed < MIN_FILL_MS || elapsed < 0) {
+        throw new ValidationError("spam", "Invio non valido.");
+    }
+}
+
+function spamScore(message: string): number {
+    const normalized = message.toLowerCase().replace(/\s+/g, " ");
+    let score = 0;
+
+    const strongPatterns = [
+        /\bthis (?:product|item) (?:works|worked|is working)\b/i,
+        /\b(?:improves?|improved) my (?:football|game|performance)\b/i,
+        /\b(?:buy|cheap|best)\s+(?:followers|backlinks|traffic)\b/i,
+        /\b(?:casino|viagra|cialis|crypto giveaway|loan offer)\b/i,
+        /\bguest post\b.{0,80}\b(?:link|backlink|seo)\b/i,
+    ];
+
+    if (strongPatterns.some((pattern) => pattern.test(normalized))) {
+        score += 2;
+    }
+
+    const softPatterns = [
+        /\bseo\b/i,
+        /\bbacklinks?\b/i,
+        /\bguest post\b/i,
+        /\bmarketing services?\b/i,
+        /\bfootball\b/i,
+        /\btelegram channel\b/i,
+    ];
+
+    for (const pattern of softPatterns) {
+        if (pattern.test(normalized)) score += 1;
+    }
+
+    const urlCount = (normalized.match(/(?:https?:\/\/|www\.)/g) ?? []).length;
+    if (urlCount >= 2) score += 2;
+    else if (urlCount === 1) score += 1;
+
+    return score;
+}
+
+function enforceMessageQuality(kind: ContactKind, message: string): void {
+    if (kind === "richiesta-opera" && spamScore(message) >= 2) {
+        throw new ValidationError("spam", "Invio non valido.");
     }
 }
 
@@ -193,6 +268,12 @@ export function parseContactPayload(
         throw new ValidationError("email", "L'indirizzo email non e' valido.");
     }
 
+    if (!REQUEST_TYPES[kind].includes(tipoRichiesta)) {
+        throw new ValidationError("campi", "Il tipo di richiesta non e' valido.");
+    }
+
+    enforceMessageQuality(kind, messaggio);
+
     const payload: ContactPayload = {
         kind,
         nome,
@@ -202,24 +283,47 @@ export function parseContactPayload(
     };
 
     if (kind === "richiesta-opera") {
-        const operaTitolo = normalizeText(data.opera_titolo);
-        const operaSlug = normalizeText(data.opera_slug);
-        const operaUrl = normalizeText(data.opera_url);
+        const operaTitolo = requireField(
+            normalizeText(data.opera_titolo),
+            "Titolo opera",
+            LIMITS.operaTitolo,
+        );
+        const operaSlug = requireField(
+            normalizeText(data.opera_slug),
+            "Slug opera",
+            LIMITS.operaSlug,
+        );
+        const operaUrl = requireField(
+            normalizeText(data.opera_url),
+            "URL opera",
+            LIMITS.operaUrl,
+        );
 
-        if (operaTitolo.length > LIMITS.operaTitolo) {
-            throw new ValidationError("lunghezza", "Titolo opera troppo lungo.");
+        if (!/^[a-z0-9][a-z0-9/-]*$/i.test(operaSlug)) {
+            throw new ValidationError("spam", "Invio non valido.");
         }
-        if (operaSlug.length > LIMITS.operaSlug) {
-            throw new ValidationError("lunghezza", "Slug opera troppo lungo.");
+
+        let parsedUrl: URL;
+        try {
+            parsedUrl = new URL(operaUrl);
+        } catch {
+            throw new ValidationError("spam", "Invio non valido.");
         }
-        if (operaUrl.length > LIMITS.operaUrl) {
-            throw new ValidationError("lunghezza", "URL opera troppo lungo.");
+
+        const allowedHosts = new Set(["lucasanna.art", "www.lucasanna.art"]);
+        const expectedPath = "/opere/" + operaSlug.replace(/^\/+|\/+$/g, "") + "/";
+
+        if (
+            parsedUrl.protocol !== "https:" ||
+            !allowedHosts.has(parsedUrl.hostname) ||
+            parsedUrl.pathname !== expectedPath
+        ) {
+            throw new ValidationError("spam", "Invio non valido.");
         }
 
         payload.operaTitolo = operaTitolo;
         payload.operaSlug = operaSlug;
-        // Accetta solo URL http(s), per non riportare in email schemi arbitrari.
-        payload.operaUrl = /^https?:\/\//i.test(operaUrl) ? operaUrl : "";
+        payload.operaUrl = parsedUrl.href;
     }
 
     return payload;
