@@ -12,6 +12,7 @@ import ContemplaOpera from "../../components/ContemplaOpera.astro";
 import PercorsoTrigger from "../../components/PercorsoTrigger.astro";
 import PercorsoOverlay from "../../components/PercorsoOverlay.astro";
 import ContactFormScript from "../../components/ContactFormScript.astro";
+import OperaRequestModal from "../../components/OperaRequestModal.astro";
 
 const CATEGORY_LABELS: Record<string, string> = {
     animali: "Animali",
@@ -1066,119 +1067,14 @@ if (isCategoryPage) {
             >
         </div>
 
-        <div
-            id="opera-request-modal"
-            class="fixed inset-0 z-[90] hidden items-center justify-center p-4"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="opera-request-modal-title"
-            data-opera-request-modal
-        >
-            <button
-                type="button"
-                class="absolute inset-0 bg-black/75"
-                aria-label="Chiudi modulo richiesta"
-                data-opera-request-close
-            ></button>
-            <div class="relative w-full max-w-xl max-h-[85vh] overflow-y-auto rounded-2xl border border-white/20 bg-[#121212] p-5 md:p-6 shadow-2xl">
-                <div class="sticky top-0 z-10 -mx-5 md:-mx-6 px-5 md:px-6 py-3 mb-5 flex items-start justify-between gap-4 border-b border-white/10 bg-[#121212]">
-                    <h2
-                        id="opera-request-modal-title"
-                        class="text-xs md:text-sm uppercase tracking-[0.18em] text-gray-200"
-                    >
-                        Richiedi informazioni sull'opera
-                    </h2>
-                    <button
-                        type="button"
-                        class="text-gray-300 hover:text-white transition-colors text-[11px] uppercase tracking-[0.16em] border border-white/20 px-3 py-1.5"
-                        data-opera-request-close
-                    >
-                        Chiudi
-                    </button>
-                </div>
-                <form
-                    name="richiesta-opera"
-                    method="POST"
-                    action="/api/contatti"
-                    data-contact-form
-                    class="grid grid-cols-1 gap-4"
-                >
-                    <input type="hidden" name="form-name" value="richiesta-opera" />
-                    <input type="hidden" name="form-started-at" data-form-started-at value="" />
-                    <input type="hidden" name="opera_url" value={operaCanonicalUrl} />
-                    <input type="hidden" name="opera_titolo" value={operaRequestTitle} />
-                    <input type="hidden" name="opera_slug" value={operaRequestSlug} />
-                    <p class="hidden" aria-hidden="true">
-                        <label>
-                            Non compilare questo campo:
-                            <input name="bot-field" tabindex="-1" autocomplete="off" />
-                        </label>
-                    </p>
-
-                    <p
-                        data-contact-error
-                        role="alert"
-                        hidden
-                        class="border border-red-500/40 bg-red-500/5 px-4 py-3 text-sm text-red-300"
-                    >
-                    </p>
-
-                    <label class="block">
-                        <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Nome</span>
-                        <input
-                            type="text"
-                            name="nome"
-                            required
-                            class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-white/40"
-                        />
-                    </label>
-
-                    <label class="block">
-                        <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Email</span>
-                        <input
-                            type="email"
-                            name="email"
-                            required
-                            class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-white/40"
-                        />
-                    </label>
-
-                    <label class="block">
-                        <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Tipo richiesta</span>
-                        <select
-                            name="tipo-richiesta"
-                            required
-                            class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-white/40"
-                        >
-                            <option value="">Seleziona</option>
-                            <option value="Prezzo">Prezzo</option>
-                            <option value="Disponibilità">Disponibilità</option>
-                            <option value="Commissione simile">Commissione simile</option>
-                            <option value="Informazioni generali">Informazioni generali</option>
-                        </select>
-                    </label>
-
-                    <label class="block">
-                        <span class="text-[11px] uppercase tracking-[0.16em] text-gray-400">Messaggio</span>
-                        <textarea
-                            name="messaggio"
-                            rows="6"
-                            required
-                            class="mt-2 w-full bg-[#141414] border border-white/15 px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-white/40"
-                        ></textarea>
-                    </label>
-
-                    <div class="pt-1 text-center">
-                        <button
-                            type="submit"
-                            class="inline-block border border-white/25 px-6 py-3 text-xs uppercase tracking-[0.2em] text-gray-200 hover:text-white hover:border-white/50 transition-colors"
-                        >
-                            Invia richiesta
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <OperaRequestModal
+            title={operaRequestTitle}
+            url={operaCanonicalUrl}
+            slug={operaRequestSlug}
+            image={entry.data.featuredImage}
+            year={entry.data.year}
+            technique={entry.data.technique}
+        />
     </div>
 
     <RevealNarrativo enabled={INTERACTIONS.reveal} selector="[data-reveal-item]" />
@@ -1188,48 +1084,7 @@ if (isCategoryPage) {
 
     <ContactFormScript />
 
-    <script is:inline>
-        const initOperaRequestModal = () => {
-            const modal = document.querySelector("[data-opera-request-modal]");
-            if (!(modal instanceof HTMLElement)) return;
-            if (modal.dataset.bound === "true") return;
-            modal.dataset.bound = "true";
 
-            const openButton = document.querySelector("[data-opera-request-open]");
-            const closeButtons = Array.from(
-                document.querySelectorAll("[data-opera-request-close]"),
-            );
-
-            const closeModal = () => {
-                modal.classList.add("hidden");
-                modal.classList.remove("flex");
-                document.documentElement.classList.remove("overflow-hidden");
-            };
-
-            const openModal = () => {
-                modal.classList.remove("hidden");
-                modal.classList.add("flex");
-                document.documentElement.classList.add("overflow-hidden");
-            };
-
-            if (openButton instanceof HTMLButtonElement) {
-                openButton.addEventListener("click", openModal);
-            }
-
-            closeButtons.forEach((button) => {
-                if (button instanceof HTMLButtonElement) {
-                    button.addEventListener("click", closeModal);
-                }
-            });
-
-            document.addEventListener("keydown", (event) => {
-                if (event.key === "Escape") closeModal();
-            });
-        };
-
-        initOperaRequestModal();
-        document.addEventListener("astro:page-load", initOperaRequestModal);
-    </script>
     )}
 </BaseLayout>
 

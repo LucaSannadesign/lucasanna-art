@@ -1,0 +1,482 @@
+---
+interface Props {
+    title: string;
+    url: string;
+    slug: string;
+    image?: string;
+    year?: string | number;
+    technique?: string;
+}
+
+const {
+    title,
+    url,
+    slug,
+    image = "",
+    year,
+    technique = "",
+} = Astro.props;
+
+const deployContext = String(import.meta.env.CONTEXT ?? "");
+const configuredTurnstileSiteKey = String(
+    import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "",
+).trim();
+const turnstileEnabled =
+    Boolean(configuredTurnstileSiteKey) &&
+    deployContext !== "deploy-preview" &&
+    deployContext !== "branch-deploy";
+const turnstileSiteKey = turnstileEnabled ? configuredTurnstileSiteKey : "";
+
+const artworkMeta = [
+    technique?.trim(),
+    year !== undefined && year !== null && String(year).trim() !== ""
+        ? String(year)
+        : "",
+]
+    .filter(Boolean)
+    .join(" · ");
+---
+
+<dialog
+    id="opera-request-modal"
+    class="opera-request-dialog m-auto w-[calc(100%-1rem)] max-w-3xl overflow-hidden border border-white/15 bg-[#101010] p-0 text-gray-200 shadow-2xl"
+    aria-labelledby="opera-request-modal-title"
+    data-opera-request-modal
+>
+    <div class="grid max-h-[92dvh] min-h-0 grid-cols-1 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        <aside class="relative hidden min-h-0 overflow-hidden border-r border-white/10 bg-[#0b0b0b] md:block">
+            {image ? (
+                <>
+                    <img
+                        src={image}
+                        alt=""
+                        aria-hidden="true"
+                        loading="lazy"
+                        decoding="async"
+                        class="absolute inset-0 h-full w-full object-cover opacity-55"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-black/10"></div>
+                </>
+            ) : (
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.08),transparent_45%)]"></div>
+            )}
+
+            <div class="relative z-10 flex h-full min-h-[32rem] flex-col justify-end p-7">
+                <p class="mb-3 text-[0.62rem] uppercase tracking-[0.24em] text-gray-400">
+                    Opera selezionata
+                </p>
+                <h2 class="max-w-sm font-heading text-3xl leading-tight text-white">
+                    {title}
+                </h2>
+                {artworkMeta && (
+                    <p class="mt-3 text-xs font-light leading-6 text-gray-300">
+                        {artworkMeta}
+                    </p>
+                )}
+                <div class="mt-7 border-t border-white/15 pt-5">
+                    <p class="text-xs font-light leading-6 text-gray-300">
+                        La richiesta non comporta alcun acquisto. Riceverai una risposta personale su prezzo,
+                        disponibilità o commissioni simili.
+                    </p>
+                </div>
+            </div>
+        </aside>
+
+        <section class="min-h-0 overflow-y-auto bg-[#121212]">
+            <header class="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-white/10 bg-[#121212]/95 px-5 py-4 backdrop-blur md:px-7">
+                <div>
+                    <p class="mb-1 text-[0.62rem] uppercase tracking-[0.22em] text-gray-500">
+                        Contatto diretto
+                    </p>
+                    <h2
+                        id="opera-request-modal-title"
+                        class="font-heading text-2xl leading-tight text-white"
+                    >
+                        Richiedi informazioni
+                    </h2>
+                </div>
+                <button
+                    type="button"
+                    class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 text-lg text-gray-400 transition hover:border-white/35 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                    aria-label="Chiudi modulo richiesta"
+                    data-opera-request-close
+                >
+                    <span aria-hidden="true">×</span>
+                </button>
+            </header>
+
+            <div class="px-5 py-6 md:px-7 md:py-7">
+                <div class="mb-6 rounded-xl border border-white/10 bg-white/[0.025] p-4 md:hidden">
+                    <p class="text-[0.6rem] uppercase tracking-[0.2em] text-gray-500">Opera</p>
+                    <p class="mt-1 font-heading text-xl text-white">{title}</p>
+                    {artworkMeta && (
+                        <p class="mt-1 text-xs font-light text-gray-400">{artworkMeta}</p>
+                    )}
+                </div>
+
+                <form
+                    name="richiesta-opera"
+                    method="POST"
+                    action="/api/contatti"
+                    data-contact-form
+                    class="grid grid-cols-1 gap-5"
+                >
+                    <input type="hidden" name="form-name" value="richiesta-opera" />
+                    <input type="hidden" name="form-started-at" data-form-started-at value="" />
+                    <input type="hidden" name="opera_url" value={url} />
+                    <input type="hidden" name="opera_titolo" value={title} />
+                    <input type="hidden" name="opera_slug" value={slug} />
+
+                    <div class="absolute left-[-10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+                        <label>
+                            Non compilare questo campo
+                            <input
+                                name="bot-field"
+                                tabindex="-1"
+                                autocomplete="off"
+                            />
+                        </label>
+                        <label>
+                            Sito web
+                            <input
+                                name="website"
+                                tabindex="-1"
+                                autocomplete="off"
+                            />
+                        </label>
+                    </div>
+
+                    <p
+                        data-contact-error
+                        role="alert"
+                        tabindex="-1"
+                        hidden
+                        class="rounded-lg border border-red-400/35 bg-red-500/[0.06] px-4 py-3 text-sm leading-6 text-red-200"
+                    ></p>
+
+                    <fieldset>
+                        <legend class="mb-3 text-[0.68rem] uppercase tracking-[0.16em] text-gray-400">
+                            Di cosa vuoi parlare?
+                        </legend>
+
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <label class="request-option">
+                                <input type="radio" name="tipo-richiesta" value="Prezzo" required />
+                                <span class="request-option-title">Prezzo</span>
+                                <span class="request-option-copy">Conoscere il prezzo dell’opera</span>
+                            </label>
+
+                            <label class="request-option">
+                                <input type="radio" name="tipo-richiesta" value="Disponibilità" required />
+                                <span class="request-option-title">Disponibilità</span>
+                                <span class="request-option-copy">Sapere se è ancora disponibile</span>
+                            </label>
+
+                            <label class="request-option">
+                                <input type="radio" name="tipo-richiesta" value="Commissione simile" required />
+                                <span class="request-option-title">Commissione</span>
+                                <span class="request-option-copy">Richiedere un lavoro simile</span>
+                            </label>
+
+                            <label class="request-option">
+                                <input type="radio" name="tipo-richiesta" value="Informazioni generali" required />
+                                <span class="request-option-title">Altro</span>
+                                <span class="request-option-copy">Tecnica, misure o altre domande</span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <label class="block">
+                            <span class="request-field-label">Nome</span>
+                            <input
+                                type="text"
+                                name="nome"
+                                autocomplete="name"
+                                minlength="2"
+                                maxlength="120"
+                                required
+                                class="request-field"
+                                placeholder="Il tuo nome"
+                            />
+                        </label>
+
+                        <label class="block">
+                            <span class="request-field-label">Email</span>
+                            <input
+                                type="email"
+                                name="email"
+                                autocomplete="email"
+                                inputmode="email"
+                                maxlength="254"
+                                required
+                                class="request-field"
+                                placeholder="nome@email.it"
+                            />
+                        </label>
+                    </div>
+
+                    <label class="block">
+                        <span class="request-field-label">Messaggio</span>
+                        <textarea
+                            name="messaggio"
+                            rows="5"
+                            minlength="8"
+                            maxlength="5000"
+                            required
+                            class="request-field resize-y"
+                            placeholder="Scrivi pure in modo semplice. Se chiedi il prezzo, puoi indicare anche eventuali dubbi su spedizione o disponibilità."
+                        ></textarea>
+                    </label>
+
+                    {turnstileSiteKey && (
+                        <div>
+                            <div
+                                data-turnstile-container
+                                data-sitekey={turnstileSiteKey}
+                                class="min-h-0"
+                            ></div>
+                            <p class="mt-2 text-[0.62rem] leading-5 text-gray-600">
+                                Protezione antispam attiva. Il controllo resta invisibile finché non è necessaria una verifica.
+                            </p>
+                        </div>
+                    )}
+
+                    <div class="border-t border-white/10 pt-5">
+                        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                            <p class="max-w-sm text-[0.68rem] font-light leading-5 text-gray-500">
+                                Nessun pagamento automatico · nessun impegno · risposta normalmente entro 24–48 ore.
+                            </p>
+                            <button
+                                type="submit"
+                                class="inline-flex min-h-12 items-center justify-center border border-white bg-white px-6 py-3 text-xs font-medium uppercase tracking-[0.18em] text-black transition hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 disabled:cursor-wait disabled:opacity-60"
+                            >
+                                Invia richiesta →
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</dialog>
+
+{turnstileSiteKey && (
+    <script
+        is:inline
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+        defer
+    ></script>
+)}
+
+<script is:inline>
+    (() => {
+        const initOperaRequestModal = () => {
+            const dialog = document.querySelector("[data-opera-request-modal]");
+            if (!(dialog instanceof HTMLDialogElement)) return;
+            if (dialog.dataset.bound === "true") return;
+            dialog.dataset.bound = "true";
+
+            const openButton = document.querySelector("[data-opera-request-open]");
+            const closeButton = dialog.querySelector("[data-opera-request-close]");
+            const form = dialog.querySelector("[data-contact-form]");
+            const startedAt = form?.querySelector("[data-form-started-at]");
+            const turnstileContainer = dialog.querySelector("[data-turnstile-container]");
+            let turnstileAttempts = 0;
+
+            const renderTurnstile = () => {
+                if (!(turnstileContainer instanceof HTMLElement)) return;
+                if (turnstileContainer.dataset.widgetId) return;
+
+                const sitekey = turnstileContainer.dataset.sitekey;
+                if (!sitekey) return;
+
+                if (
+                    typeof window.turnstile === "undefined" ||
+                    typeof window.turnstile.render !== "function"
+                ) {
+                    if (turnstileAttempts < 20) {
+                        turnstileAttempts += 1;
+                        window.setTimeout(renderTurnstile, 150);
+                    }
+                    return;
+                }
+
+                const widgetId = window.turnstile.render(turnstileContainer, {
+                    sitekey,
+                    theme: "dark",
+                    size: "flexible",
+                    appearance: "interaction-only",
+                    action: "artwork_request",
+                    retry: "auto",
+                    "refresh-expired": "auto",
+                });
+
+                turnstileContainer.dataset.widgetId = String(widgetId);
+            };
+
+            const openDialog = () => {
+                if (startedAt instanceof HTMLInputElement) {
+                    startedAt.value = String(Date.now());
+                }
+
+                if (!dialog.open) dialog.showModal();
+                document.documentElement.classList.add("overflow-hidden");
+                turnstileAttempts = 0;
+                renderTurnstile();
+
+                window.requestAnimationFrame(() => {
+                    const firstField = dialog.querySelector('input[name="nome"]');
+                    if (firstField instanceof HTMLInputElement) firstField.focus();
+                });
+            };
+
+            const closeDialog = () => {
+                if (dialog.open) dialog.close();
+            };
+
+            if (openButton instanceof HTMLButtonElement) {
+                openButton.addEventListener("click", openDialog);
+            }
+
+            if (closeButton instanceof HTMLButtonElement) {
+                closeButton.addEventListener("click", closeDialog);
+            }
+
+            dialog.addEventListener("close", () => {
+                document.documentElement.classList.remove("overflow-hidden");
+                if (openButton instanceof HTMLButtonElement) openButton.focus();
+            });
+
+            dialog.addEventListener("cancel", () => {
+                document.documentElement.classList.remove("overflow-hidden");
+            });
+
+            dialog.addEventListener("click", (event) => {
+                if (event.target !== dialog) return;
+                const rect = dialog.getBoundingClientRect();
+                const inside =
+                    event.clientX >= rect.left &&
+                    event.clientX <= rect.right &&
+                    event.clientY >= rect.top &&
+                    event.clientY <= rect.bottom;
+                if (!inside) closeDialog();
+            });
+        };
+
+        initOperaRequestModal();
+        document.addEventListener("astro:page-load", initOperaRequestModal);
+    })();
+</script>
+
+<style>
+    .opera-request-dialog {
+        border-radius: 1rem;
+    }
+
+    .opera-request-dialog::backdrop {
+        background: rgba(0, 0, 0, 0.82);
+        backdrop-filter: blur(9px);
+    }
+
+    .request-option {
+        position: relative;
+        display: flex;
+        min-height: 5.25rem;
+        cursor: pointer;
+        flex-direction: column;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.018);
+        padding: 0.85rem 0.9rem;
+        transition:
+            border-color 160ms ease,
+            background-color 160ms ease,
+            transform 160ms ease;
+    }
+
+    .request-option:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.035);
+    }
+
+    .request-option:has(input:checked) {
+        border-color: rgba(255, 255, 255, 0.72);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .request-option:focus-within {
+        outline: 2px solid rgba(255, 255, 255, 0.58);
+        outline-offset: 2px;
+    }
+
+    .request-option input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .request-option-title {
+        color: rgba(245, 245, 245, 0.96);
+        font-size: 0.74rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .request-option-copy {
+        margin-top: 0.32rem;
+        color: rgba(160, 160, 160, 0.92);
+        font-size: 0.7rem;
+        font-weight: 300;
+        line-height: 1.45;
+    }
+
+    .request-field-label {
+        color: rgba(160, 160, 160, 0.92);
+        font-size: 0.68rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+    }
+
+    .request-field {
+        margin-top: 0.5rem;
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        background: #0e0e0e;
+        padding: 0.82rem 0.92rem;
+        color: #eeeeee;
+        font-size: 0.875rem;
+        line-height: 1.45;
+        outline: none;
+        transition:
+            border-color 160ms ease,
+            background-color 160ms ease,
+            box-shadow 160ms ease;
+    }
+
+    .request-field::placeholder {
+        color: rgba(125, 125, 125, 0.78);
+    }
+
+    .request-field:focus {
+        border-color: rgba(255, 255, 255, 0.48);
+        background: #131313;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.035);
+    }
+
+    @media (max-width: 767px) {
+        .opera-request-dialog {
+            margin-top: auto;
+            margin-bottom: 0.5rem;
+            border-radius: 1rem 1rem 0.75rem 0.75rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .request-option,
+        .request-field {
+            transition: none;
+        }
+    }
+</style>

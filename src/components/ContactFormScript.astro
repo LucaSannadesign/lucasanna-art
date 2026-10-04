@@ -14,6 +14,7 @@ const messages =
               formato: "Invalid request. Reload the page and try again.",
               "rate-limit": "You have already sent several requests. Please try again in one hour.",
               invio: "The message could not be sent. Please try again later or email me directly.",
+              verifica: "The anti-spam verification did not complete. Please try again.",
               rete: "Connection failed. Check your network and try again.",
           }
         : {
@@ -23,6 +24,7 @@ const messages =
               formato: "Richiesta non valida. Ricarica la pagina e riprova.",
               "rate-limit": "Hai gia' inviato diverse richieste. Riprova tra un'ora.",
               invio: "Non e' stato possibile inviare il messaggio. Riprova piu' tardi oppure scrivi direttamente via email.",
+              verifica: "La verifica antispam non si e' completata. Riprova.",
               rete: "Connessione non riuscita. Verifica la rete e riprova.",
           };
 
@@ -40,6 +42,7 @@ const successRedirect = locale === "en" ? "/en/thank-you/?ok=1" : null;
             box.textContent = MESSAGGI[codice] || testo || MESSAGGI.invio;
             box.hidden = false;
             box.scrollIntoView({ block: "nearest", behavior: "smooth" });
+            if (typeof box.focus === "function") box.focus({ preventScroll: true });
         };
 
         const nascondiErrore = (form) => {
@@ -72,6 +75,20 @@ const successRedirect = locale === "en" ? "/en/thank-you/?ok=1" : null;
                         submitButton.disabled = true;
                         submitButton.textContent = sendingLabel;
                     }
+                    form.setAttribute("aria-busy", "true");
+
+                    const resetTurnstile = () => {
+                        const container = form.querySelector("[data-turnstile-container]");
+                        if (!(container instanceof HTMLElement)) return;
+                        const widgetId = container.dataset.widgetId;
+                        if (
+                            widgetId &&
+                            typeof window.turnstile !== "undefined" &&
+                            typeof window.turnstile.reset === "function"
+                        ) {
+                            window.turnstile.reset(widgetId);
+                        }
+                    };
 
                     try {
                         const response = await fetch(form.action, {
@@ -99,9 +116,13 @@ const successRedirect = locale === "en" ? "/en/thank-you/?ok=1" : null;
                             (esito && esito.code) || "invio",
                             esito && esito.message,
                         );
+                        resetTurnstile();
                     } catch {
                         mostraErrore(form, "rete");
+                        resetTurnstile();
                     }
+
+                    form.removeAttribute("aria-busy");
 
                     if (submitButton instanceof HTMLButtonElement) {
                         submitButton.disabled = false;
