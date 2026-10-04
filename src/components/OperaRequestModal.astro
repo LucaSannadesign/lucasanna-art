@@ -45,24 +45,26 @@ const artworkMeta = [
     data-opera-request-modal
 >
     <div class="opera-request-layout grid h-full min-h-0 grid-cols-1 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-        <aside class="relative hidden h-full min-h-0 overflow-hidden border-r border-white/10 bg-[#0b0b0b] md:block">
-            {image ? (
-                <>
-                    <img
-                        src={image}
-                        alt=""
-                        aria-hidden="true"
-                        loading="lazy"
-                        decoding="async"
-                        class="absolute inset-0 h-full w-full object-cover opacity-55"
-                    />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-black/10"></div>
-                </>
-            ) : (
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.08),transparent_45%)]"></div>
-            )}
+        <aside class="hidden h-full min-h-0 overflow-hidden border-r border-white/10 bg-[#0b0b0b] md:flex md:flex-col">
+            <div class="relative h-[38%] min-h-[12rem] shrink-0 overflow-hidden border-b border-white/10">
+                {image ? (
+                    <>
+                        <img
+                            src={image}
+                            alt=""
+                            aria-hidden="true"
+                            loading="lazy"
+                            decoding="async"
+                            class="absolute inset-0 h-full w-full object-cover opacity-72"
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/5"></div>
+                    </>
+                ) : (
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.08),transparent_45%)]"></div>
+                )}
+            </div>
 
-            <div class="relative z-10 flex h-full min-h-0 flex-col justify-end overflow-hidden p-7">
+            <div class="flex min-h-0 flex-1 flex-col justify-center overflow-y-auto p-7">
                 <p class="mb-3 text-[0.62rem] uppercase tracking-[0.24em] text-gray-400">
                     Opera selezionata
                 </p>
@@ -74,10 +76,9 @@ const artworkMeta = [
                         {artworkMeta}
                     </p>
                 )}
-                <div class="mt-7 border-t border-white/15 pt-5">
-                    <p class="text-xs font-light leading-6 text-gray-300">
-                        La richiesta non comporta alcun acquisto. Riceverai una risposta personale su prezzo,
-                        disponibilità o commissioni simili.
+                <div class="mt-6 border-t border-white/15 pt-4">
+                    <p class="text-xs font-light leading-5 text-gray-400">
+                        Nessun acquisto automatico. Risposta personale su prezzo, disponibilità o commissioni simili.
                     </p>
                 </div>
             </div>
@@ -120,7 +121,7 @@ const artworkMeta = [
                     method="POST"
                     action="/api/contatti"
                     data-contact-form
-                    class="grid grid-cols-1 gap-5"
+                    class="grid grid-cols-1 gap-4"
                 >
                     <input type="hidden" name="form-name" value="richiesta-opera" />
                     <input type="hidden" name="form-started-at" data-form-started-at value="" />
@@ -221,7 +222,7 @@ const artworkMeta = [
                         <span class="request-field-label">Messaggio</span>
                         <textarea
                             name="messaggio"
-                            rows="5"
+                            rows="4"
                             minlength="8"
                             maxlength="5000"
                             required
@@ -283,6 +284,7 @@ const artworkMeta = [
             const form = dialog.querySelector("[data-contact-form]");
             const startedAt = form?.querySelector("[data-form-started-at]");
             const turnstileContainer = dialog.querySelector("[data-turnstile-container]");
+            const scrollArea = dialog.querySelector("[data-opera-request-scroll]");
             let turnstileAttempts = 0;
 
             const renderTurnstile = () => {
@@ -323,10 +325,20 @@ const artworkMeta = [
 
                 if (!dialog.open) dialog.showModal();
                 document.documentElement.classList.add("overflow-hidden");
+
+                dialog.scrollTop = 0;
+                if (scrollArea instanceof HTMLElement) {
+                    scrollArea.scrollTop = 0;
+                }
+
                 turnstileAttempts = 0;
                 renderTurnstile();
 
                 window.requestAnimationFrame(() => {
+                    dialog.scrollTop = 0;
+                    if (scrollArea instanceof HTMLElement) {
+                        scrollArea.scrollTop = 0;
+                    }
                     const firstField = dialog.querySelector('input[name="nome"]');
                     if (firstField instanceof HTMLInputElement) {
                         firstField.focus({ preventScroll: true });
@@ -388,13 +400,13 @@ const artworkMeta = [
     .request-option {
         position: relative;
         display: flex;
-        min-height: 5.25rem;
+        min-height: 4.4rem;
         cursor: pointer;
         flex-direction: column;
         justify-content: center;
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: rgba(255, 255, 255, 0.018);
-        padding: 0.85rem 0.9rem;
+        padding: 0.72rem 0.82rem;
         transition:
             border-color 160ms ease,
             background-color 160ms ease,
