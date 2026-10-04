@@ -40,12 +40,12 @@ const artworkMeta = [
 
 <dialog
     id="opera-request-modal"
-    class="opera-request-dialog m-auto w-[calc(100%-1rem)] max-w-3xl overflow-hidden border border-white/15 bg-[#101010] p-0 text-gray-200 shadow-2xl"
+    class="opera-request-dialog m-auto overflow-hidden border border-white/15 bg-[#101010] p-0 text-gray-200 shadow-2xl"
     aria-labelledby="opera-request-modal-title"
     data-opera-request-modal
 >
-    <div class="grid max-h-[92dvh] min-h-0 grid-cols-1 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-        <aside class="relative hidden min-h-0 overflow-hidden border-r border-white/10 bg-[#0b0b0b] md:block">
+    <div class="opera-request-layout grid h-full min-h-0 grid-cols-1 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        <aside class="relative hidden h-full min-h-0 overflow-hidden border-r border-white/10 bg-[#0b0b0b] md:block">
             {image ? (
                 <>
                     <img
@@ -62,11 +62,11 @@ const artworkMeta = [
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.08),transparent_45%)]"></div>
             )}
 
-            <div class="relative z-10 flex h-full min-h-[32rem] flex-col justify-end p-7">
+            <div class="relative z-10 flex h-full min-h-0 flex-col justify-end overflow-hidden p-7">
                 <p class="mb-3 text-[0.62rem] uppercase tracking-[0.24em] text-gray-400">
                     Opera selezionata
                 </p>
-                <h2 class="max-w-sm font-heading text-3xl leading-tight text-white">
+                <h2 class="max-w-sm font-heading text-2xl leading-tight text-white lg:text-3xl">
                     {title}
                 </h2>
                 {artworkMeta && (
@@ -83,8 +83,8 @@ const artworkMeta = [
             </div>
         </aside>
 
-        <section class="min-h-0 overflow-y-auto bg-[#121212]">
-            <header class="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-white/10 bg-[#121212]/95 px-5 py-4 backdrop-blur md:px-7">
+        <section class="flex h-full min-h-0 flex-col overflow-hidden bg-[#121212]">
+            <header class="z-20 flex shrink-0 items-start justify-between gap-4 border-b border-white/10 bg-[#121212]/95 px-5 py-4 backdrop-blur md:px-7">
                 <div>
                     <p class="mb-1 text-[0.62rem] uppercase tracking-[0.22em] text-gray-500">
                         Contatto diretto
@@ -106,7 +106,7 @@ const artworkMeta = [
                 </button>
             </header>
 
-            <div class="px-5 py-6 md:px-7 md:py-7">
+            <div class="min-h-0 flex-1 overflow-y-auto px-5 py-6 md:px-7 md:py-7" data-opera-request-scroll>
                 <div class="mb-6 rounded-xl border border-white/10 bg-white/[0.025] p-4 md:hidden">
                     <p class="text-[0.6rem] uppercase tracking-[0.2em] text-gray-500">Opera</p>
                     <p class="mt-1 font-heading text-xl text-white">{title}</p>
@@ -328,7 +328,9 @@ const artworkMeta = [
 
                 window.requestAnimationFrame(() => {
                     const firstField = dialog.querySelector('input[name="nome"]');
-                    if (firstField instanceof HTMLInputElement) firstField.focus();
+                    if (firstField instanceof HTMLInputElement) {
+                        firstField.focus({ preventScroll: true });
+                    }
                 });
             };
 
@@ -372,6 +374,9 @@ const artworkMeta = [
 
 <style>
     .opera-request-dialog {
+        width: min(calc(100vw - 1rem), 64rem);
+        height: min(52rem, calc(100dvh - 2rem));
+        max-height: calc(100dvh - 2rem);
         border-radius: 1rem;
     }
 
@@ -468,9 +473,22 @@ const artworkMeta = [
 
     @media (max-width: 767px) {
         .opera-request-dialog {
+            width: calc(100vw - 0.5rem);
+            height: calc(100dvh - 0.5rem);
+            max-height: calc(100dvh - 0.5rem);
             margin-top: auto;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
             border-radius: 1rem 1rem 0.75rem 0.75rem;
+        }
+    }
+
+    @media (min-width: 768px) and (max-height: 720px) {
+        .opera-request-layout {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .opera-request-layout > aside {
+            display: none;
         }
     }
 
