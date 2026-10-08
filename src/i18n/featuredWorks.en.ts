@@ -17,6 +17,46 @@ export type FeaturedWorkEn = {
 
 export const featuredWorksEn: FeaturedWorkEn[] = [
     {
+        itSlug: "grafica/apollo-di-serdica-studio-a-sanguigna",
+        enSlug: "drawing/apollo-of-serdica-sanguine-study",
+        title: "Apollo di Serdica — studio a sanguigna",
+        englishTitle: "Apollo of Serdica — sanguine study",
+        year: "2026",
+        technique: "Sanguine on paper",
+        category: "Drawing",
+        image: "/assets/uploads/apollo-serdica-studio-sanguigna-luca-sanna-2026.webp",
+        imageAlt: "Sanguine drawing by Luca Sanna after the Apollo head from Serdica, with flowing hair, hollow eyes and soft modelling of the face.",
+        metaTitle: "Apollo of Serdica — Sanguine Drawing | Luca Sanna",
+        metaDescription: "A 2026 sanguine study by Luca Sanna inspired by the gilded bronze head of Apollo from ancient Serdica, now in Sofia's National Archaeological Museum.",
+        intro: "Some works leave a lasting impression when encountered in person. This sanguine study began with the gilded bronze head of Apollo from ancient Serdica, seen at the National Archaeological Museum in Sofia.",
+        sections: [
+            {
+                heading: "Encountering the original",
+                paragraphs: [
+                    "The sculpture's quiet presence, the movement of its hair and the sensitive modelling of the face stayed with me long after the visit. Its empty eye sockets add to the tension between a human face and an idealised image.",
+                    "What impressed me most was the experience of standing in front of the actual object. A photograph records its appearance, but not quite its presence."
+                ]
+            },
+            {
+                heading: "From sculpture to drawing",
+                paragraphs: [
+                    "Made in 2026 in sanguine on paper, this is neither an archaeological reconstruction nor an exact facsimile. It is a personal study of the sculpture's volumes and the relationship between light and shadow.",
+                    "I was particularly attentive to a slight indentation I had noticed on the sculpture's left cheek. I tried to convey it through a gradual tonal transition, without turning it into a hard outline. Darker passages around the eyes and beneath the chin give the drawing its depth.",
+                    "Drawing this head became a way of returning to the encounter, looking more slowly at a form that has retained its expressive power across the centuries."
+                ]
+            },
+            {
+                heading: "The ancient reference",
+                paragraphs: [
+                    "The original is a gilded bronze head identified as Apollo, found in ancient Serdica (present-day Sofia) and now kept at the National Archaeological Museum. It is generally dated to the 2nd century AD. Sources connect its discovery with building work, but the exact year of discovery has not been reliably established in the material consulted.",
+                    "The worship of Apollo, including Apollo the Healer, is documented in ancient Serdica. The work has been discussed in relation to Greek sculptural models.",
+                    "Sources: National Archaeological Institute with Museum (naim.bg/en/content/news/600/857/281/) and Visit Sofia (mail.visitsofia.bg, Ancient Serdica — Roman thermal baths and temples)."
+                ]
+            }
+        ]
+    },
+
+    {
         itSlug: "grafica/castello-di-bran-veduta-interna",
         enSlug: "drawing/bran-castle-interior-view",
         title: "Castello di Bran — scorcio",
